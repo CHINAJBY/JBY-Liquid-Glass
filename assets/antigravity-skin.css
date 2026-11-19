@@ -1,0 +1,948 @@
+/* JBY Liquid Glass v3 — Clear Optical Refraction + Floating Thread Parity Engine for Antigravity 2.0 & IDE */
+
+@layer dreamskin-base, dreamskin-accessibility, dreamskin-community;
+
+@property --ds-lg-aurora-angle {
+  syntax: "<angle>";
+  initial-value: 135deg;
+  inherits: false;
+}
+
+@keyframes ds-lg-aurora {
+  0% { --ds-lg-aurora-angle: 0deg; }
+  100% { --ds-lg-aurora-angle: 360deg; }
+}
+
+@keyframes ds-lg-settled-flash {
+  0% {
+    box-shadow:
+      0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .58),
+      inset 0 0 22px rgb(255 255 255 / .68);
+  }
+  100% {
+    box-shadow:
+      0 0 0 20px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / 0),
+      inset 0 0 0 rgb(255 255 255 / 0);
+  }
+}
+
+@keyframes ds-lg-enter-turn {
+  0% { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.988); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes ds-lg-pop-in {
+  0% { opacity: 0; transform: translate3d(0, 6px, 0) scale(0.94, 0.91); }
+  68% { opacity: 1; transform: translate3d(0, -1px, 0) scale(1.012, 1.014); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1, 1); }
+}
+
+@keyframes ds-lg-sonar {
+  0% { box-shadow: 0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .48); }
+  75% { box-shadow: 0 0 0 12px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / 0); }
+}
+
+@layer dreamskin-base {
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"],
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] body {
+    --shell-canvas: transparent !important;
+    --background: transparent !important;
+    --content: transparent !important;
+    --shell: transparent !important;
+    --sidebar: transparent !important;
+    --onyx-frame: transparent !important;
+    --card: rgb(var(--ds-panel-rgb, 255 255 255) / var(--ds-lg-z-cards-bg-a, 0.34)) !important;
+    --glass: rgb(var(--ds-panel-rgb, 255 255 255) / var(--ds-lg-z-popover-bg-a, 0.46)) !important;
+    --onyx-well: rgb(var(--ds-panel-rgb, 255 255 255) / 0.16) !important;
+    --onyx-raised: rgb(var(--ds-panel-rgb, 255 255 255) / 0.42) !important;
+    --onyx-selected: rgb(var(--ds-accent-rgb, 47 117 195) / 0.16) !important;
+    --onyx-key: rgb(var(--ds-panel-rgb, 255 255 255) / 0.56) !important;
+    --primary: rgb(var(--ds-accent-rgb, 47 117 195)) !important;
+    --primary-foreground: var(--ds-accent-ink, #ffffff) !important;
+    --accent: rgb(var(--ds-accent-rgb, 47 117 195)) !important;
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="light"],
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="light"] body {
+    --foreground: #0b111e !important;
+    --secondary-foreground: #1e293b !important;
+    --muted-foreground: #475569 !important;
+    --placeholder: #64748b !important;
+    --secondary: rgb(10 16 30 / 0.068) !important;
+    --muted: rgb(10 16 30 / 0.042) !important;
+    --sidebar-secondary: rgb(10 16 30 / 0.078) !important;
+    --sidebar-muted: rgb(10 16 30 / 0.044) !important;
+    --card-border: rgb(18 28 48 / 0.11) !important;
+    --border: rgb(18 28 48 / 0.09) !important;
+    --glass-border: rgb(255 255 255 / 0.62) !important;
+    --glass-highlight: rgb(255 255 255 / 0.94) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"],
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"] body {
+    --foreground: #f4f7fd !important;
+    --secondary-foreground: #d4dcf0 !important;
+    --muted-foreground: #9aa7c2 !important;
+    --placeholder: #6c7995 !important;
+    --secondary: rgb(255 255 255 / 0.088) !important;
+    --muted: rgb(255 255 255 / 0.052) !important;
+    --sidebar-secondary: rgb(255 255 255 / 0.105) !important;
+    --sidebar-muted: rgb(255 255 255 / 0.058) !important;
+    --card-border: rgb(255 255 255 / 0.16) !important;
+    --border: rgb(255 255 255 / 0.11) !important;
+    --glass-border: rgb(255 255 255 / 0.24) !important;
+    --glass-highlight: rgb(255 255 255 / 0.36) !important;
+  }
+
+  /* Wallpaper Container (sits behind #root, dynamically clips around browser WebContentsView holes) */
+  #agy-ds-wallpaper-layer {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    background: var(--ds-bg-solid, #101420) !important;
+  }
+
+  #agy-ds-wallpaper-layer .agy-ds-wp-img {
+    position: absolute !important;
+    inset: 0 !important;
+    background-image: var(--dream-skin-art) !important;
+    background-size: cover !important;
+    background-position: var(--ds-art-position, center center) !important;
+    background-repeat: no-repeat !important;
+    transform: translateZ(0);
+  }
+
+  body[data-dream-skin-video="true"] #agy-ds-wallpaper-layer .agy-ds-wp-img {
+    opacity: 0 !important;
+  }
+
+  #agy-ds-wallpaper-layer .agy-ds-wp-video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: var(--ds-art-position, center center) !important;
+    pointer-events: none !important;
+  }
+
+  #agy-ds-wallpaper-layer .agy-ds-wp-veil {
+    position: absolute !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+    background: linear-gradient(
+      180deg,
+      rgb(var(--ds-wallpaper-veil-rgb, 255 255 255) / var(--ds-wallpaper-veil-top, 0.08)) 0%,
+      rgb(var(--ds-wallpaper-veil-rgb, 255 255 255) / var(--ds-wallpaper-veil-mid, 0.05)) 55%,
+      rgb(var(--ds-wallpaper-veil-rgb, 255 255 255) / var(--ds-wallpaper-veil-bot, 0.12)) 100%
+    ) !important;
+  }
+
+  /* Keep React Root Above Wallpaper Layer */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] #root,
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] .monaco-workbench {
+    position: relative !important;
+    z-index: 1 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  /* Transparent Shell Chrome */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] :is(
+    .agy-shell,
+    .agy-inset-shell,
+    .agy-sheet[data-sheet-inset],
+    [data-testid="sidebar-split"],
+    [data-testid="sidebar-split"] > :first-child,
+    [data-testid="sidebar-split"] > :first-child > [data-split-sized],
+    [data-split-panes],
+    [data-tiling-pane],
+    [data-main-content-header="true"],
+    [data-main-content-body="true"],
+    .agy-home,
+    .agy-titlebar,
+    [data-testid="title-menu-bar"]
+  ) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] [data-tiling-pane]::after {
+    box-shadow: none !important;
+    border-color: transparent !important;
+  }
+
+  /* Keep outer split sidebar wrapper unclipped so 24px Crystal Island shadow stays crisp */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] [data-testid="sidebar-split"] > :first-child {
+    overflow: visible !important;
+  }
+
+  /* Main content body stays clean & borderless (only Sidebar & Composer carry crystal framing like Codex) */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"]:not([data-dream-lg="on"]) [data-main-content-body="true"] {
+    background: var(--ds-main-scrim, rgb(255 255 255 / 0.06)) !important;
+  }
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-main-content-body="true"] {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Antigravity Embedded Browser Hole Safety: Never cover WebContentsView cutouts */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] [data-has-browser-hole="true"]:not(body),
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] .browser-hole-opaque {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* IDE Monaco Compatibility */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] .monaco-workbench :is(.part.editor, .editor-container, .monaco-editor, .monaco-editor-background, .margin, .part.panel, .part.auxiliarybar) {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  /* Sidebar row gradient fades: remove opaque mask blocks */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] :is(.agy-row-actions, .agy-status-overflow) {
+    background: transparent !important;
+    background-image: none !important;
+    mask-image: none !important;
+  }
+
+  /* Clean Translucent Base for Non-Liquid-Glass Themes (Asuka, Alpha Lock, Lock, etc.) */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"]:not([data-dream-lg="on"]) [data-ds-part="sidebar"] {
+    background-color: rgb(var(--ds-panel-rgb, 255 255 255) / 0.42) !important;
+    border: 1px solid var(--ds-theme-color-line, rgba(18, 28, 48, 0.14)) !important;
+    border-radius: 18px !important;
+    margin: 4px 4px 10px 10px !important;
+    width: calc(100% - 14px) !important;
+    height: calc(100% - 14px) !important;
+    backdrop-filter: blur(14px) saturate(1.28) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(1.28) !important;
+    box-shadow: 0 10px 28px rgb(var(--ds-bg-rgb, 16 20 32) / 0.14) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"]:not([data-dream-lg="on"]) .surface-composer {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"]:not([data-dream-lg="on"]) :is(.surface-composer-card, .agy-takeover-card, [data-ds-part="composer"]) {
+    background-color: rgb(var(--ds-panel-rgb, 255 255 255) / 0.54) !important;
+    border: 1px solid var(--ds-theme-color-line, rgba(18, 28, 48, 0.16)) !important;
+    border-radius: 22px !important;
+    backdrop-filter: blur(16px) saturate(1.32) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(1.32) !important;
+    box-shadow: 0 12px 30px rgb(var(--ds-bg-rgb, 16 20 32) / 0.16) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"]:not([data-dream-lg="on"]) :is(.agy-user-bubble, .artifact-card, .agy-card, .agy-dialog, .animate-overview-panel) {
+    background-color: rgb(var(--ds-panel-rgb, 255 255 255) / 0.60) !important;
+    border: 1px solid var(--ds-theme-color-line, rgba(18, 28, 48, 0.14)) !important;
+    backdrop-filter: blur(14px) saturate(1.25) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(1.25) !important;
+  }
+}
+
+@layer dreamskin-accessibility {
+  /* =========================================================
+   * JBY-LIQUID-GLASS v3 ON ANTIGRAVITY 2.0 + IDE (1:1 CODEX PARITY)
+   * ========================================================= */
+
+  /* 0. Exact Codex Optical Surface Tokens */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] {
+    --ds-lg-glass-hi: rgb(255 255 255 / var(--ds-lg-glaze-hi, .10));
+    --ds-lg-glass-mid: rgb(255 255 255 / var(--ds-lg-glaze-mid, .025));
+    --ds-lg-glass-lo: rgb(255 255 255 / var(--ds-lg-glaze-lo, .065));
+
+    --ds-lg-composer-bg: linear-gradient(162deg, rgb(255 255 255 / var(--ds-lg-z-composer-hi, .10)) 0%, rgb(255 255 255 / var(--ds-lg-z-composer-mid, .025)) 56%, rgb(255 255 255 / var(--ds-lg-z-composer-lo, .065)) 100%);
+    --ds-lg-rail-bg: linear-gradient(162deg, rgb(255 255 255 / var(--ds-lg-z-composer-hi, .11)) 0%, rgb(255 255 255 / var(--ds-lg-z-composer-mid, .03)) 56%, rgb(255 255 255 / var(--ds-lg-z-composer-lo, .07)) 100%);
+    --ds-lg-writing-bg: linear-gradient(156deg, rgb(255 255 255 / var(--ds-lg-z-writing-hi, .24)) 0%, rgb(255 255 255 / var(--ds-lg-z-writing-mid, .07)) 56%, rgb(255 255 255 / var(--ds-lg-z-writing-lo, .15)) 100%);
+    --ds-lg-sidebar-bg: linear-gradient(160deg, rgb(255 255 255 / var(--ds-lg-z-sidebar-hi, .22)) 0%, rgb(255 255 255 / var(--ds-lg-z-sidebar-mid, .08)) 62%, rgb(255 255 255 / var(--ds-lg-z-sidebar-lo, .14)) 100%);
+    --ds-lg-card-bg: linear-gradient(158deg, rgb(255 255 255 / var(--ds-lg-z-cards-hi, .22)) 0%, rgb(255 255 255 / var(--ds-lg-z-cards-mid, .07)) 60%, rgb(255 255 255 / var(--ds-lg-z-cards-lo, .14)) 100%);
+    --ds-lg-pill-bg: linear-gradient(148deg, rgb(255 255 255 / var(--ds-lg-z-cards-hi, .26)) 0%, rgb(255 255 255 / var(--ds-lg-z-cards-mid, .08)) 64%, rgb(255 255 255 / var(--ds-lg-z-cards-lo, .16)) 100%);
+    --ds-lg-popover-bg: linear-gradient(158deg, rgb(255 255 255 / var(--ds-lg-z-popover-hi, .48)) 0%, rgb(248 251 255 / var(--ds-lg-z-popover-mid, .28)) 60%, rgb(244 248 255 / var(--ds-lg-z-popover-lo, .38)) 100%);
+    --ds-lg-tooltip-bg: linear-gradient(156deg, rgb(255 255 255 / .56) 0%, rgb(246 250 255 / .38) 100%);
+
+    --ds-lg-rim-dark: rgb(18 28 48 / var(--ds-lg-rim-alpha, .15));
+    --ds-lg-rim-spec: rgb(255 255 255 / .96);
+    --ds-lg-shadow-sep:
+      0 0 0 1px rgb(16 24 40 / .08),
+      0 22px 48px -12px rgb(16 24 40 / .20),
+      0 8px 20px -6px rgb(16 24 40 / .12),
+      inset 0 -8px 18px -12px rgb(16 24 40 / .08);
+    --ds-lg-shadow-brick:
+      0 0 0 1px rgb(16 24 40 / .08),
+      0 14px 30px -10px rgb(16 24 40 / .16),
+      0 4px 12px -4px rgb(16 24 40 / .10),
+      inset 0 -4px 12px -8px rgb(16 24 40 / .07);
+    --ds-lg-text-halo: 0 1px 1px rgb(255 255 255 / .86), 0 0 8px rgb(255 255 255 / .68);
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] {
+    --ds-lg-glass-hi: rgb(255 255 255 / .11);
+    --ds-lg-glass-mid: rgb(14 18 28 / .18);
+    --ds-lg-glass-lo: rgb(14 18 28 / .24);
+
+    --ds-lg-composer-bg: linear-gradient(162deg, var(--ds-lg-z-composer-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-composer-dark-mid, rgb(14 18 28 / .18)) 56%, var(--ds-lg-z-composer-dark-lo, rgb(14 18 28 / .24)) 100%);
+    --ds-lg-rail-bg: linear-gradient(164deg, var(--ds-lg-z-composer-dark-hi, rgb(255 255 255 / .12)) 0%, var(--ds-lg-z-composer-dark-lo, rgb(14 18 28 / .24)) 100%);
+    --ds-lg-writing-bg: linear-gradient(156deg, var(--ds-lg-z-writing-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-writing-dark-mid, rgb(16 20 32 / .24)) 56%, var(--ds-lg-z-writing-dark-lo, rgb(14 18 28 / .30)) 100%);
+    --ds-lg-sidebar-bg: linear-gradient(160deg, var(--ds-lg-z-sidebar-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-sidebar-dark-lo, rgb(16 22 36 / .24)) 100%);
+    --ds-lg-card-bg: linear-gradient(158deg, var(--ds-lg-z-cards-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-cards-dark-lo, rgb(16 22 36 / .24)) 100%);
+    --ds-lg-pill-bg: linear-gradient(142deg, var(--ds-lg-z-cards-dark-hi, rgb(255 255 255 / .14)) 0%, var(--ds-lg-z-cards-dark-lo, rgb(18 24 38 / .28)) 100%);
+    --ds-lg-popover-bg: linear-gradient(158deg, var(--ds-lg-z-popover-dark-hi, rgb(28 35 52 / .64)) 0%, var(--ds-lg-z-popover-dark-lo, rgb(14 18 28 / .54)) 100%);
+    --ds-lg-tooltip-bg: linear-gradient(154deg, rgb(26 32 48 / .72), rgb(14 18 28 / .62));
+
+    --ds-lg-rim-dark: rgb(255 255 255 / .22);
+    --ds-lg-rim-spec: rgb(255 255 255 / .48);
+    --ds-lg-shadow-sep:
+      0 0 0 1px rgb(0 0 0 / .40),
+      0 24px 52px -10px rgb(0 0 0 / .54),
+      0 10px 24px -4px rgb(0 0 0 / .34),
+      inset 0 -10px 20px -12px rgb(0 0 0 / .38);
+    --ds-lg-shadow-brick:
+      0 0 0 1px rgb(0 0 0 / .34),
+      0 14px 32px -8px rgb(0 0 0 / .44),
+      inset 0 -6px 12px -8px rgb(0 0 0 / .28);
+    --ds-lg-text-halo: 0 1px 2px rgb(0 0 0 / .72), 0 0 10px rgb(0 0 0 / .52);
+  }
+
+  /* Inherited Typography Smoothing & Contrast Halo */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] body {
+    font-weight: var(--ds-live-weight-body, 500);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(button, a, label, [role="menuitem"], [role="tab"], [role="option"], summary) {
+    font-weight: var(--ds-live-weight-ctrl, 530);
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(h1, h2, h3, [data-ds-part="home-hero"]) {
+    font-weight: var(--ds-live-weight-head, 560);
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    [data-ds-part="sidebar"],
+    [data-testid="autoscroll-viewport"],
+    .agy-user-bubble,
+    .artifact-card,
+    [role="dialog"],
+    [role="menu"],
+    [data-base-ui-portal]
+  ) {
+    text-shadow: var(--ds-lg-text-halo);
+  }
+
+  /* Seamless Title Menu Bar */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    [data-testid="title-menu-bar"],
+    .agy-titlebar,
+    [data-ds-part="header"]
+  ) {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-bottom-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="light"][data-dream-art-tone="dim"][data-dream-lg="on"] [data-testid="title-menu-bar"] {
+    background-image: linear-gradient(180deg, rgb(255 255 255 / 0.44) 0%, rgb(255 255 255 / 0.04) 100%) !important;
+  }
+
+  /* 1. SIDEBAR ZONE — Distinct 24px Floating Crystal Island + WebGL2 GPU Optics */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-ds-part="sidebar"] {
+    position: relative !important;
+    isolation: isolate;
+    width: calc(100% - 14px) !important;
+    height: calc(100% - 14px) !important;
+    margin: 4px 4px 10px 10px !important;
+    border-radius: 24px !important;
+    overflow: hidden !important;
+    background: var(--ds-lg-sidebar-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-sidebar-rim-a, .15)) !important;
+    backdrop-filter: blur(var(--ds-lg-z-sidebar-blur, 4px)) saturate(122%) brightness(1.01) !important;
+    -webkit-backdrop-filter: blur(var(--ds-lg-z-sidebar-blur, 4px)) saturate(122%) brightness(1.01) !important;
+    box-shadow:
+      var(--ds-lg-shadow-sep),
+      inset 0 1.5px 0 var(--ds-lg-rim-spec),
+      inset 1px 0 0 rgb(255 255 255 / .76),
+      inset -1px 0 0 rgb(255 255 255 / .56) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] [data-ds-part="sidebar"] {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-sidebar-rim-a, .22)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-ds-part="sidebar"][data-dream-lg-gpu="1"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-lg-gpu="1"]::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    border-radius: inherit !important;
+    background-image: var(--ds-lg-gpu-bg) !important;
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;
+    pointer-events: none !important;
+    z-index: -1 !important;
+  }
+
+  body[data-dream-skin-video="true"] [data-ds-part="sidebar"] {
+    background: var(--ds-lg-sidebar-bg) !important;
+    backdrop-filter: var(--ds-lg-lens-card, blur(0px)) blur(var(--ds-lg-z-sidebar-blur, 6px)) saturate(1.36) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-card, blur(0px)) blur(var(--ds-lg-z-sidebar-blur, 6px)) saturate(1.36) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    [data-testid="conversation-row-sidebar"],
+    [data-testid="conversation-row-history"],
+    .agy-sidebar-row,
+    [data-ds-part="sidebar"] :is(button, a)
+  ) {
+    border-radius: 11px !important;
+    transition: transform 200ms var(--ds-lg-spring-responsive, cubic-bezier(0.22, 1.24, 0.36, 1)),
+                background-color 140ms ease,
+                box-shadow 180ms ease,
+                border-color 160ms ease !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    [data-testid="conversation-row-sidebar"],
+    [data-testid="conversation-row-history"],
+    .agy-sidebar-row,
+    [data-ds-part="sidebar"] :is(button, a)
+  ):hover {
+    transform: translate3d(3px, 0, 0) !important;
+    background: var(--ds-lg-pill-bg) !important;
+    border: 1px solid rgb(255 255 255 / .68) !important;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .56), 0 4px 12px -4px rgb(16 24 40 / .14) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-ds-part="sidebar"] :is([data-selected="true"], [aria-current="page"]) {
+    background: linear-gradient(135deg, rgb(255 255 255 / .36), rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .16)) !important;
+    border: 1px solid rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .36) !important;
+    box-shadow: 0 6px 16px -4px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .18), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  /* 2. THREAD SCROLL-UNDER-COMPOSER OVERLAY (Text visibly scrolls & refracts behind the crystal composer pill!) */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-agy-thread-shell="1"] {
+    position: relative !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-agy-thread-scroll="1"] {
+    height: 100% !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    background: linear-gradient(90deg, rgb(var(--ds-panel-rgb, 255 255 255) / .06) 0%, rgb(var(--ds-panel-rgb, 255 255 255) / .02) 55%, transparent 100%) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-agy-thread-scroll="1"] [data-testid="autoscroll-viewport"] {
+    padding-bottom: calc(var(--ds-agy-dock-h, 112px) + 28px) !important;
+    scroll-padding-bottom: calc(var(--ds-agy-dock-h, 112px) + 32px) !important;
+    box-sizing: border-box !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-agy-thread-scroll="1"] .agy-scroll-bottom {
+    position: absolute !important;
+    bottom: calc(var(--ds-agy-dock-h, 112px) + 12px) !important;
+    z-index: 25 !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-agy-composer-dock="1"] {
+    position: absolute !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    z-index: 20 !important;
+    pointer-events: none !important;
+    background: transparent !important;
+    background-image: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-agy-composer-dock="1"] > * {
+    pointer-events: auto !important;
+  }
+
+  /* 3. COMPOSER ZONE — Zero Nested Backdrop-Filter; Pure 28px Crystal Pill with Live SVG Snell Lens */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-testid="agent-input-box"] .surface-composer,
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .surface-composer {
+    position: relative !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Protruding Home/Attached Rail Bar tucked cleanly above Composer Card */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .surface-composer[data-dream-agy-has-rail="1"] > div:has(> [data-testid="input-box-bottom-toolbar"]) {
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .surface-composer[data-dream-agy-has-rail="1"] [data-testid="input-box-bottom-toolbar"] {
+    position: relative !important;
+    isolation: isolate;
+    z-index: 1 !important;
+    width: calc(100% - 36px) !important;
+    min-height: 40px !important;
+    margin: 0 auto -16px auto !important;
+    padding: 5px 16px 18px 16px !important;
+    border-radius: 22px 22px 12px 12px !important;
+    background: var(--ds-lg-rail-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-rail, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-rail, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-composer-rim-a, .15)) !important;
+    box-shadow:
+      0 12px 30px -10px rgb(16 24 44 / .18),
+      inset 0 1.5px 0 var(--ds-lg-rim-spec),
+      inset 1px 0 0 rgb(255 255 255 / .72),
+      inset -1px 0 0 rgb(255 255 255 / .52) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] .surface-composer[data-dream-agy-has-rail="1"] [data-testid="input-box-bottom-toolbar"] {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-composer-rim-a, .22)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    .surface-composer-card,
+    .agy-takeover-frame > .agy-takeover-card,
+    .interactive-input-part,
+    [data-ds-part="composer"]
+  ) {
+    position: relative !important;
+    isolation: isolate;
+    z-index: 3 !important;
+    border-radius: 28px !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-composer-rim-a, .15)) !important;
+    background: var(--ds-lg-composer-bg) !important;
+    background-color: transparent !important;
+    outline: none !important;
+    backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    box-shadow:
+      var(--ds-lg-shadow-sep),
+      inset 0 1.5px 1px var(--ds-lg-rim-spec),
+      inset 1px 0 0 rgb(255 255 255 / .76),
+      inset -1px 0 0 rgb(255 255 255 / .56) !important;
+    transition: box-shadow 200ms ease, border-color 180ms ease !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] :is(
+    .surface-composer-card,
+    .agy-takeover-frame > .agy-takeover-card,
+    .interactive-input-part,
+    [data-ds-part="composer"]
+  ) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-composer-rim-a, .22)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .surface-composer-card :is(form, [role="combobox"], [data-lexical-editor="true"]) {
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.surface-composer-card, .agy-takeover-card):is([data-dream-lg-hover="1"], [data-dream-lg-pair-active="1"], :focus-within) {
+    border-color: rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .44) !important;
+    box-shadow:
+      0 0 0 1px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .22),
+      0 26px 58px -12px rgb(16 24 44 / .24),
+      0 8px 22px -6px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .18),
+      inset 0 1.5px 1px rgb(255 255 255 / 1),
+      inset 0 -1.5px 2px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .16) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-composer-footer, [data-ds-part="composer-toolbar"]:not([data-testid="input-box-bottom-toolbar"])) {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.surface-composer-card, .surface-composer) button {
+    transition: transform 200ms var(--ds-lg-spring-responsive, cubic-bezier(0.22, 1.24, 0.36, 1)), opacity 140ms ease;
+  }
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.surface-composer-card, .surface-composer) button:hover {
+    transform: translate3d(0, -1.5px, 0) scale(1.02);
+  }
+
+  /* 4. WRITING / OUTPUT ZONE (User Bubbles with Left Accent Bar, Artifacts, Callouts, Tables) */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .agy-user-bubble {
+    position: relative !important;
+    isolation: isolate;
+    border-radius: 20px !important;
+    background: var(--ds-lg-writing-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-writing-rim-a, .16)) !important;
+    border-left: 2.5px solid rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .72) !important;
+    backdrop-filter: var(--ds-lg-lens-writing, blur(0px)) blur(var(--ds-lg-z-writing-blur, 5px)) saturate(1.42) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-writing, blur(0px)) blur(var(--ds-lg-z-writing-blur, 5px)) saturate(1.42) brightness(1.02) !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    color: var(--ds-text) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] .agy-user-bubble {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-writing-rim-a, .24)) !important;
+    border-left: 2.5px solid rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 96 144 228)) / .78) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    .artifact-card,
+    .agy-callout,
+    .agy-md-table,
+    .md-table-host,
+    .md-table-frame,
+    .markdown-alert,
+    .animate-overview-panel,
+    [data-testid="ask-question-option"],
+    [data-testid="permission-target-editor"]
+  ) {
+    position: relative !important;
+    isolation: isolate;
+    border-radius: 20px !important;
+    background: var(--ds-lg-writing-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-writing-rim-a, .16)) !important;
+    backdrop-filter: var(--ds-lg-lens-writing, blur(0px)) blur(var(--ds-lg-z-writing-blur, 5px)) saturate(1.44) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-writing, blur(0px)) blur(var(--ds-lg-z-writing-blur, 5px)) saturate(1.44) brightness(1.02) !important;
+    box-shadow:
+      var(--ds-lg-shadow-sep),
+      inset 0 1.5px 1px var(--ds-lg-rim-spec),
+      inset 1px 0 0 rgb(255 255 255 / .72),
+      inset -1px 0 0 rgb(255 255 255 / .52) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] :is(
+    .artifact-card,
+    .agy-callout,
+    .agy-md-table,
+    .md-table-host,
+    .md-table-frame,
+    .markdown-alert,
+    .animate-overview-panel,
+    [data-testid="ask-question-option"],
+    [data-testid="permission-target-editor"]
+  ) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-writing-rim-a, .24)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(pre, .code-block, [data-testid="code-block"]) {
+    background: var(--ds-lg-card-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-writing-rim-a, .15)) !important;
+    backdrop-filter: blur(var(--ds-lg-z-writing-blur, 5px)) saturate(1.32) !important;
+    -webkit-backdrop-filter: blur(var(--ds-lg-z-writing-blur, 5px)) saturate(1.32) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  /* 5. CARDS / AUXILIARY PANEL / TERMINAL / SETTINGS CARDS ZONE */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-side-panel-body="true"] {
+    position: relative;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    [data-side-panel-body="true"],
+    [data-peek-surface="open"],
+    [data-testid="bottom-terminal-panel"],
+    .agy-card,
+    .agy-home .agy-card,
+    [data-testid="sidebar-product-name-button"],
+    [data-testid="project-selector-trigger"],
+    .agy-scroll-bottom
+  ) {
+    isolation: isolate;
+    background: var(--ds-lg-card-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
+    border-radius: 20px !important;
+    backdrop-filter: var(--ds-lg-lens-card, blur(0px)) blur(var(--ds-lg-z-cards-blur, 5px)) saturate(1.42) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-card, blur(0px)) blur(var(--ds-lg-z-cards-blur, 5px)) saturate(1.42) brightness(1.02) !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] :is(
+    [data-side-panel-body="true"],
+    [data-peek-surface="open"],
+    [data-testid="bottom-terminal-panel"],
+    .agy-card,
+    .agy-home .agy-card,
+    .settings-modal-container :is([role="radio"], .agy-card),
+    .agy-scroll-bottom
+  ) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-cards-rim-a, .22)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-home .agy-card, [data-ds-part="home-hero"] button)[data-dream-lg-gpu="1"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .settings-modal-container :is([role="radio"], .agy-card) {
+    background: var(--ds-lg-card-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
+    border-radius: 16px !important;
+    backdrop-filter: blur(8px) saturate(1.28) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(1.28) !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .settings-modal-container [role="radio"][aria-checked="true"],
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [aria-checked="true"].agy-card {
+    background: linear-gradient(154deg, rgb(var(--ds-accent-rgb, 47 117 195) / .16) 0%, var(--ds-lg-glass-hi) 100%) !important;
+    border-color: rgb(var(--ds-accent-rgb, 47 117 195) / .72) !important;
+    box-shadow: 0 0 0 2px rgb(var(--ds-accent-rgb, 47 117 195) / .22), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  /* 6. POPOVER / DIALOG / SETTINGS / MENUS / TOOLTIPS ZONE */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .settings-modal-backdrop {
+    background: rgb(10 14 24 / 0.22) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .agy-dialog.settings-modal-container {
+    position: relative;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    .agy-dialog,
+    .agy-dialog.settings-modal-container,
+    .onboarding-shell,
+    .surface-glass,
+    .agy-overlay,
+    .agy-fastpick,
+    .quick-input-widget,
+    .agy-tip-card,
+    .agy-toast,
+    [data-ds-part="dialog"],
+    [data-base-ui-portal] :is([role="menu"], [role="listbox"], [role="dialog"])
+  ) {
+    isolation: isolate;
+    background: var(--ds-lg-popover-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-popover-rim-a, .16)) !important;
+    border-radius: 22px !important;
+    backdrop-filter: var(--ds-lg-lens-popover, blur(0px)) blur(var(--ds-lg-z-popover-blur, 10px)) saturate(1.52) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-popover, blur(0px)) blur(var(--ds-lg-z-popover-blur, 10px)) saturate(1.52) brightness(1.02) !important;
+    box-shadow:
+      0 18px 42px -8px rgb(16 24 44 / .24),
+      0 0 0 1px rgb(20 30 56 / .08),
+      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] :is(
+    .agy-dialog,
+    .agy-dialog.settings-modal-container,
+    .onboarding-shell,
+    .surface-glass,
+    .agy-overlay,
+    .agy-fastpick,
+    .quick-input-widget,
+    .agy-tip-card,
+    .agy-toast,
+    [data-ds-part="dialog"],
+    [data-base-ui-portal] :is([role="menu"], [role="listbox"], [role="dialog"])
+  ) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-popover-rim-a, .24)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .compact-tooltip,
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [role="tooltip"] {
+    background: var(--ds-lg-tooltip-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-popover-rim-a, .16)) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 22px -5px rgb(16 24 44 / .18), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  /* 7. HarmonyOS 7 Segmented Pill Sliding Capsule */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-lg-seg="1"] {
+    position: relative !important;
+    isolation: isolate;
+    overflow: hidden !important;
+    padding: 4px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(164deg, rgb(255 255 255 / .18), rgb(255 255 255 / .07)) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-popover-rim-a, .15)) !important;
+    box-shadow: inset 0 2px 6px rgb(16 24 44 / .10), 0 8px 20px -4px rgb(16 24 44 / .14), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-lg-seg="1"]::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 4px !important;
+    bottom: 4px !important;
+    left: 0 !important;
+    width: var(--ds-lg-seg-w, 0px) !important;
+    transform: translate3d(var(--ds-lg-seg-x, 0px), 0, 0) scaleX(var(--ds-lg-seg-sx, 1)) !important;
+    transform-origin: center center;
+    border-radius: 999px !important;
+    background: linear-gradient(155deg, rgb(255 255 255 / .62) 0%, rgb(255 255 255 / .24) 56%, rgb(246 250 255 / .42) 100%) !important;
+    border: 1px solid rgb(255 255 255 / .86) !important;
+    box-shadow: 0 3px 10px -2px rgb(10 16 32 / .16), inset 0 1px 0 rgb(255 255 255 / .94) !important;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] [data-dream-lg-seg="1"]::before {
+    background: linear-gradient(155deg, rgb(255 255 255 / .22), rgb(255 255 255 / .08)) !important;
+    border-color: rgb(255 255 255 / .32) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] [data-dream-lg-seg="1"] > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Controls & Selects & Send Button */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-select-trigger, .agy-field, textarea.agy-textarea) {
+    background: var(--ds-lg-pill-bg) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-send-button:not(:disabled), .surface-composer-card :is(button[class*="bg-foreground"], button[type="submit"]):not(:disabled)) {
+    background: linear-gradient(145deg, rgb(var(--ds-lg-prism-b, var(--ds-accent-rgb, 47 117 195)) / .92), rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .88)) !important;
+    border: 1px solid rgb(255 255 255 / .82) !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px -4px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .40), inset 0 1.5px 0 rgb(255 255 255 / .76) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-send-button, [data-testid="voice-live-pill"], .surface-composer-card button[aria-label*="Send" i]):disabled,
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .surface-composer-card button[data-testid*="send"]:disabled {
+    background: var(--ds-lg-pill-bg) !important;
+    border: 1px solid var(--ds-lg-rim-dark) !important;
+    color: rgb(var(--ds-text-rgb, 11 17 30) / .72) !important;
+    box-shadow: 0 4px 12px -2px rgb(16 24 44 / .12), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="light"] [class*="text-background"] {
+    color: #ffffff !important;
+  }
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"] [class*="text-background"] {
+    color: #0b111e !important;
+  }
+
+  /* 8. Unified 1.25px Pure Optical Specular Bevel Ring across ALL Crystal Windows */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    .surface-composer-card,
+    .agy-takeover-frame > .agy-takeover-card,
+    [data-ds-part="sidebar"],
+    .agy-user-bubble,
+    .artifact-card,
+    .animate-overview-panel,
+    .agy-dialog.settings-modal-container,
+    [data-side-panel-body="true"],
+    [data-base-ui-portal] :is([role="menu"], [role="listbox"], [role="dialog"])
+  )::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1.25px;
+    border-radius: inherit;
+    corner-shape: inherit;
+    pointer-events: none;
+    z-index: 4;
+    background: linear-gradient(138deg, rgb(255 255 255 / .96) 0%, rgb(255 255 255 / .36) 36%, rgb(255 255 255 / .14) 64%, rgb(255 255 255 / .64) 100%) !important;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: .76;
+    transition: opacity 150ms ease-out;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    .surface-composer-card,
+    [data-ds-part="sidebar"],
+    .agy-user-bubble,
+    .artifact-card,
+    .animate-overview-panel,
+    [role="dialog"],
+    [role="menu"]
+  ):is([data-dream-lg-hover="1"], [data-dream-lg-pair-active="1"], :focus-within)::after {
+    opacity: 1;
+  }
+
+  /* 9. HarmonyOS Runtime Aurora (Pending -> Traveling Outline; Confirmed -> Crystal Sparkle) + Enter Motion */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"][data-dream-lg-busy="true"] :is(.surface-composer-card, .agy-takeover-card)::after {
+    opacity: 1;
+    background: conic-gradient(from var(--ds-lg-aurora-angle), transparent 0deg, rgb(var(--ds-lg-prism-b, var(--ds-accent-rgb, 47 117 195)) / .92) 48deg, rgb(255 255 255 / 1) 76deg, rgb(var(--ds-lg-prism-a, 200 228 255) / .88) 108deg, transparent 165deg, transparent 360deg) !important;
+    animation: ds-lg-aurora 2.4s linear infinite;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"][data-dream-lg-busy="true"] [data-testid="agent-input-box"] :is(button[aria-label*="stop" i], button[aria-label*="cancel" i], button[aria-label*="停止"]) {
+    animation: ds-lg-sonar 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"][data-dream-lg-settled="1"] :is(.surface-composer-card, .agy-takeover-card) {
+    animation: ds-lg-settled-flash 720ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-user-bubble, .artifact-card)[data-dream-lg-seen="enter"] {
+    animation: ds-lg-enter-turn 240ms cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-dialog, [role="dialog"], [role="menu"], [role="listbox"], .compact-tooltip, .agy-toast)[data-dream-lg-seen="enter"] {
+    animation: ds-lg-pop-in 185ms cubic-bezier(.22, 1.18, .36, 1) both;
+  }
+
+  /* Menu item & switch motion */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is([role="menuitem"], [role="option"]) {
+    border-radius: 10px !important;
+    transition: background-color 70ms ease, transform 120ms cubic-bezier(.22, 1.22, .36, 1) !important;
+  }
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is([role="menuitem"], [role="option"]):is(:hover, [data-highlighted]) {
+    transform: translate3d(3px, 0, 0);
+    background: rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .14) !important;
+  }
+
+  /* Font Weight Live Boost */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] :is(body, p, li, span, td, th, label) {
+    font-weight: var(--ds-live-weight-body);
+  }
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] :is(h1, h2, h3, h4, .home-greeting-title) {
+    font-weight: var(--ds-live-weight-head);
+  }
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] :is(button, [role="button"], [role="tab"]) {
+    font-weight: var(--ds-live-weight-ctrl);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] *,
+    html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] *::before,
+    html[data-dream-skin="active"][data-dream-wallpaper-ready="1"] *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+    }
+  }
+}

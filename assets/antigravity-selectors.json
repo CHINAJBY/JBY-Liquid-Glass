@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "app": "Antigravity",
+  "minShellVersion": "2.0.0",
+  "selectors": [
+    {
+      "key": "shell-main",
+      "part": "main",
+      "label": "主工作区容器",
+      "selector": "[data-main-content-body=\"true\"], .monaco-workbench .part.editor"
+    },
+    {
+      "key": "left-panel",
+      "part": "sidebar",
+      "label": "左侧导航与会话栏",
+      "selector": "[data-testid=\"sidebar-split\"][data-split-root=\"true\"] > :first-child [role=\"navigation\"], .monaco-workbench .part.sidebar"
+    },
+    {
+      "key": "header-tint",
+      "part": "header",
+      "label": "主内容顶部导航栏",
+      "selector": "[data-main-content-header=\"true\"], .monaco-workbench .part.titlebar"
+    },
+    {
+      "key": "home-route",
+      "part": "home",
+      "label": "首页欢迎区",
+      "selector": ".agy-home, [data-main-content-body=\"true\"]:has([data-testid=\"home-greeting\"]), .monaco-workbench .part.editor .gettingStartedContainer"
+    },
+    {
+      "key": "home-icon",
+      "part": "home-hero",
+      "label": "首页品牌标识",
+      "selector": "[data-testid=\"home-greeting\"]"
+    },
+    {
+      "key": "home-suggestions",
+      "part": "home",
+      "label": "首页建议卡片",
+      "selector": ".agy-home .agy-card, .agy-home [data-testid=\"ask-question-option\"]"
+    },
+    {
+      "key": "home-banners",
+      "part": "header",
+      "label": "首页横幅区",
+      "selector": "[data-main-content-header=\"true\"]"
+    },
+    {
+      "key": "game-source",
+      "part": "home-hero",
+      "label": "首页标题文本",
+      "selector": ".home-greeting-title, [data-testid=\"home-greeting\"]"
+    },
+    {
+      "key": "project-selector",
+      "part": "project-list",
+      "label": "项目与会话列表",
+      "selector": "[data-testid=\"project-selector-trigger\"], [data-testid=\"conversation-row-sidebar\"], [data-testid=\"conversation-row-history\"], .agy-sidebar-row"
+    },
+    {
+      "key": "thread-surface",
+      "part": "thread",
+      "label": "对话流表面",
+      "selector": "[data-main-content-body=\"true\"]:has([data-testid=\"agent-input-box\"]), [data-main-content-body=\"true\"]:has(.agy-user-bubble)"
+    },
+    {
+      "key": "message",
+      "part": "message",
+      "label": "对话消息气泡与内容块",
+      "selector": ".agy-user-bubble, .agy-user-bubble-frame"
+    },
+    {
+      "key": "composer-chrome",
+      "part": "composer",
+      "label": "对话输入框主体",
+      "selector": "[data-testid=\"agent-input-box\"] .surface-composer-card, .surface-composer-card, .agy-takeover-card, .interactive-input-part"
+    },
+    {
+      "key": "composer-toolbar",
+      "part": "composer-toolbar",
+      "label": "输入框底部与顶部工具条",
+      "selector": ".agy-composer-footer, [data-testid=\"input-box-bottom-toolbar\"]"
+    },
+    {
+      "key": "overlay-dialog",
+      "part": "dialog",
+      "label": "设置弹窗与浮层",
+      "selector": ".agy-dialog, [role=\"dialog\"], [aria-modal=\"true\"], .quick-input-widget"
+    },
+    {
+      "key": "settings-panel",
+      "part": "dialog",
+      "label": "设置面板",
+      "selector": ".settings-modal-container, .onboarding-shell, .settings-editor"
+    },
+    {
+      "key": "appearance-radio",
+      "part": "dialog",
+      "label": "外观与分段控制",
+      "selector": "[data-slot=\"toggle-group\"], [role=\"radiogroup\"], .settings-modal-container [role=\"radio\"]"
+    }
+  ]
+}

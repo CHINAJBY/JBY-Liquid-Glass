@@ -1,6 +1,7 @@
-.DS_Store
-Thumbs.db
-desktop.ini
+app/*.exe
+runtime/
+assets/codex-app.ico
 *.log
-*.tmp
-node_modules/
+*.tmp-*
+desktop-artifacts/
+scratch/
