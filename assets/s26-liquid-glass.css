@@ -1,4 +1,4 @@
-/* === JBY-Liquid-Glass: Universal S26 Clear Liquid Glass & HarmonyOS 7 Fluid Engine ([data-dream-lg="on"]) === */
+/* === JBY-Liquid-Glass v3: Multi-Zone Clear Liquid Glass (Live SVG Snell + WebGL2 + Zero-Lag Blink CSS) === */
 @property --ds-lg-aurora-angle {
   syntax: "<angle>";
   initial-value: 135deg;
@@ -6,67 +6,41 @@
 }
 
 @keyframes ds-lg-aurora {
-  0% {
-    --ds-lg-aurora-angle: 0deg;
-  }
-  100% {
-    --ds-lg-aurora-angle: 360deg;
-  }
+  0% { --ds-lg-aurora-angle: 0deg; }
+  100% { --ds-lg-aurora-angle: 360deg; }
 }
 
 @keyframes ds-lg-settled-flash {
   0% {
     box-shadow:
-      0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .65),
-      inset 0 0 24px rgb(255 255 255 / .65);
+      0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .58),
+      inset 0 0 22px rgb(255 255 255 / .68);
   }
   100% {
     box-shadow:
-      0 0 0 22px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / 0),
+      0 0 0 20px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / 0),
       inset 0 0 0 rgb(255 255 255 / 0);
   }
 }
 
 @keyframes ds-lg-enter-turn {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 12px, 0) scale(0.985);
-  }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-  }
+  0% { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.988); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
 }
 
 @keyframes ds-lg-pop-in {
-  0% {
-    opacity: 0;
-    border-radius: 34px;
-    transform: translate3d(0, 6px, 0) scale(0.91, 0.88);
-  }
-  66% {
-    opacity: 1;
-    border-radius: 20px;
-    transform: translate3d(0, -1.5px, 0) scale(1.018, 1.022);
-  }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1, 1);
-  }
+  0% { opacity: 0; transform: translate3d(0, 6px, 0) scale(0.94, 0.91); }
+  68% { opacity: 1; transform: translate3d(0, -1px, 0) scale(1.012, 1.014); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1, 1); }
 }
 
 @keyframes ds-lg-sonar {
-  0% {
-    box-shadow: 0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .52);
-  }
-  75% {
-    box-shadow: 0 0 0 13px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / 0);
-  }
+  0% { box-shadow: 0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .48); }
+  75% { box-shadow: 0 0 0 12px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / 0); }
 }
 
+/* Highest !important layer in DreamSkin: cleanly overrides SafeCSS @layer dreamskin-community & @layer utilities */
 @layer dreamskin-accessibility {
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] {
     --ds-immersive-sidebar: transparent;
@@ -74,96 +48,107 @@
     --ds-immersive-mid: transparent;
     --ds-immersive-far: transparent;
     --ds-task-full-veil: none;
-    --ds-immersive-line: rgb(var(--ds-text-rgb) / .28);
-    --ds-immersive-composer: linear-gradient(155deg, rgb(255 255 255 / .18), rgb(255 255 255 / .10));
-    --ds-immersive-composer-solid: linear-gradient(155deg, rgb(255 255 255 / .18), rgb(255 255 255 / .10));
-    /* S26 Clear Crystal Lens Tokens: ultra-low white glaze (10%-18%), high saturation refraction, heavy bevel separation */
-    --ds-lg-glass-hi: rgb(255 255 255 / .18);
-    --ds-lg-glass-mid: rgb(255 255 255 / .10);
-    --ds-lg-glass-lo: rgb(var(--ds-lg-env-rgb, var(--ds-lg-accent-rgb, var(--ds-accent-rgb))) / .14);
-    --ds-lg-rail-bg: linear-gradient(158deg, rgb(255 255 255 / .18) 0%, rgb(255 255 255 / .10) 56%, rgb(var(--ds-lg-env-rgb, var(--ds-lg-accent-rgb, var(--ds-accent-rgb))) / .16) 100%);
-    --ds-lg-popover-bg: linear-gradient(158deg, rgb(255 255 255 / .18) 0%, rgb(var(--ds-panel-rgb) / .13) 62%, rgb(var(--ds-lg-env-rgb, var(--ds-lg-accent-rgb, var(--ds-accent-rgb))) / .16) 100%);
-    --ds-lg-tooltip-bg: linear-gradient(154deg, rgb(255 255 255 / .22) 0%, rgb(var(--ds-panel-rgb) / .15) 100%);
-    --ds-lg-card-bg: linear-gradient(158deg, rgb(255 255 255 / .17) 0%, rgb(var(--ds-panel-rgb) / .10) 64%, rgb(var(--ds-lg-env-rgb, var(--ds-lg-accent-rgb, var(--ds-accent-rgb))) / .14) 100%);
-    --ds-lg-rim-dark: rgb(var(--ds-text-rgb, 36 46 68) / var(--ds-lg-rim-alpha, .36));
-    --ds-lg-rim-spec: rgb(255 255 255 / .98);
+    --ds-immersive-line: rgb(18 28 48 / .15);
+    --ds-immersive-composer: linear-gradient(162deg, rgb(255 255 255 / var(--ds-lg-z-composer-hi, .10)), rgb(255 255 255 / var(--ds-lg-z-composer-mid, .025)) 56%, rgb(255 255 255 / var(--ds-lg-z-composer-lo, .065)));
+    --ds-immersive-composer-solid: var(--ds-immersive-composer);
+
+    /* Default Optical Tokens (Light Shell: pure neutral white crystal, zero color bleed) */
+    --ds-lg-glass-hi: rgb(255 255 255 / var(--ds-lg-glaze-hi, .10));
+    --ds-lg-glass-mid: rgb(255 255 255 / var(--ds-lg-glaze-mid, .025));
+    --ds-lg-glass-lo: rgb(255 255 255 / var(--ds-lg-glaze-lo, .065));
+
+    --ds-lg-composer-bg: linear-gradient(162deg, rgb(255 255 255 / var(--ds-lg-z-composer-hi, .10)) 0%, rgb(255 255 255 / var(--ds-lg-z-composer-mid, .025)) 56%, rgb(255 255 255 / var(--ds-lg-z-composer-lo, .065)) 100%);
+    --ds-lg-rail-bg: linear-gradient(162deg, rgb(255 255 255 / var(--ds-lg-z-composer-hi, .11)) 0%, rgb(255 255 255 / var(--ds-lg-z-composer-mid, .03)) 56%, rgb(255 255 255 / var(--ds-lg-z-composer-lo, .07)) 100%);
+    --ds-lg-writing-bg: linear-gradient(156deg, rgb(255 255 255 / var(--ds-lg-z-writing-hi, .24)) 0%, rgb(255 255 255 / var(--ds-lg-z-writing-mid, .07)) 56%, rgb(255 255 255 / var(--ds-lg-z-writing-lo, .15)) 100%);
+    --ds-lg-sidebar-bg: linear-gradient(160deg, rgb(255 255 255 / var(--ds-lg-z-sidebar-hi, .22)) 0%, rgb(255 255 255 / var(--ds-lg-z-sidebar-mid, .08)) 62%, rgb(255 255 255 / var(--ds-lg-z-sidebar-lo, .14)) 100%);
+    --ds-lg-card-bg: linear-gradient(158deg, rgb(255 255 255 / var(--ds-lg-z-cards-hi, .22)) 0%, rgb(255 255 255 / var(--ds-lg-z-cards-mid, .07)) 60%, rgb(255 255 255 / var(--ds-lg-z-cards-lo, .14)) 100%);
+    --ds-lg-pill-bg: linear-gradient(148deg, rgb(255 255 255 / var(--ds-lg-z-cards-hi, .26)) 0%, rgb(255 255 255 / var(--ds-lg-z-cards-mid, .08)) 64%, rgb(255 255 255 / var(--ds-lg-z-cards-lo, .16)) 100%);
+    --ds-lg-popover-bg: linear-gradient(158deg, rgb(255 255 255 / var(--ds-lg-z-popover-hi, .48)) 0%, rgb(248 251 255 / var(--ds-lg-z-popover-mid, .28)) 60%, rgb(244 248 255 / var(--ds-lg-z-popover-lo, .38)) 100%);
+    --ds-lg-tooltip-bg: linear-gradient(156deg, rgb(255 255 255 / .56) 0%, rgb(246 250 255 / .38) 100%);
+
+    --ds-lg-rim-dark: rgb(18 28 48 / var(--ds-lg-rim-alpha, .15));
+    --ds-lg-rim-spec: rgb(255 255 255 / .96);
     --ds-lg-shadow-sep:
-      0 0 0 1px rgb(20 30 56 / .20),
-      0 26px 58px -10px rgb(16 24 44 / .36),
-      0 10px 24px -4px rgb(16 24 44 / .22),
-      inset 0 -10px 22px -12px rgb(20 30 56 / .15);
+      0 0 0 1px rgb(16 24 40 / .08),
+      0 22px 48px -12px rgb(16 24 40 / .20),
+      0 8px 20px -6px rgb(16 24 40 / .12),
+      inset 0 -8px 18px -12px rgb(16 24 40 / .08);
     --ds-lg-shadow-brick:
-      0 0 0 1px rgb(20 30 56 / .18),
-      0 16px 36px -8px rgb(16 24 44 / .28),
-      0 5px 14px -3px rgb(16 24 44 / .16),
-      inset 0 -6px 14px -10px rgb(20 30 56 / .14);
-    --ds-lg-text-halo: 0 1px 1px rgb(255 255 255 / .88), 0 0 10px rgb(255 255 255 / .76);
-    --ds-lg-pill-bg: linear-gradient(140deg, rgb(255 255 255 / .22), rgb(var(--ds-panel-rgb) / .12) 66%, rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .14) 100%);
+      0 0 0 1px rgb(16 24 40 / .08),
+      0 14px 30px -10px rgb(16 24 40 / .16),
+      0 4px 12px -4px rgb(16 24 40 / .10),
+      inset 0 -4px 12px -8px rgb(16 24 40 / .07);
+    --ds-lg-text-halo: 0 1px 1px rgb(255 255 255 / .86), 0 0 8px rgb(255 255 255 / .68);
   }
 
   html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] {
-    --ds-lg-glass-hi: rgb(255 255 255 / .14);
-    --ds-lg-glass-mid: rgb(var(--ds-panel-rgb) / .24);
-    --ds-lg-glass-lo: rgb(var(--ds-lg-env-rgb, var(--ds-lg-accent-rgb, var(--ds-accent-rgb))) / .20);
-    --ds-lg-rail-bg: linear-gradient(164deg, rgb(255 255 255 / .14) 0%, rgb(var(--ds-panel-rgb) / .26) 100%);
-    --ds-lg-popover-bg: linear-gradient(158deg, rgb(var(--ds-panel-rgb) / .34) 0%, rgb(var(--ds-bg-rgb) / .24) 100%);
-    --ds-lg-tooltip-bg: linear-gradient(154deg, rgb(var(--ds-panel-2-rgb) / .42), rgb(var(--ds-bg-rgb) / .30));
-    --ds-lg-card-bg: linear-gradient(158deg, rgb(var(--ds-panel-rgb) / .28), rgb(var(--ds-bg-rgb) / .18));
-    --ds-lg-rim-dark: rgb(255 255 255 / .28);
-    --ds-lg-rim-spec: rgb(255 255 255 / .46);
+    --ds-immersive-line: rgb(255 255 255 / .22);
+    --ds-lg-glass-hi: rgb(255 255 255 / .11);
+    --ds-lg-glass-mid: rgb(14 18 28 / .18);
+    --ds-lg-glass-lo: rgb(14 18 28 / .24);
+
+    --ds-lg-composer-bg: linear-gradient(162deg, var(--ds-lg-z-composer-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-composer-dark-mid, rgb(14 18 28 / .18)) 56%, var(--ds-lg-z-composer-dark-lo, rgb(14 18 28 / .24)) 100%);
+    --ds-lg-rail-bg: linear-gradient(164deg, var(--ds-lg-z-composer-dark-hi, rgb(255 255 255 / .12)) 0%, var(--ds-lg-z-composer-dark-lo, rgb(14 18 28 / .24)) 100%);
+    --ds-lg-writing-bg: linear-gradient(156deg, var(--ds-lg-z-writing-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-writing-dark-mid, rgb(16 20 32 / .24)) 56%, var(--ds-lg-z-writing-dark-lo, rgb(14 18 28 / .30)) 100%);
+    --ds-lg-sidebar-bg: linear-gradient(160deg, var(--ds-lg-z-sidebar-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-sidebar-dark-lo, rgb(16 22 36 / .24)) 100%);
+    --ds-lg-card-bg: linear-gradient(158deg, var(--ds-lg-z-cards-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-cards-dark-lo, rgb(16 22 36 / .24)) 100%);
+    --ds-lg-pill-bg: linear-gradient(142deg, var(--ds-lg-z-cards-dark-hi, rgb(255 255 255 / .14)) 0%, var(--ds-lg-z-cards-dark-lo, rgb(18 24 38 / .28)) 100%);
+    --ds-lg-popover-bg: linear-gradient(158deg, var(--ds-lg-z-popover-dark-hi, rgb(28 35 52 / .64)) 0%, var(--ds-lg-z-popover-dark-lo, rgb(14 18 28 / .54)) 100%);
+    --ds-lg-tooltip-bg: linear-gradient(154deg, rgb(26 32 48 / .72), rgb(14 18 28 / .62));
+
+    --ds-lg-rim-dark: rgb(255 255 255 / .22);
+    --ds-lg-rim-spec: rgb(255 255 255 / .48);
     --ds-lg-shadow-sep:
-      0 0 0 1px rgb(0 0 0 / .44),
-      0 26px 58px -8px rgb(0 0 0 / .58),
-      0 10px 26px -4px rgb(0 0 0 / .36),
-      inset 0 -10px 22px -12px rgb(0 0 0 / .42);
+      0 0 0 1px rgb(0 0 0 / .40),
+      0 24px 52px -10px rgb(0 0 0 / .54),
+      0 10px 24px -4px rgb(0 0 0 / .34),
+      inset 0 -10px 20px -12px rgb(0 0 0 / .38);
     --ds-lg-shadow-brick:
-      0 0 0 1px rgb(0 0 0 / .38),
-      0 16px 36px -8px rgb(0 0 0 / .48),
-      inset 0 -6px 14px -10px rgb(0 0 0 / .32);
+      0 0 0 1px rgb(0 0 0 / .34),
+      0 14px 32px -8px rgb(0 0 0 / .44),
+      inset 0 -6px 12px -8px rgb(0 0 0 / .28);
     --ds-lg-text-halo: 0 1px 2px rgb(0 0 0 / .72), 0 0 10px rgb(0 0 0 / .52);
-    --ds-lg-pill-bg: linear-gradient(135deg, rgb(255 255 255 / .16), rgb(var(--ds-panel-rgb) / .28));
   }
 
-  /* Decision #7 Typography: 500 body / 530 controls / 560 headings + clear-glass halo legibility */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(body, aside, main, [role="menu"], [role="dialog"], [role="tooltip"]) {
-    font-weight: 500;
-    -webkit-font-smoothing: subpixel-antialiased;
+  /* Inherited typography smoothing & halo (zero costly span/div descendant chains!) */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] body {
+    font-weight: var(--ds-live-weight-body, 500);
+    -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(button, a, label, [role="menuitem"], [role="tab"], [role="option"], summary) {
-    font-weight: 530;
+    font-weight: var(--ds-live-weight-ctrl, 530);
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(h1, h2, h3, [data-ds-part="home-hero"]) {
-    font-weight: 560;
+    font-weight: var(--ds-live-weight-head, 560);
   }
 
-  html[data-dream-skin="active"][data-dream-shell="light"][data-dream-lg="on"]
-    :is(aside.app-shell-left-panel, [role="menu"], [role="dialog"], [role="tooltip"], [class*="Tooltip-"], section > div[class*="rounded-2xl"][class*="border"]) :is(span, p, div, a, label) {
-    text-shadow: 0 1px 1px rgb(255 255 255 / .92), 0 0 8px rgb(255 255 255 / .72);
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(aside.app-shell-left-panel, [role="menu"], [role="dialog"], [data-radix-popper-content-wrapper], section div[class*="rounded-2xl"][class*="border"]) {
+    text-shadow: var(--ds-lg-text-halo);
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="main"]:has([data-testid="home-icon"]) :is(h1, h2, p, [data-ds-part="home-hero"]) {
+  html[data-dream-skin="active"][data-dream-shell="light"][data-dream-lg="on"] [data-ds-part="home-hero"] {
     text-shadow: 0 1px 12px rgb(255 255 255 / .94), 0 0 22px rgb(var(--ds-panel-rgb) / .84) !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] [role="main"]:has([data-testid="home-icon"]) :is(h1, h2, p, [data-ds-part="home-hero"]) {
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] [data-ds-part="home-hero"] {
     text-shadow: 0 2px 14px rgb(0 0 0 / .78), 0 0 24px rgb(0 0 0 / .50) !important;
   }
 
-  /* Decision #3 — S26 Floating Crystal Island Sidebar (clears top ApplicationMenuTopBar cleanly at 40px, 24px radius, 0 software readbacks) */
+  /* Zone: Sidebar Floating Crystal Island (40px top clearance, 24px radius) */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] aside.app-shell-left-panel,
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"][data-dream-art-wide="true"]:has(main:is(.main-surface, [data-app-shell-main-surface], [class*="_MainContentSurface_"])) aside.app-shell-left-panel,
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="sidebar"] {
     isolation: isolate;
     margin: 40px 0 8px 8px !important;
     height: calc(100% - 48px) !important;
     max-height: calc(100vh - 48px) !important;
-    background: var(--ds-lg-card-bg) !important;
-    backdrop-filter: blur(4px) saturate(165%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(4px) saturate(165%) brightness(1.02) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
+    background: var(--ds-lg-sidebar-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: blur(var(--ds-lg-z-sidebar-blur, 4px)) saturate(122%) brightness(1.01) !important;
+    -webkit-backdrop-filter: blur(var(--ds-lg-z-sidebar-blur, 4px)) saturate(122%) brightness(1.01) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-sidebar-rim-a, .15)) !important;
     border-radius: 24px !important;
     overflow: hidden !important;
     box-shadow:
@@ -173,10 +158,14 @@
       inset -1px 0 0 rgb(255 255 255 / .56) !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] aside.app-shell-left-panel[data-dream-lg-gpu="1"],
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"][data-dream-art-wide="true"]:has(main:is(.main-surface, [data-app-shell-main-surface], [class*="_MainContentSurface_"])) aside.app-shell-left-panel[data-dream-lg-gpu="1"],
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="sidebar"][data-dream-lg-gpu="1"] {
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] aside.app-shell-left-panel,
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] [data-ds-part="sidebar"] {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-sidebar-rim-a, .22)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(aside.app-shell-left-panel, [data-ds-part="sidebar"])[data-dream-lg-gpu="1"] {
     background: transparent !important;
+    background-color: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
@@ -187,38 +176,32 @@
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] aside.app-shell-left-panel button:not([aria-label^="切换模式"]):hover,
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] aside.app-shell-left-panel a:hover {
-    transform: translate3d(2.5px, 0, 0) !important;
+    transform: translate3d(3px, 0, 0) !important;
     background: var(--ds-lg-pill-bg) !important;
-    border: 1px solid rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .32) !important;
+    border: 1px solid rgb(255 255 255 / .68) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] aside.app-shell-left-panel [aria-current="page"],
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] aside.app-shell-left-panel [class~="bg-token-list-hover-background"] {
-    background: linear-gradient(135deg,
-      rgb(255 255 255 / .30),
-      rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .20)) !important;
-    border: 1px solid rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .44) !important;
-    box-shadow:
-      0 6px 16px -4px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .22),
-      inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+    background: linear-gradient(135deg, rgb(255 255 255 / .36), rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .16)) !important;
+    border: 1px solid rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .36) !important;
+    box-shadow: 0 6px 16px -4px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .18), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
   }
 
-  /* Tier 3 — Home Suggestions & Hero Project Selector Capsule (iOS 26 crystal clarity) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="main"]:has([data-testid="home-icon"]) .group\/home-suggestions button,
+  /* Zone: Cards (Home suggestions, Project selector, Settings cards, Work quota banner) */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="home"] .group\/home-suggestions button,
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .group\/project-selector > button {
     isolation: isolate;
     overflow: hidden !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
     border-radius: 20px !important;
-    background: linear-gradient(155deg, var(--ds-lg-glass-hi), var(--ds-lg-glass-mid) 64%, var(--ds-lg-glass-lo) 100%) !important;
-    backdrop-filter: blur(2.2px) saturate(195%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(2.2px) saturate(195%) brightness(1.02) !important;
-    box-shadow:
-      var(--ds-lg-shadow-brick),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    background: var(--ds-lg-card-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: blur(var(--ds-lg-z-cards-blur, 3px)) saturate(124%) brightness(1.01) !important;
+    -webkit-backdrop-filter: blur(var(--ds-lg-z-cards-blur, 3px)) saturate(124%) brightness(1.01) !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="main"]:has([data-testid="home-icon"]) h1 button,
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="home-hero"] button {
     position: relative !important;
     isolation: isolate;
@@ -226,24 +209,23 @@
     margin-inline: 5px !important;
     border-radius: 999px !important;
     background: var(--ds-lg-pill-bg) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    backdrop-filter: blur(2.2px) saturate(198%) !important;
-    -webkit-backdrop-filter: blur(2.2px) saturate(198%) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
+    backdrop-filter: blur(var(--ds-lg-z-cards-blur, 3px)) saturate(124%) !important;
+    -webkit-backdrop-filter: blur(var(--ds-lg-z-cards-blur, 3px)) saturate(124%) !important;
     color: var(--ds-text) !important;
     text-decoration: none !important;
-    box-shadow:
-      var(--ds-lg-shadow-brick),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(.group\/home-suggestions button, .group\/project-selector > button, [data-ds-part="home-hero"] button)[data-dream-lg-gpu="1"] {
     background: transparent !important;
+    background-color: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
 
-  /* Decision #5 — Discrete Crystal Thread Layer (AI text frameless 100% clear; User bubble, activity bricks, diffs, codeblocks = S26 clear crystal bricks) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] main:is(.main-surface, [data-app-shell-main-surface], [class*="MainContentSurface"]):not(:has([role="main"])) article,
+  /* Thread Layer: AI prose remains frameless for effortless readability; thread cards keep fast bevel glass */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="message"],
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-local-conversation-final-assistant="true"],
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .thread-scroll-container [data-local-conversation-item-target-ids]:has([data-markdown-text-style]):not(:has([data-user-message-bubble])),
@@ -256,20 +238,19 @@
     border-width: 0 !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
-  /* Discrete Crystal User Question Bubble (clear iOS 26 optics, zero slow SVG readback) */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .thread-scroll-container :is([data-user-message-bubble="true"], [class~="bg-user-message"]) {
     border-radius: 20px !important;
     padding: 10px 16px !important;
     background: var(--ds-lg-card-bg) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    border-left: 2.5px solid rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .78) !important;
-    backdrop-filter: blur(2.4px) saturate(198%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(2.4px) saturate(198%) brightness(1.02) !important;
-    box-shadow:
-      var(--ds-lg-shadow-brick),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
+    border-left: 2.5px solid rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .72) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
     color: var(--ds-text) !important;
   }
 
@@ -285,63 +266,67 @@
     content: none !important;
   }
 
-  /* Keep full artwork behind AI text, only ultra-soft feather on far-left reading band */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .thread-scroll-container {
-    background: linear-gradient(90deg,
-      rgb(var(--ds-panel-rgb) / .10) 0%,
-      rgb(var(--ds-panel-rgb) / .04) 55%,
-      transparent 100%) !important;
-  }
-
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .thread-scroll-container :is([class*="_markdown"], [class*="markdown"], [data-user-message-bubble="true"], [data-markdown-text-style]) :is(p, li, h1, h2, h3, h4, h5, h6, strong, em, blockquote, a, td, th, div) {
+    background: linear-gradient(90deg, rgb(var(--ds-panel-rgb) / .06) 0%, rgb(var(--ds-panel-rgb) / .02) 55%, transparent 100%) !important;
     color: var(--ds-text) !important;
-    text-shadow:
-      var(--ds-lg-text-halo),
-      0 0 14px rgb(var(--ds-panel-rgb) / .88) !important;
+    text-shadow: var(--ds-lg-text-halo);
   }
 
-  html[data-dream-skin="active"][data-dream-shell="light"][data-dream-lg="on"] .thread-scroll-container :is([class*="_markdown"], [class*="markdown"], [data-user-message-bubble="true"], [data-markdown-text-style]) :is(p, li, h1, h2, h3, h4, h5, h6, strong, em, blockquote, a, td, th, div) {
-    text-shadow:
-      0 1px 1px rgb(255 255 255 / .98),
-      0 0 10px rgb(var(--ds-panel-rgb) / .96),
-      0 0 22px rgb(255 255 255 / .90) !important;
+  /* Zone: Writing Block Output Card ([data-oai-writing-block-surface]) -> Full Clear Liquid Glass Window! */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"]) {
+    --wb-surface-primary: transparent !important;
+    position: relative !important;
+    isolation: isolate;
+    border-radius: 24px !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-writing-rim-a, .16)) !important;
+    background: var(--ds-lg-writing-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-writing, blur(0px)) blur(var(--ds-lg-z-writing-blur, 5px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-writing, blur(0px)) blur(var(--ds-lg-z-writing-blur, 5px)) saturate(1.48) brightness(1.02) !important;
+    box-shadow:
+      var(--ds-lg-shadow-sep),
+      inset 0 1.5px 1px var(--ds-lg-rim-spec),
+      inset 1px 0 0 rgb(255 255 255 / .72),
+      inset -1px 0 0 rgb(255 255 255 / .52) !important;
+    color: var(--ds-text) !important;
+    text-shadow: var(--ds-lg-text-halo);
   }
 
-  html[data-dream-skin="active"][data-dream-shell="light"][data-dream-lg="on"] .thread-scroll-container :is([class*="text-token-text-tertiary"], [class*="text-tertiary"], [class*="text-secondary"]) {
-    color: rgb(var(--ds-text-rgb) / .78) !important;
-    text-shadow:
-      0 1px 1px rgb(255 255 255 / .98),
-      0 0 10px rgb(var(--ds-panel-rgb) / .92) !important;
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] :is([data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"]) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-writing-rim-a, .24)) !important;
   }
 
-  /* Discrete Crystal Bricks: Activity Strips, File Edit Cards, Tool Status Banners */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"]) > div[class*="inset-0"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"]) header {
+    background: linear-gradient(180deg, rgb(255 255 255 / .68), rgb(255 255 255 / .42)) !important;
+    background-color: transparent !important;
+    border-bottom: 1px solid rgb(18 28 48 / .10) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] :is([data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"]) header {
+    background: linear-gradient(180deg, rgb(22 28 44 / .72), rgb(14 18 28 / .52)) !important;
+    border-bottom-color: rgb(255 255 255 / .14) !important;
+  }
+
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .thread-scroll-container [data-local-conversation-item-target-ids]:not(:has([data-markdown-text-style], [data-user-message-bubble], [class*="group/activity-header"], summary, [class*="turn-diff-header"], [data-local-conversation-turn-diff])),
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .thread-scroll-container :is([class*="group/activity-header"], summary) {
-    border-radius: 16px !important;
-    background: var(--ds-lg-card-bg) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    backdrop-filter: blur(2.4px) saturate(195%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(2.4px) saturate(195%) brightness(1.02) !important;
-    box-shadow:
-      var(--ds-lg-shadow-brick),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
-  }
-
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .thread-scroll-container :is([data-markdown-copy="code-block"], pre) {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] .thread-scroll-container :is([class*="group/activity-header"], summary, [data-markdown-copy="code-block"], pre) {
     border-radius: 18px !important;
-    background: var(--ds-lg-popover-bg) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    backdrop-filter: blur(3px) saturate(192%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(3px) saturate(192%) brightness(1.02) !important;
-    box-shadow:
-      var(--ds-lg-shadow-brick),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    background: var(--ds-lg-card-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
   }
-}
 
-/* @layer properties overrides SafeCSS theme.css, dreamskin-community, and Tailwind @layer utilities */
-@layer properties {
-  /* WebGL2 Hardware-Baked Optical Texture Layer (painted behind content, zero DOM injection, zero hover readbacks) */
+  /* WebGL2 Hardware-Baked Optical Layer (static wallpaper-backed surfaces: Sidebar & Home cards) */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-gpu="1"]::before {
     content: "" !important;
     position: absolute !important;
@@ -354,8 +339,8 @@
     z-index: -1 !important;
   }
 
-  /* Tier 2 — Crystal-Clean Transparent Header & Floating Glass Control Pills */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-ds-part="header"], header[class*="ApplicationMenuPageHeader"], main > header:is(.app-header-tint, [data-app-shell-header-edge-scroll], [class*="_Header_"])) {
+  /* Transparent Header & Glass Header Control Pills */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-ds-part="header"], header[class*="ApplicationMenuPageHeader"], main > header:is(.app-header-tint, [data-app-shell-header-edge-scroll], [class*="_Header_"]), [class~="group/application-menu-top-bar"], [class*="ApplicationMenuTopBar"]) {
     background: transparent !important;
     background-color: transparent !important;
     backdrop-filter: none !important;
@@ -364,16 +349,6 @@
     box-shadow: none !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([class~="group/application-menu-top-bar"], [class*="ApplicationMenuTopBar"]) {
-    background: transparent !important;
-    background-color: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-bottom: 0 !important;
-    box-shadow: none !important;
-  }
-
-  /* Standalone header control pills (strictly EXCLUDING segmented switcher tabs!) */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(
     [class*="ApplicationMenuTopBar"] button[role="menuitem"]:hover,
     [class*="ApplicationMenuTopBar"] button[aria-expanded="true"],
@@ -382,99 +357,94 @@
   ) {
     background: var(--ds-lg-pill-bg) !important;
     border: 1px solid var(--ds-lg-rim-dark) !important;
-    backdrop-filter: blur(4px) saturate(195%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(4px) saturate(195%) brightness(1.02) !important;
-    box-shadow: 0 6px 16px -3px rgb(16 24 44 / .20), 0 0 0 1px rgb(20 30 56 / .12), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+    backdrop-filter: blur(4px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(4px) saturate(135%) !important;
+    box-shadow: 0 6px 16px -3px rgb(16 24 44 / .16), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
     border-radius: 999px !important;
   }
 
-  /* Native Codex ChatGPT "聊天 | 工作" Mode Switcher — Deeply Separated Recessed Track vs Proud Floating Crystal Lens */
+  /* Zone: Popover — Native Codex Mode Switcher ("聊天 | 工作"): TRUE clear crystal glass (NO opaque white blob!) */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="group"]:has(> [class*="indicator-"]):has(> button[aria-pressed]) {
+    position: relative !important;
+    isolation: isolate;
     height: 38px !important;
     padding: 0 !important;
     overflow: visible !important;
+    background: transparent !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="group"]:has(> [class*="indicator-"]) > span[class*="mode-toggle-track"] {
-    height: 34px !important;
-    background: linear-gradient(164deg, rgb(22 32 54 / .24), rgb(16 24 44 / .16)) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    backdrop-filter: blur(4px) saturate(185%) !important;
-    -webkit-backdrop-filter: blur(4px) saturate(185%) !important;
+    height: 36px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(162deg, rgb(255 255 255 / .24), rgb(255 255 255 / .06)) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-popover-rim-a, .16)) !important;
+    backdrop-filter: var(--ds-lg-lens-popover, blur(0px)) blur(var(--ds-lg-z-popover-blur, 5px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-popover, blur(0px)) blur(var(--ds-lg-z-popover-blur, 5px)) saturate(1.48) brightness(1.02) !important;
     box-shadow:
-      inset 0 2.5px 8px rgb(12 20 40 / .30),
-      0 6px 18px -4px rgb(16 24 44 / .18) !important;
+      0 8px 22px -6px rgb(16 24 44 / .16),
+      inset 0 1.5px 0 var(--ds-lg-rim-spec),
+      inset 0 -1px 0 rgb(255 255 255 / .36) !important;
+    z-index: 0 !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] [role="group"]:has(> [class*="indicator-"]) > span[class*="mode-toggle-track"] {
-    background: linear-gradient(164deg, rgb(6 10 22 / .58), rgb(12 18 36 / .46)) !important;
-    box-shadow:
-      inset 0 2.5px 8px rgb(0 0 0 / .48),
-      0 6px 18px -4px rgb(0 0 0 / .38) !important;
+    background: linear-gradient(164deg, rgb(255 255 255 / .12), rgb(12 18 32 / .38)) !important;
+    border-color: rgb(255 255 255 / var(--ds-lg-z-popover-rim-a, .24)) !important;
+    box-shadow: 0 10px 24px -6px rgb(0 0 0 / .46), inset 0 1.5px 0 rgb(255 255 255 / .38) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="group"]:has(> [class*="indicator-"]) > span[class*="indicator-"] {
-    height: 40px !important;
+    z-index: 1 !important;
+    height: 30px !important;
     align-self: center !important;
     background: linear-gradient(155deg,
-      rgb(255 255 255 / .98) 0%,
-      rgb(252 254 255 / .93) 62%,
-      rgb(var(--ds-lg-prism-a, 224 238 255) / .96) 100%) !important;
-    border: 1.5px solid #ffffff !important;
+      rgb(255 255 255 / var(--ds-lg-z-popover-hi, .46)) 0%,
+      rgb(255 255 255 / var(--ds-lg-z-popover-mid, .14)) 56%,
+      rgb(255 255 255 / var(--ds-lg-z-popover-lo, .30)) 100%) !important;
+    border: 1px solid rgb(255 255 255 / .92) !important;
     box-shadow:
-      0 10px 26px -3px rgb(10 18 38 / .36),
-      0 0 0 1px rgb(var(--ds-lg-accent-rgb) / .24),
-      inset 0 2px 1.5px #ffffff !important;
-    transition: transform 340ms cubic-bezier(.22, 1.28, .36, 1) !important;
+      0 6px 16px -3px rgb(16 24 44 / .18),
+      0 0 0 1px rgb(18 28 48 / .06),
+      inset 0 1.5px 1px #ffffff !important;
+    transition: transform 320ms var(--ds-lg-spring-responsive, cubic-bezier(.22, 1.28, .36, 1)) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] [role="group"]:has(> [class*="indicator-"]) > span[class*="indicator-"] {
     background: linear-gradient(155deg,
-      rgb(255 255 255 / .34) 0%,
-      rgb(var(--ds-lg-accent-rgb) / .44) 60%,
-      rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-alt-rgb)) / .38) 100%) !important;
-    border: 1.5px solid rgb(255 255 255 / .86) !important;
-    box-shadow:
-      0 10px 26px -3px rgb(0 0 0 / .52),
-      0 0 14px -2px rgb(var(--ds-lg-accent-rgb) / .40),
-      inset 0 2px 1.5px rgb(255 255 255 / .88) !important;
+      var(--ds-lg-z-popover-dark-hi, rgb(255 255 255 / .24)) 0%,
+      var(--ds-lg-z-popover-dark-lo, rgb(255 255 255 / .08)) 100%) !important;
+    border: 1px solid rgb(255 255 255 / .68) !important;
+    box-shadow: 0 8px 20px -4px rgb(0 0 0 / .48), inset 0 1.5px 1px rgb(255 255 255 / .72) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="group"]:has(> [class*="indicator-"]) > button[aria-pressed] {
+    position: relative !important;
+    z-index: 2 !important;
     background: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
-    transition: transform 220ms cubic-bezier(.22, 1.24, .36, 1), opacity 160ms ease !important;
+    transition: transform 220ms cubic-bezier(.22, 1.24, .36, 1), opacity 160ms ease, color 160ms ease !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="group"]:has(> [class*="indicator-"]) > button[aria-pressed="false"] {
-    color: rgb(var(--ds-text-rgb) / .64) !important;
-    opacity: .68 !important;
-    font-weight: 500 !important;
-    transform: scale(.90) !important;
+    color: rgb(var(--ds-text-rgb) / .72) !important;
+    opacity: .78 !important;
+    font-weight: 520 !important;
+    transform: scale(.94) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="group"]:has(> [class*="indicator-"]) > button[aria-pressed="true"] {
     color: var(--ds-text) !important;
     opacity: 1 !important;
-    font-weight: 600 !important;
-    transform: scale(1.06) !important;
+    font-weight: 620 !important;
+    transform: scale(1.04) !important;
   }
 
-  /* Segmented Control Containers ("聊天 | 工作", tabs, radiogroups — crisp elevated active block + sliding Dock droplet thumb) */
+  /* Segmented Control Containers (tabs/radiogroups other than native Mode Switcher) */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(
     [role="tablist"],
-    [role="radiogroup"],
-    header [class*="segmented"],
-    header [class*="Segmented"],
-    header [class*="flex"][class*="items-center"]:not([class*="group/tab"]):has(
-      > [role="tab"] + [role="tab"],
-      > [role="radio"] + [role="radio"],
-      > button[aria-selected],
-      > button[aria-pressed],
-      > button[data-state]
-    )
+    [role="radiogroup"]
   ) {
     position: relative !important;
     isolation: isolate;
@@ -482,17 +452,13 @@
     padding: 4px !important;
     gap: 2px !important;
     border-radius: 999px !important;
-    background: linear-gradient(164deg, rgb(var(--ds-panel-rgb) / .20), rgb(var(--ds-bg-rgb) / .14)) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    backdrop-filter: blur(5px) saturate(195%) !important;
-    -webkit-backdrop-filter: blur(5px) saturate(195%) !important;
-    box-shadow:
-      inset 0 2px 6px rgb(16 24 44 / .16),
-      0 8px 20px -4px rgb(16 24 44 / .22),
-      inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+    background: linear-gradient(164deg, rgb(255 255 255 / .18), rgb(255 255 255 / .07)) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-popover-rim-a, .15)) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: inset 0 2px 6px rgb(16 24 44 / .10), 0 8px 20px -4px rgb(16 24 44 / .14), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
   }
 
-  /* Spring-driven sliding liquid crystal lens thumb inside Segmented Controls ("聊天 | 工作" & Dock feel) */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-seg="1"]::before {
     content: "" !important;
     position: absolute !important;
@@ -501,22 +467,15 @@
     left: 0 !important;
     width: var(--ds-lg-seg-w, 50%) !important;
     border-radius: 999px !important;
-    background: linear-gradient(155deg,
-      rgb(255 255 255 / .90) 0%,
-      rgb(255 255 255 / .56) 54%,
-      rgb(var(--ds-lg-prism-a, 212 232 255) / .68) 100%) !important;
-    border: 1px solid rgb(255 255 255 / .96) !important;
-    box-shadow:
-      0 6px 18px -4px rgb(16 24 44 / .28),
-      0 2px 8px -2px rgb(var(--ds-lg-accent-rgb) / .26),
-      inset 0 1.5px 1px #ffffff !important;
+    background: linear-gradient(155deg, rgb(255 255 255 / .56) 0%, rgb(255 255 255 / .22) 56%, rgb(246 250 255 / .40) 100%) !important;
+    border: 1px solid rgb(255 255 255 / .94) !important;
+    box-shadow: 0 6px 16px -4px rgb(16 24 44 / .18), inset 0 1.5px 1px #ffffff !important;
     transform-origin: center center !important;
     transform: translate3d(var(--ds-lg-seg-x, 4px), 0, 0) scaleX(var(--ds-lg-seg-sx, 1)) !important;
     pointer-events: none !important;
     z-index: 0 !important;
   }
 
-  /* Inactive segmented tab: completely flat/recessed so selected lens pops unmistakably */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-seg="1"] > :is([role="tab"], [role="radio"], button, a) {
     position: relative !important;
     z-index: 1 !important;
@@ -526,37 +485,57 @@
     border-color: transparent !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
-    opacity: .56 !important;
+    opacity: .68 !important;
     transform: scale(0.95) !important;
-    transition: opacity 180ms ease, transform 220ms cubic-bezier(.22, 1.24, .36, 1) !important;
+    transition: opacity 160ms ease, transform 220ms cubic-bezier(.22, 1.24, .36, 1) !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-seg="1"] > :is([aria-selected="true"], [aria-checked="true"], [aria-pressed="true"], [data-state="active"], [data-state="on"], [aria-current], button[class*="bg-surface"], button[class*="bg-primary"], button[class*="bg-token-main"]) {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-seg="1"] > :is([aria-selected="true"], [aria-checked="true"], [aria-pressed="true"], [data-state="active"], [data-state="on"], [aria-current]) {
     opacity: 1 !important;
     font-weight: 600 !important;
     color: var(--ds-text) !important;
     transform: scale(1.03) !important;
   }
 
-  /* Fallback contrast elevation if Segmented Track hasn't received JS sliding thumb yet */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([role="tablist"], [role="radiogroup"], header [class*="segmented"], header [class*="Segmented"]):not([data-dream-lg-seg="1"]) > :is([aria-selected="true"], [aria-checked="true"], [aria-pressed="true"], [data-state="active"], [data-state="on"]) {
-    background: linear-gradient(155deg, rgb(255 255 255 / .88), rgb(var(--ds-lg-prism-a, 212 232 255) / .65)) !important;
-    border: 1px solid #ffffff !important;
-    border-radius: 999px !important;
-    box-shadow: 0 6px 16px -4px rgb(16 24 44 / .24), inset 0 1px 0 #ffffff !important;
-    opacity: 1 !important;
-    font-weight: 600 !important;
+  /* Work Mode Quota Banner Card ("你暂时已用完工作用量") -> Liquid Glass Card! */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([class*="ComposerBannerPortal"] aside, aside[class*="banner-"]) {
+    position: relative !important;
+    isolation: isolate;
+    border-radius: 26px !important;
+    background: var(--ds-lg-card-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-card, blur(0px)) blur(var(--ds-lg-z-cards-blur, 5px)) saturate(1.46) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-card, blur(0px)) blur(var(--ds-lg-z-cards-blur, 5px)) saturate(1.46) brightness(1.02) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
+    box-shadow: var(--ds-lg-shadow-sep), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    color: var(--ds-text) !important;
   }
 
-  /* Refined Golden-Proportion Width for Docked Composer Stack (matches 39b4ad05.png & 241817b8.png silhouette) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] main div:has(> :is([data-composer-rail], [class*="rail-"][class*="attached-"])):has([class*="ComposerLayoutRoot"]) {
+  /* Composer Rail: Fix collision when inside non-Work ComposerLayoutRoot, keep Work Mode & External Rail shapes untouched */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"]):not([data-dream-lg-surface="work-composer"]) :is([data-composer-rail], [class*="rail-"][class*="attached-"]) {
+    position: relative !important;
+    margin: 8px 0 0 0 !important;
+    padding: 8px 10px 2px 10px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 34px !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
+    border-top: 1px solid rgb(18 28 48 / .09) !important;
+    border-radius: 0 0 18px 18px !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-surface="rail-host"] {
     max-width: min(760px, calc(100% - 64px)) !important;
     width: 100% !important;
     margin-inline: auto !important;
   }
 
-  /* Docked Smooth Rounded Upper Tray ("盘圆润一点" — tucks behind Composer upper shoulder + NEVER overflows Goal buttons!) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-rail][data-composer-rail-placement="above"], [class*="rail-"][class*="attached-"]:not([data-composer-rail-placement="below"]):not([data-composer-rail-placement="responsive"]), [class*="homeUtilityBar"]:not([data-composer-rail-placement="responsive"]), [class*="ComposerHomeUtilityBar"]):not(:empty):has(button, [data-composer-rail-item="present"]) {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-rail][data-composer-rail-placement="above"], [class*="rail-"][class*="attached-"]:not([data-composer-rail-placement="below"]):not([data-composer-rail-placement="responsive"]), [class*="homeUtilityBar"]:not([data-composer-rail-placement="responsive"]), [class*="ComposerHomeUtilityBar"]):not(:is(.composer-surface-chrome *, [class*="ComposerLayoutRoot"] *)):not(:empty):has(button, [data-composer-rail-item="present"]) {
     position: relative !important;
     isolation: isolate;
     z-index: 1 !important;
@@ -570,19 +549,14 @@
     border-radius: 24px 24px 16px 16px !important;
     overflow: hidden !important;
     background: var(--ds-lg-rail-bg) !important;
-    backdrop-filter: blur(2.4px) saturate(195%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(2.4px) saturate(195%) brightness(1.02) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    box-shadow:
-      0 -6px 24px -6px rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .22),
-      0 14px 36px -8px rgb(16 24 44 / .24),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec),
-      inset 1px 0 0 rgb(255 255 255 / .74),
-      inset -1px 0 0 rgb(255 255 255 / .54) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-composer-rim-a, .15)) !important;
+    box-shadow: 0 12px 30px -10px rgb(16 24 44 / .18), inset 0 1.5px 0 var(--ds-lg-rim-spec), inset 1px 0 0 rgb(255 255 255 / .72), inset -1px 0 0 rgb(255 255 255 / .52) !important;
   }
 
-  /* ChatGPT Work below-composer docked shelf ("选择项目 | 文件 | 插件" — placement="below" / "responsive"): mirror-tucks cleanly beneath Composer without colliding into Suggestions */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-rail][data-composer-rail-placement="below"], [data-composer-rail][data-composer-rail-placement="responsive"]):not(:empty):has(button, [data-composer-rail-item="present"]) {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-rail][data-composer-rail-placement="below"], [data-composer-rail][data-composer-rail-placement="responsive"]):not(:is(.composer-surface-chrome *, [class*="ComposerLayoutRoot"] *)):not(:empty):has(button, [data-composer-rail-item="present"]) {
     position: relative !important;
     isolation: isolate;
     z-index: 1 !important;
@@ -596,28 +570,18 @@
     border-radius: 16px 16px 24px 24px !important;
     overflow: hidden !important;
     background: var(--ds-lg-rail-bg) !important;
-    backdrop-filter: blur(2.4px) saturate(195%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(2.4px) saturate(195%) brightness(1.02) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    box-shadow:
-      0 14px 30px -6px rgb(16 24 44 / .24),
-      inset 0 -1.5px 0 var(--ds-lg-rim-spec),
-      inset 1px 0 0 rgb(255 255 255 / .74),
-      inset -1px 0 0 rgb(255 255 255 / .54) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-composer-rim-a, .15)) !important;
+    box-shadow: 0 14px 30px -8px rgb(16 24 44 / .18), inset 0 -1.5px 0 var(--ds-lg-rim-spec), inset 1px 0 0 rgb(255 255 255 / .72), inset -1px 0 0 rgb(255 255 255 / .52) !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="main"]:has([data-composer-rail][data-composer-rail-placement="below"], [data-composer-rail][data-composer-rail-placement="responsive"]) :is(div:has(> [class*="home-suggestions"]), [class*="home-suggestions"]) {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="home"]:has([data-composer-rail][data-composer-rail-placement="below"], [data-composer-rail][data-composer-rail-placement="responsive"]) [class*="home-suggestions"] {
     margin-top: 14px !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-rail][class*="attached-"], [class*="rail-"][class*="attached-"], [class*="homeUtilityBar"])[data-dream-lg-gpu="1"] {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-
-  /* Strip inner borders so docked upper tray is one clean rounded layer */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-utility-rail], [class*="rail-"][class*="attached-"] > div) {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-utility-rail], [class*="rail-"][class*="attached-"] > div):not([data-dream-lg-surface="work-composer"] *) {
     background: transparent !important;
     background-color: transparent !important;
     backdrop-filter: none !important;
@@ -630,7 +594,7 @@
     min-width: 0 !important;
   }
 
-  /* CRITICAL FIX: Prevent Goal Strip ("目标已停滞 / 进行中的目标") from overflowing right edge so right action buttons stay clickable! */
+  /* Goal Mode Overflow Protection */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-rail][class*="attached-"], [class*="rail-"][class*="attached-"]) :is(div, button[class*="text-codex-description"], span) {
     min-width: 0 !important;
     max-width: 100% !important;
@@ -646,20 +610,20 @@
     flex: 0 0 auto !important;
   }
 
-  /* Keep Home "[此计算机 | UI设计]" both labels visible inside the sleek docked shelf */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="main"]:has([data-testid="home-icon"]) :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"]) [class*="horizontal-scroll-fade-mask"] {
+  /* Home "[此计算机 | UI设计]" dual dropdown visibility protection */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="home"] :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"]) [class*="horizontal-scroll-fade-mask"] {
     flex: 0 1 auto !important;
     width: auto !important;
     overflow: visible !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="main"]:has([data-testid="home-icon"]) :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"]) [class*="ClearableSelectorTrigger"] button:not([class*="ClearButton"]) [class*="ComposerDropdownLabelValue"] {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="home"] :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"]) [class*="ClearableSelectorTrigger"] button:not([class*="ClearButton"]) [class*="ComposerDropdownLabelValue"] {
     display: inline-block !important;
     width: auto !important;
     opacity: 1 !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="main"]:has([data-testid="home-icon"]) :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"]) :is(button, a) {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-ds-part="home"] :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"]) :is(button, a) {
     flex-shrink: 0 !important;
     white-space: nowrap !important;
   }
@@ -672,58 +636,49 @@
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"]) :is(button, a):hover {
     background: var(--ds-lg-pill-bg) !important;
-    box-shadow: 0 4px 12px -2px rgb(16 24 44 / .18), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+    box-shadow: 0 4px 12px -2px rgb(16 24 44 / .14), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
   }
 
-  /* Lower Rounded-28px Crystal Composer (WebGL2 wallpaper refraction on Home; crystal blur+GPU rim on Thread) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant], [data-ds-part="composer"]) {
+  /* Zone: Composer — Rounded-28px Crystal Pill with Real-Time Live SVG Snell Lens (Chat & Codex unchanged) */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant], [data-ds-part="composer"]):not([data-dream-lg-surface="work-composer"]) {
     position: relative !important;
     isolation: isolate;
     z-index: 3 !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-composer-rim-a, .15)) !important;
     --ds-community-composer-border-width: 1px !important;
     --ds-community-composer-border-style: solid !important;
-    --ds-community-composer-border-color: var(--ds-lg-rim-dark) !important;
+    --ds-community-composer-border-color: rgb(18 28 48 / var(--ds-lg-z-composer-rim-a, .15)) !important;
     border-radius: 28px !important;
-    background: linear-gradient(155deg,
-      var(--ds-lg-glass-hi) 0%,
-      var(--ds-lg-glass-mid) 56%,
-      var(--ds-lg-glass-lo) 100%) !important;
-    backdrop-filter: blur(2.4px) saturate(202%) brightness(1.03) !important;
-    -webkit-backdrop-filter: blur(2.4px) saturate(202%) brightness(1.03) !important;
+    background: var(--ds-lg-composer-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
     box-shadow:
       var(--ds-lg-shadow-sep),
       inset 0 1.5px 1px var(--ds-lg-rim-spec),
-      inset 1px 0 0 rgb(255 255 255 / .74),
-      inset -1px 0 0 rgb(255 255 255 / .54) !important;
+      inset 1px 0 0 rgb(255 255 255 / .76),
+      inset -1px 0 0 rgb(255 255 255 / .56) !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="main"]:has([data-testid="home-icon"]) :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant])[data-dream-lg-gpu="1"] {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant], [data-ds-part="composer"]):not([data-dream-lg-surface="work-composer"]) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-composer-rim-a, .22)) !important;
   }
 
-  /* GlassEffectContainer magnetic proximity enhancement when hovering either Home capsule */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"], .composer-surface-chrome, [class*="ComposerLayoutRoot"])[data-dream-lg-pair-active="1"] {
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([class*="rail-"][class*="attached-"], [class*="homeUtilityBar"], .composer-surface-chrome:not([data-dream-lg-surface="work-composer"]), [class*="ComposerLayoutRoot"]:not([data-dream-lg-surface="work-composer"]), [data-dream-lg-surface="work-composer"] [data-composer-body])[data-dream-lg-pair-active="1"] {
     box-shadow:
-      0 0 0 1px rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .32),
-      0 28px 62px -10px rgb(16 24 44 / .38),
-      0 12px 26px -4px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .20),
+      0 0 0 1px rgb(18 28 48 / .14),
+      0 26px 56px -12px rgb(16 24 44 / .24),
       inset 0 1.5px 1px rgb(255 255 255 / 1),
-      inset 0 -10px 22px -12px rgb(20 30 56 / .16) !important;
+      inset 1px 0 0 rgb(255 255 255 / .86),
+      inset -1px 0 0 rgb(255 255 255 / .66) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant])
     :is(button[class~="bg-primary-solid"], button[aria-label="发送"], button[aria-label="引导"], button[aria-label="停止"], button[aria-label*="语音"], button[aria-label*="对话"], button[aria-label*="send" i], button[aria-label*="steer" i], button[aria-label*="stop" i], button[aria-label*="voice" i]):not(:disabled):not([aria-disabled="true"]) {
-    background: linear-gradient(145deg,
-      rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .92),
-      rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .86)) !important;
+    background: linear-gradient(145deg, rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .92), rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .88)) !important;
     border: 1px solid rgb(255 255 255 / .82) !important;
     color: #ffffff !important;
-    box-shadow:
-      0 8px 20px -3px rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .48),
-      inset 0 1.5px 0 rgb(255 255 255 / .76) !important;
+    box-shadow: 0 8px 20px -4px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .40), inset 0 1.5px 0 rgb(255 255 255 / .76) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant])
@@ -731,11 +686,11 @@
     background: var(--ds-lg-pill-bg) !important;
     border: 1px solid var(--ds-lg-rim-dark) !important;
     color: rgb(var(--ds-text-rgb) / .72) !important;
-    box-shadow: 0 4px 12px -2px rgb(16 24 44 / .16), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+    box-shadow: 0 4px 12px -2px rgb(16 24 44 / .12), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
   }
 
-  /* Strip redundant inner box & nested blur inside Composer body/footer (strict <=2 nested blur cap) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-body], [class*="ComposerLayoutBody"], [class*="ComposerLayoutFooter"], [data-ds-part="composer-toolbar"]) {
+  /* Strip redundant inner boxes & nested blurs inside Composer body/footer (Work body excluded — carries native shape) */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([data-composer-body]:not([data-dream-lg-surface="work-composer"] *), [class*="ComposerLayoutBody"]:not([data-dream-lg-surface="work-composer"] *), [class*="ComposerLayoutFooter"], [data-ds-part="composer-toolbar"]) {
     background: transparent !important;
     background-color: transparent !important;
     backdrop-filter: none !important;
@@ -744,110 +699,174 @@
     border-color: transparent !important;
   }
 
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant], [data-ds-part="composer"]):focus-within {
-    border-color: rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .54) !important;
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is(.composer-surface-chrome:not([data-dream-lg-surface="work-composer"]), [class*="ComposerLayoutRoot"]:not([data-dream-lg-surface="work-composer"]), [data-composer-surface-variant][data-composer-radius-variant]:not([data-dream-lg-surface="work-composer"]), [data-ds-part="composer"]:not([data-dream-lg-surface="work-composer"]), [data-dream-lg-surface="work-composer"] [data-composer-body]):focus-within {
+    border-color: rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .44) !important;
     box-shadow:
-      0 0 0 1px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .28),
-      0 28px 64px -10px rgb(16 24 44 / .36),
-      0 10px 26px -4px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .24),
+      0 0 0 1px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .22),
+      0 26px 58px -12px rgb(16 24 44 / .24),
+      0 8px 22px -6px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .18),
       inset 0 1.5px 1px rgb(255 255 255 / 1),
-      inset 0 -1.5px 2px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .22) !important;
+      inset 0 -1.5px 2px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .16) !important;
+  }
+
+  /* Zone: Home Work Mode Composer — Restore 100% Native 2-Part Shape, Full Liquid Glass Optics */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-surface="work-composer"] {
+    position: relative !important;
+    isolation: auto !important;
+    z-index: 10 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    --ds-community-composer-border-width: 0px !important;
+    --ds-community-composer-border-style: none !important;
+    --ds-community-composer-border-color: transparent !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-surface="work-composer"] [data-composer-body] {
+    position: relative !important;
+    isolation: isolate;
+    z-index: 10 !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-composer-rim-a, .15)) !important;
+    background: var(--ds-lg-composer-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    box-shadow:
+      var(--ds-lg-shadow-sep),
+      inset 0 1.5px 1px var(--ds-lg-rim-spec),
+      inset 1px 0 0 rgb(255 255 255 / .76),
+      inset -1px 0 0 rgb(255 255 255 / .56) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-surface="work-composer"] [class*="ResponsiveHomeUtilityBar"] {
+    z-index: 0 !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-surface="work-composer"] [data-composer-utility-rail] {
+    position: relative !important;
+    isolation: isolate;
+    background: var(--ds-lg-rail-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-filter, blur(0px)) blur(var(--ds-lg-z-composer-blur, 1.1px)) saturate(1.48) brightness(1.02) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-composer-rim-a, .10)) !important;
+    border-top: 0 !important;
+    box-shadow:
+      0 14px 30px -8px rgb(16 24 44 / .18),
+      inset 0 -1.5px 0 var(--ds-lg-rim-spec),
+      inset 1px 0 0 rgb(255 255 255 / .72),
+      inset -1px 0 0 rgb(255 255 255 / .52) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] [data-dream-lg-surface="work-composer"] :is([data-composer-body], [data-composer-utility-rail]) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-composer-rim-a, .22)) !important;
   }
 
   /* Keep thread composer floating purely without opaque bottom tray */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] main div:has(> [data-codex-composer-root]):has(.thread-scroll-container),
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-surface="thread-tray"],
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [class*="footer-"][class*="surface-"] {
-    background: linear-gradient(180deg, transparent 0%, rgb(var(--ds-panel-rgb) / .10) 65%, rgb(var(--ds-panel-rgb) / .22) 100%) !important;
-    backdrop-filter: none !important;
-  }
-
-  /* Queued Task Strip & Turn-Diff Review Card (iOS 26 clear crystal bricks) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] main div:has(> .group\/turn-diff-header),
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] main div:has(> div > div > button[class*="text-codex-description"]):has([class*="ComposerLayoutRoot"]) > div:not(:has([class*="ComposerLayoutRoot"])):not(:empty) {
-    border-radius: 18px !important;
-    background: var(--ds-lg-card-bg) !important;
-    backdrop-filter: blur(2.4px) saturate(195%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(2.4px) saturate(195%) brightness(1.02) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
-  }
-
-  /* Tier 5 — Dialogs, Quota/Context Menus & Dropdown Popovers (Hardware WebGL2 crystal menus + 0-readback hover = 144 FPS!) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([role="dialog"], [role="menu"], [data-ds-part="dialog"], [class~="bg-token-dropdown-background"]) {
-    isolation: isolate;
-    contain: layout style;
-    transition: none !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
-    border-radius: 22px !important;
-    background: var(--ds-lg-popover-bg) !important;
-    backdrop-filter: blur(4px) saturate(175%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(4px) saturate(175%) brightness(1.02) !important;
-    box-shadow:
-      0 14px 32px -6px rgb(16 24 44 / .24),
-      0 0 0 1px rgb(20 30 56 / .12),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
-    color: var(--ds-text) !important;
-  }
-
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([role="menu"], [class~="bg-token-dropdown-background"])[data-dream-lg-gpu="1"] {
     background: transparent !important;
+    background-color: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
 
-  /* Tier 5B — Tooltips ("5 小时 0 分钟后重置" etc.): S26 clear crystal pill */
+  /* Queued Task Strip & Turn-Diff Review Card */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-surface="turn-diff"],
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [data-dream-lg-surface="queued-strip"] {
+    border-radius: 18px !important;
+    background: var(--ds-lg-card-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  /* Zone: Popover — Dialogs, Profile/Context Menus, Thinking Slider Popovers & Dropdowns (Unified Crystal Refraction!) */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([role="dialog"], [role="menu"], [data-ds-part="dialog"], [class~="bg-token-dropdown-background"], [data-radix-popper-content-wrapper] > div) {
+    position: relative;
+    isolation: isolate;
+    contain: layout style;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-popover-rim-a, .16)) !important;
+    border-radius: 22px !important;
+    background: var(--ds-lg-popover-bg) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-popover, blur(0px)) blur(var(--ds-lg-z-popover-blur, 10px)) saturate(1.52) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-popover, blur(0px)) blur(var(--ds-lg-z-popover-blur, 10px)) saturate(1.52) brightness(1.02) !important;
+    box-shadow:
+      0 18px 42px -8px rgb(16 24 44 / .24),
+      0 0 0 1px rgb(20 30 56 / .08),
+      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    color: var(--ds-text) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] :is([role="dialog"], [role="menu"], [data-ds-part="dialog"], [class~="bg-token-dropdown-background"], [data-radix-popper-content-wrapper] > div) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-popover-rim-a, .24)) !important;
+  }
+
+  /* Tooltips */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([role="tooltip"], [class*="Tooltip-"]) {
     background: var(--ds-lg-tooltip-bg) !important;
     background-color: transparent !important;
     color: var(--ds-text) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-popover-rim-a, .16)) !important;
     border-radius: 14px !important;
-    backdrop-filter: blur(4px) saturate(180%) brightness(1.03) !important;
-    -webkit-backdrop-filter: blur(4px) saturate(180%) brightness(1.03) !important;
-    box-shadow:
-      0 10px 22px -5px rgb(16 24 44 / .22),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 10px 22px -5px rgb(16 24 44 / .18), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] :is([role="tooltip"], [class*="Tooltip-"]) * {
     color: inherit !important;
   }
 
-  /* Decision #6 — Full-Scene Settings Crystal Cards (crystal clear blur, 144fps scroll) */
-  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] section > div[class*="rounded-2xl"][class*="border"],
+  /* Zone: Cards — Settings Cards (nested 1-2 levels under section) with crisp crystal clarity + optical refraction */
+  html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] section div[class*="rounded-2xl"][class*="border"],
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [class*="group/settings"] div[class*="rounded-2xl"][class*="border"] {
+    position: relative;
+    isolation: isolate;
     background: var(--ds-lg-card-bg) !important;
-    backdrop-filter: blur(3px) saturate(192%) brightness(1.02) !important;
-    -webkit-backdrop-filter: blur(3px) saturate(192%) brightness(1.02) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
+    background-color: transparent !important;
+    backdrop-filter: var(--ds-lg-lens-card, blur(0px)) blur(var(--ds-lg-z-cards-blur, 5px)) saturate(1.42) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-card, blur(0px)) blur(var(--ds-lg-z-cards-blur, 5px)) saturate(1.42) brightness(1.02) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
     border-radius: 20px !important;
-    box-shadow:
-      var(--ds-lg-shadow-brick),
-      inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+    box-shadow: var(--ds-lg-shadow-brick), inset 0 1.5px 0 var(--ds-lg-rim-spec) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] section div[class*="rounded-2xl"][class*="border"],
+  html[data-dream-skin="active"][data-dream-shell="dark"][data-dream-lg="on"] [class*="group/settings"] div[class*="rounded-2xl"][class*="border"] {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-cards-rim-a, .22)) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell="light"][data-dream-lg="on"]
-    :is(section > div[class*="rounded-2xl"][class*="border"], [class*="group/settings"] div[class*="rounded-2xl"][class*="border"], [role="menu"])
+    :is(section div[class*="rounded-2xl"][class*="border"], [class*="group/settings"] div[class*="rounded-2xl"][class*="border"], [role="menu"])
     :is([class*="text-codex-description"], [class*="text-secondary"], [class*="text-token-text-secondary"]) {
     color: rgb(var(--ds-text-rgb, 36 46 68) / .84) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] button[role="combobox"] {
     background: var(--ds-lg-pill-bg) !important;
-    border: 1px solid var(--ds-lg-rim-dark) !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-cards-rim-a, .15)) !important;
     border-radius: 12px !important;
-    backdrop-filter: blur(4px) saturate(190%) !important;
-    -webkit-backdrop-filter: blur(4px) saturate(190%) !important;
-    box-shadow: 0 6px 16px -3px rgb(16 24 44 / .18), 0 0 0 1px rgb(20 30 56 / .10), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 6px 16px -3px rgb(16 24 44 / .14), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
     color: var(--ds-text) !important;
   }
 
-  /* HarmonyOS / S26 Tactile Crystal Droplet Switches */
+  /* HarmonyOS 7 / S26 Tactile Crystal Droplet Switches */
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="switch"] > span {
     border: 1px solid var(--ds-lg-rim-dark) !important;
-    background: linear-gradient(180deg, rgb(255 255 255 / .24), rgb(var(--ds-panel-2-rgb) / .38)) !important;
-    backdrop-filter: blur(4px) saturate(175%) !important;
-    box-shadow: inset 0 1.5px 3px rgb(16 24 44 / .18), 0 1px 0 var(--ds-lg-rim-spec) !important;
+    background: linear-gradient(180deg, rgb(255 255 255 / .30), rgb(var(--ds-panel-2-rgb) / .38)) !important;
+    backdrop-filter: none !important;
+    box-shadow: inset 0 1.5px 3px rgb(16 24 44 / .16), 0 1px 0 var(--ds-lg-rim-spec) !important;
     transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease !important;
   }
 
@@ -859,125 +878,119 @@
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="switch"][data-state="checked"] > span,
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="switch"][aria-checked="true"] > span {
     border-color: rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .68) !important;
-    background: linear-gradient(135deg,
-      rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .82),
-      rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-alt-rgb)) / .70) 68%,
-      rgb(255 255 255 / .38) 100%) !important;
-    box-shadow:
-      inset 0 1px 1.5px rgb(255 255 255 / .72),
-      0 5px 14px -2px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .38) !important;
+    background: linear-gradient(135deg, rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .84), rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-alt-rgb)) / .74) 68%, rgb(255 255 255 / .38) 100%) !important;
+    box-shadow: inset 0 1px 1.5px rgb(255 255 255 / .72), 0 5px 14px -2px rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .34) !important;
   }
 
   html[data-dream-skin="active"][data-dream-shell][data-dream-lg="on"] [role="switch"] > span > span {
-    background: radial-gradient(circle at 35% 28%, #ffffff 0%, rgb(246 250 255 / .96) 55%, rgb(var(--ds-lg-prism-a, 220 232 255) / .90) 100%) !important;
+    background: radial-gradient(circle at 35% 28%, #ffffff 0%, rgb(246 250 255 / .98) 65%, rgb(235 242 252 / .94) 100%) !important;
     color: #ffffff !important;
     border: 0.5px solid rgb(255 255 255 / 1) !important;
-    box-shadow: 0 2px 7px rgb(16 24 44 / .30), inset 0 1px 0 #ffffff !important;
-    transition: transform 240ms cubic-bezier(.22, 1.26, .36, 1) !important;
+    box-shadow: 0 2px 7px rgb(16 24 44 / .28), inset 0 1px 0 #ffffff !important;
+    transition: transform 240ms var(--ds-lg-spring-responsive, cubic-bezier(.22, 1.26, .36, 1)) !important;
   }
 }
 
-/* Lightweight GPU-only compositor interaction, HarmonyOS Chamfer Rim & Traveling Border Outlines */
+/* Unified Pure Optical Specular Bevel Ring across ALL Crystal Windows */
 html[data-dream-skin="active"][data-dream-lg="on"] :is(
-  .composer-surface-chrome,
-  [class*="ComposerLayoutRoot"],
-  [data-composer-surface-variant][data-composer-radius-variant],
-  [data-ds-part="composer"],
-  [data-composer-rail][class*="attached-"],
-  [class*="rail-"][class*="attached-"],
-  [class*="homeUtilityBar"],
-  [class*="ComposerHomeUtilityBar"],
+  .composer-surface-chrome:not([data-dream-lg-surface="work-composer"]),
+  [class*="ComposerLayoutRoot"]:not([data-dream-lg-surface="work-composer"]),
+  [data-composer-surface-variant][data-composer-radius-variant]:not([data-dream-lg-surface="work-composer"]),
+  [data-ds-part="composer"]:not([data-dream-lg-surface="work-composer"]),
+  [data-dream-lg-surface="work-composer"] [data-composer-body],
+  [data-oai-writing-block-surface],
+  [data-testid="chatgpt-writing-block"],
+  [class*="ComposerBannerPortal"] aside,
+  aside[class*="banner-"],
+  [role="dialog"],
+  [role="menu"],
+  [data-ds-part="dialog"],
+  [class~="bg-token-dropdown-background"],
+  [data-radix-popper-content-wrapper] > div,
   aside.app-shell-left-panel,
-  [role="main"]:has([data-testid="home-icon"]) .group\/home-suggestions button,
+  [data-ds-part="home"] .group\/home-suggestions button,
   .group\/project-selector > button,
-  section > div[class*="rounded-2xl"][class*="border"],
-  [class*="group/settings"] div[class*="rounded-2xl"][class*="border"],
+  section div[class*="rounded-2xl"][class*="border"],
   .thread-scroll-container :is([class*="group/activity-header"], summary, [data-user-message-bubble="true"], [data-markdown-copy="code-block"], pre),
-  main div:has(> .group\/turn-diff-header)
+  [data-dream-lg-surface="turn-diff"]
 ) {
   position: relative;
 }
 
-/* Static chamfer specular ring (pointer gleam drawn at 144 FPS on fxCanvas -> zero per-frame style/paint invalidation) */
 html[data-dream-skin="active"][data-dream-lg="on"] :is(
-  .composer-surface-chrome,
-  [class*="ComposerLayoutRoot"],
-  [data-composer-surface-variant][data-composer-radius-variant],
-  [data-ds-part="composer"],
-  [data-composer-rail][class*="attached-"],
-  [class*="rail-"][class*="attached-"],
-  [class*="homeUtilityBar"],
-  [class*="ComposerHomeUtilityBar"],
+  .composer-surface-chrome:not([data-dream-lg-surface="work-composer"]),
+  [class*="ComposerLayoutRoot"]:not([data-dream-lg-surface="work-composer"]),
+  [data-composer-surface-variant][data-composer-radius-variant]:not([data-dream-lg-surface="work-composer"]),
+  [data-ds-part="composer"]:not([data-dream-lg-surface="work-composer"]),
+  [data-dream-lg-surface="work-composer"] [data-composer-body],
+  [data-oai-writing-block-surface],
+  [data-testid="chatgpt-writing-block"],
+  [class*="ComposerBannerPortal"] aside,
+  aside[class*="banner-"],
+  [role="dialog"],
+  [role="menu"],
+  [data-ds-part="dialog"],
+  [class~="bg-token-dropdown-background"],
+  [data-radix-popper-content-wrapper] > div,
   aside.app-shell-left-panel,
-  [role="main"]:has([data-testid="home-icon"]) .group\/home-suggestions button,
+  [data-ds-part="home"] .group\/home-suggestions button,
   .group\/project-selector > button,
-  section > div[class*="rounded-2xl"][class*="border"],
-  [class*="group/settings"] div[class*="rounded-2xl"][class*="border"],
+  section div[class*="rounded-2xl"][class*="border"],
   .thread-scroll-container :is([class*="group/activity-header"], summary, [data-user-message-bubble="true"], [data-markdown-copy="code-block"], pre),
-  main div:has(> .group\/turn-diff-header)
+  [data-dream-lg-surface="turn-diff"]
 )::after {
   content: "";
   position: absolute;
   inset: 0;
-  padding: 1.5px;
+  padding: 1.25px;
   border-radius: inherit;
+  corner-shape: inherit;
   pointer-events: none;
   z-index: 4;
-  background:
-    linear-gradient(138deg,
-      rgb(255 255 255 / .98) 0%,
-      rgb(var(--ds-lg-prism-a, 215 235 255) / .48) 36%,
-      rgb(var(--ds-lg-env-rgb, var(--ds-lg-accent-rgb)) / .28) 64%,
-      rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-alt-rgb)) / .52) 100%) !important;
+  background: linear-gradient(138deg, rgb(255 255 255 / .96) 0%, rgb(255 255 255 / .36) 36%, rgb(255 255 255 / .14) 64%, rgb(255 255 255 / .64) 100%) !important;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  opacity: .78;
+  opacity: .76;
   transition: opacity 150ms ease-out;
 }
 
 html[data-dream-skin="active"][data-dream-lg="on"] :is(
-  .composer-surface-chrome,
-  [class*="ComposerLayoutRoot"],
-  [data-composer-surface-variant][data-composer-radius-variant],
-  [data-ds-part="composer"],
-  [data-composer-rail][class*="attached-"],
-  [class*="rail-"][class*="attached-"],
-  [class*="homeUtilityBar"],
-  [class*="ComposerHomeUtilityBar"],
+  .composer-surface-chrome:not([data-dream-lg-surface="work-composer"]),
+  [class*="ComposerLayoutRoot"]:not([data-dream-lg-surface="work-composer"]),
+  [data-dream-lg-surface="work-composer"] [data-composer-body],
+  [data-oai-writing-block-surface],
+  [class*="ComposerBannerPortal"] aside,
+  aside[class*="banner-"],
+  [role="dialog"],
+  [role="menu"],
   aside.app-shell-left-panel,
-  [role="main"]:has([data-testid="home-icon"]) .group\/home-suggestions button,
+  [data-ds-part="home"] .group\/home-suggestions button,
   .group\/project-selector > button,
-  section > div[class*="rounded-2xl"][class*="border"],
-  [class*="group/settings"] div[class*="rounded-2xl"][class*="border"],
-  .thread-scroll-container :is([class*="group/activity-header"], summary, [data-user-message-bubble="true"], [data-markdown-copy="code-block"], pre),
-  main div:has(> .group\/turn-diff-header)
+  section div[class*="rounded-2xl"][class*="border"]
 ):is([data-dream-lg-hover="1"], [data-dream-lg-pair-active="1"], :focus-within)::after {
   opacity: 1;
 }
 
-/* Composer buttons GPU-only spring transform */
+/* Composer buttons, header pills, sidebar & Home cards: HarmonyOS 7 compositor spring micro-motion */
 html[data-dream-skin="active"][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant]) button,
 html[data-dream-skin="active"][data-dream-lg="on"] header button,
-html[data-dream-skin="active"][data-dream-lg="on"] aside.app-shell-left-panel :is(button, a) {
-  transition: transform 180ms cubic-bezier(.22, 1.24, .36, 1), opacity 140ms ease;
+html[data-dream-skin="active"][data-dream-lg="on"] aside.app-shell-left-panel :is(button, a),
+html[data-dream-skin="active"][data-dream-lg="on"] [data-ds-part="home"] .group\/home-suggestions button,
+html[data-dream-skin="active"][data-dream-lg="on"] .group\/project-selector > button {
+  transition: transform 200ms var(--ds-lg-spring-responsive, cubic-bezier(.22, 1.24, .36, 1)), opacity 140ms ease;
 }
 
-html[data-dream-skin="active"][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant]) button:hover {
-  transform: translate3d(0, -1px, 0) scale(1.03);
+html[data-dream-skin="active"][data-dream-lg="on"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant]) button:hover,
+html[data-dream-skin="active"][data-dream-lg="on"] [data-ds-part="home"] .group\/home-suggestions button:hover,
+html[data-dream-skin="active"][data-dream-lg="on"] .group\/project-selector > button:hover {
+  transform: translate3d(0, -1.5px, 0) scale(1.02);
 }
 
-/* Decision #7 — Truthful HarmonyOS Runtime Aurora (Pending -> Traveling Outline; Settled -> Crystal Sparkle) */
-html[data-dream-skin="active"][data-dream-lg="on"][data-dream-lg-busy="true"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant])::after {
+/* Truthful HarmonyOS Runtime Aurora (Pending -> Traveling Outline; Confirmed -> Crystal Sparkle) */
+html[data-dream-skin="active"][data-dream-lg="on"][data-dream-lg-busy="true"] :is(.composer-surface-chrome:not([data-dream-lg-surface="work-composer"]), [class*="ComposerLayoutRoot"]:not([data-dream-lg-surface="work-composer"]), [data-composer-surface-variant][data-composer-radius-variant]:not([data-dream-lg-surface="work-composer"]), [data-dream-lg-surface="work-composer"] [data-composer-body])::after {
   opacity: 1;
-  background:
-    conic-gradient(from var(--ds-lg-aurora-angle),
-      transparent 0deg,
-      rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .92) 48deg,
-      rgb(255 255 255 / 1) 76deg,
-      rgb(var(--ds-lg-prism-a, 200 228 255) / .88) 108deg,
-      transparent 165deg,
-      transparent 360deg) !important;
+  background: conic-gradient(from var(--ds-lg-aurora-angle), transparent 0deg, rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .92) 48deg, rgb(255 255 255 / 1) 76deg, rgb(var(--ds-lg-prism-a, 200 228 255) / .88) 108deg, transparent 165deg, transparent 360deg) !important;
   animation: ds-lg-aurora 2.4s linear infinite;
 }
 
@@ -986,28 +999,27 @@ html[data-dream-skin="active"][data-dream-lg="on"][data-dream-lg-busy="true"] :i
   animation: ds-lg-sonar 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
-html[data-dream-skin="active"][data-dream-lg="on"][data-dream-lg-settled="1"] :is(.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant]) {
+html[data-dream-skin="active"][data-dream-lg="on"][data-dream-lg-settled="1"] :is(.composer-surface-chrome:not([data-dream-lg-surface="work-composer"]), [class*="ComposerLayoutRoot"]:not([data-dream-lg-surface="work-composer"]), [data-composer-surface-variant][data-composer-radius-variant]:not([data-dream-lg-surface="work-composer"]), [data-dream-lg-surface="work-composer"] [data-composer-body]) {
   animation: ds-lg-settled-flash 720ms cubic-bezier(.16, 1, .3, 1) both;
 }
 
 html[data-dream-skin="active"][data-dream-lg="on"] .thread-scroll-container [data-dream-lg-seen="enter"] {
-  animation: ds-lg-enter-turn 280ms cubic-bezier(.16, 1, .3, 1) both;
+  animation: ds-lg-enter-turn 240ms cubic-bezier(.22, 1, .36, 1) both;
 }
 
-html[data-dream-skin="active"][data-dream-lg="on"] :is([role="dialog"], [role="menu"], [role="tooltip"], [class*="Tooltip-"], [class~="bg-token-dropdown-background"])[data-dream-lg-seen="enter"] {
+html[data-dream-skin="active"][data-dream-lg="on"] :is([role="dialog"], [role="menu"], [role="tooltip"], [class*="Tooltip-"], [class~="bg-token-dropdown-background"], [data-radix-popper-content-wrapper] > div)[data-dream-lg-seen="enter"] {
   transform-origin: var(--radix-popper-transform-origin, center center);
-  animation: ds-lg-pop-in 210ms cubic-bezier(.18, 1.24, .36, 1) both;
+  animation: ds-lg-pop-in 185ms cubic-bezier(.22, 1.18, .36, 1) both;
 }
 
-/* Butter-smooth zero-RenderPass hover for Profile & Context Menu rows (144 FPS!) */
 html[data-dream-skin="active"][data-dream-lg="on"] :is([role="menuitem"], [role="option"]) {
   border-radius: 10px !important;
-  transition: background-color 70ms ease, transform 100ms cubic-bezier(.22, 1.22, .36, 1) !important;
+  transition: background-color 70ms ease, transform 120ms cubic-bezier(.22, 1.22, .36, 1) !important;
 }
 
 html[data-dream-skin="active"][data-dream-lg="on"] :is([role="menuitem"], [role="option"]):is(:hover, [data-highlighted]) {
-  transform: translate3d(2px, 0, 0);
-  background: rgb(var(--ds-lg-prism-b, var(--ds-lg-accent-rgb)) / .18) !important;
+  transform: translate3d(3px, 0, 0);
+  background: rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb)) / .14) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
