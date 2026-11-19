@@ -26,9 +26,11 @@ try {
 } catch {} finally {
   if ($null -ne $trayMutex) { $trayMutex.Dispose() }
 }
+$conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
 $psExe = (Get-Command powershell.exe -ErrorAction Stop).Source
 if (-not $trayRunning -and (Test-Path -LiteralPath $TrayScript -PathType Leaf)) {
-  Start-Process -FilePath $psExe -ArgumentList "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$TrayScript`"" `
+  $trayArgs = "--headless `"$psExe`" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$TrayScript`""
+  Start-Process -FilePath $conhost -ArgumentList $trayArgs `
     -WorkingDirectory $EngineRoot -WindowStyle Hidden | Out-Null
 }
 
@@ -67,7 +69,8 @@ if ($visChat.Count -gt 0 -and $cdp9335Alive) {
     $_.CommandLine -and $_.CommandLine -match 'JBYLiquidGlass\\engine\\scripts\\injector\.mjs' -and $_.CommandLine -match '--port\s+9335'
   })
   if ($injAlive.Count -eq 0 -and (Test-Path -LiteralPath $StartScript -PathType Leaf)) {
-    Start-Process -FilePath $psExe -ArgumentList "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$StartScript`" -Port 9335" `
+    $startArgs = "--headless `"$psExe`" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$StartScript`" -Port 9335"
+    Start-Process -FilePath $conhost -ArgumentList $startArgs `
       -WorkingDirectory $EngineRoot -WindowStyle Hidden | Out-Null
   }
   exit 0

@@ -1293,6 +1293,7 @@ namespace JBYLiquidGlassApp
 
         private void OptimizeAllAppShortcuts()
         {
+            string conhost = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "conhost.exe").Replace("'", "''");
             string ps = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "WindowsPowerShell\\v1.0\\powershell.exe").Replace("'", "''");
             string agyLauncher = Path.Combine(engineRoot, "scripts", "launch-antigravity-with-jby.ps1").Replace("'", "''");
             string codexLauncher = Path.Combine(engineRoot, "scripts", "launch-codex-with-jby.ps1").Replace("'", "''");
@@ -1303,8 +1304,8 @@ namespace JBYLiquidGlassApp
                 "foreach ($p in @((Join-Path ([Environment]::GetFolderPath('Desktop')) 'Antigravity.lnk'), (Join-Path $env:APPDATA 'Microsoft\\Windows\\Start Menu\\Programs\\Antigravity.lnk'))) { " +
                 "  if (Test-Path -LiteralPath $p -PathType Leaf) { " +
                 "    $sc = $sh.CreateShortcut($p); " +
-                "    $sc.TargetPath = '" + ps + "'; " +
-                "    $sc.Arguments = '-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + agyLauncher + "\"'; " +
+                "    $sc.TargetPath = '" + conhost + "'; " +
+                "    $sc.Arguments = '--headless \"" + ps + "\" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + agyLauncher + "\"'; " +
                 "    $agyExe = Join-Path $env:LOCALAPPDATA 'Programs\\Antigravity\\Antigravity.exe'; if (!(Test-Path $agyExe)) { $agyExe = Join-Path $env:LOCALAPPDATA 'Programs\\antigravity\\Antigravity.exe' }; " +
                 "    if (Test-Path $agyExe) { $sc.IconLocation = \"$agyExe,0\" }; " +
                 "    $sc.Save(); $n++; " +
@@ -1313,12 +1314,12 @@ namespace JBYLiquidGlassApp
                 "$gptLnk = Join-Path ([Environment]::GetFolderPath('Desktop')) 'ChatGPT.lnk'; " +
                 "if (Test-Path -LiteralPath $gptLnk -PathType Leaf) { " +
                 "  $sc = $sh.CreateShortcut($gptLnk); " +
-                "  $sc.TargetPath = '" + ps + "'; " +
-                "  $sc.Arguments = '-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + codexLauncher + "\"'; " +
+                "  $sc.TargetPath = '" + conhost + "'; " +
+                "  $sc.Arguments = '--headless \"" + ps + "\" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + codexLauncher + "\"'; " +
                 "  if (Test-Path '" + codexIco + "') { $sc.IconLocation = '" + codexIco + ",0' }; " +
                 "  $sc.Save(); $n++; " +
                 "}; Write-Output $n";
-            RunPowerShellInline(cmd, "已优化 Antigravity 与 ChatGPT 桌面快捷方式（直接点击应用即可拉起托盘与皮肤）");
+            RunPowerShellInline(cmd, "已优化 Antigravity 与 ChatGPT 桌面快捷方式（无终端窗口静默拉起托盘与皮肤）");
         }
 
         private void LoadOpticalPresetsUi()
@@ -1605,9 +1606,10 @@ namespace JBYLiquidGlassApp
             string baseDir = Program.ResolveInstallBaseDir();
             string bootstrap = Path.Combine(baseDir, "setup-bootstrap.ps1");
             string tray = Path.Combine(engineRoot, "scripts", "tray-jby-liquid-glass.ps1");
+            string psRaw = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "WindowsPowerShell\\v1.0\\powershell.exe");
             string argsLine = File.Exists(bootstrap)
-                ? "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + bootstrap + "\" -LaunchTray"
-                : "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + tray + "\"";
+                ? "--headless \"" + psRaw + "\" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + bootstrap + "\" -LaunchTray"
+                : "--headless \"" + psRaw + "\" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + tray + "\"";
             string ico = Path.Combine(engineRoot, "assets", "jby-liquid-glass.ico");
             if (!File.Exists(ico)) ico = Path.Combine(baseDir, "payload", "assets", "jby-liquid-glass.ico");
 
@@ -1620,11 +1622,11 @@ namespace JBYLiquidGlassApp
             }
             else
             {
-                string psExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "WindowsPowerShell\\v1.0\\powershell.exe").Replace("'", "''");
+                string conhostExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "conhost.exe").Replace("'", "''");
                 cmd =
                     "$sh = New-Object -ComObject WScript.Shell; " +
                     "$sc = $sh.CreateShortcut('" + escPath + "'); " +
-                    "$sc.TargetPath = '" + psExe + "'; " +
+                    "$sc.TargetPath = '" + conhostExe + "'; " +
                     "$sc.Arguments = '" + argsLine.Replace("'", "''") + "'; " +
                     "$sc.WorkingDirectory = '" + baseDir.TrimEnd('\\').Replace("'", "''") + "'; " +
                     "$sc.Description = 'Start JBY Liquid Glass in notification area'; " +
@@ -1833,9 +1835,11 @@ namespace JBYLiquidGlassApp
                         string tray = Path.Combine(engineRoot, "scripts", "tray-jby-liquid-glass.ps1");
                         if (File.Exists(tray))
                         {
+                            string conhost = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "conhost.exe");
+                            string psExe = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "WindowsPowerShell\\v1.0\\powershell.exe");
                             ProcessStartInfo psi = new ProcessStartInfo();
-                            psi.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "WindowsPowerShell\\v1.0\\powershell.exe");
-                            psi.Arguments = "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + tray + "\"";
+                            psi.FileName = conhost;
+                            psi.Arguments = "--headless \"" + psExe + "\" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File \"" + tray + "\"";
                             psi.WorkingDirectory = engineRoot;
                             psi.UseShellExecute = false;
                             psi.CreateNoWindow = true;

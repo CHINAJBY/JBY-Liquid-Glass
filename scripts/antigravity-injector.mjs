@@ -42,7 +42,7 @@ const ENGINE_ROOT = path.resolve(__dirname, "..");
 const ASSETS_DIR = path.join(ENGINE_ROOT, "assets");
 const PRESETS_DIR = path.join(ENGINE_ROOT, "presets");
 
-const SKIN_VERSION = "3.1.0";
+const SKIN_VERSION = "3.1.1";
 const DEFAULT_PORT = 9235;
 
 const CODEX_ROOT = codexStateRoot();
@@ -748,10 +748,12 @@ async function handleRpcAction({ action, payload = {} }, context) {
     const active = await readActiveState();
     const nextId = String(payload.themeId || active.themeId);
     await writeJsonAtomic(ACTIVE_THEME_FILE, { schemaVersion: 1, themeId: nextId, customImage: null, customVideo: null });
+    await context.syncStatStamps?.();
     await context.reloadAll();
     return { ok: true, themeId: nextId, catalog: await listThemesCatalog() };
   }
   if (action === "reapplySkin") {
+    await context.syncStatStamps?.();
     await context.reloadAll();
     return { ok: true };
   }
@@ -763,6 +765,7 @@ async function handleRpcAction({ action, payload = {} }, context) {
       cfg.themes[themeId] = normalized;
       await writePluginConfig(cfg);
       await writeThemeTransparency(themeId, normalized.transparency);
+      await context.syncStatStamps?.();
     }
     return { ok: true, params: normalized };
   }
@@ -773,6 +776,7 @@ async function handleRpcAction({ action, payload = {} }, context) {
     cfg.themes[themeId] = defParams;
     await writePluginConfig(cfg);
     await writeThemeTransparency(themeId, defParams.transparency);
+    await context.syncStatStamps?.();
     return { ok: true, params: defParams, opticalPresets: await readOpticalPresets() };
   }
   if (action === "savePreset") {
@@ -782,6 +786,7 @@ async function handleRpcAction({ action, payload = {} }, context) {
       params: payload.params || {},
       setAsDefault: Boolean(payload.setAsDefault),
     });
+    await context.syncStatStamps?.();
     return { ok: true, savedPreset: saved.preset, opticalPresets: saved.state };
   }
   if (action === "setDefaultPreset") {
@@ -796,16 +801,19 @@ async function handleRpcAction({ action, payload = {} }, context) {
       });
       nextState = saved.state;
     }
+    await context.syncStatStamps?.();
     return { ok: true, opticalPresets: nextState };
   }
   if (action === "deletePreset") {
     const nextState = await deleteOpticalPreset(payload.presetId);
+    await context.syncStatStamps?.();
     return { ok: true, opticalPresets: nextState };
   }
   if (action === "setPluginUi") {
     const cfg = await readPluginConfig();
     cfg.ui = normalizePluginUiState(payload.ui);
     await writePluginConfig(cfg);
+    await context.syncStatStamps?.();
     return { ok: true, ui: cfg.ui };
   }
   if (action === "setGuardConfig") {
@@ -852,12 +860,14 @@ async function handleRpcAction({ action, payload = {} }, context) {
       customImage: isVideo ? active.customImage : dst,
       customVideo: isVideo ? dst : null,
     });
+    await context.syncStatStamps?.();
     await context.reloadAll();
     return { ok: true, path: dst, kind: isVideo ? "video" : "image" };
   }
   if (action === "resetCustomWallpaper") {
     const active = await readActiveState();
     await writeJsonAtomic(ACTIVE_THEME_FILE, { schemaVersion: 1, themeId: active.themeId, customImage: null, customVideo: null });
+    await context.syncStatStamps?.();
     await context.reloadAll();
     return { ok: true };
   }
@@ -882,6 +892,7 @@ async function handleRpcAction({ action, payload = {} }, context) {
       let imported = {};
       try { imported = JSON.parse(String(stdout || "{}").trim().split(/\r?\n/).pop() || "{}"); } catch {}
       const themeId = String(imported.themeId || path.basename(zipPath, ".zip"));
+      await context.syncStatStamps?.();
       await context.reloadAll();
       return { ok: true, themeId, liquidGlass: Boolean(imported.liquidGlass), catalog: await listThemesCatalog() };
     }
@@ -907,6 +918,7 @@ async function handleRpcAction({ action, payload = {} }, context) {
       const dest = path.join(THEMES_DIR, themeId);
       await copyDirectorySafe(themeRoot, dest);
       await writeJsonAtomic(ACTIVE_THEME_FILE, { schemaVersion: 1, themeId, customImage: null, customVideo: null });
+      await context.syncStatStamps?.();
       await context.reloadAll();
       return { ok: true, themeId, catalog: await listThemesCatalog() };
     } finally {
@@ -926,12 +938,14 @@ async function runWatch(options) {
   const attached = new Map(); // targetId -> { session, earlyId, revision }
   const PLUGIN_CFG_FILE = pluginConfigPath();
   const PREFS_FILE = themePreferencesPath();
+  const PRESETS_STATE_FILE = opticalPresetsPath();
   const statStamp = async (p) => (await fs.stat(p).catch(() => null))?.mtimeMs || 0;
 
   let currentBuilt = await buildPayload({ themeDir: options.themeDir, themeId: options.themeId });
   let lastActiveStat = await statStamp(ACTIVE_THEME_FILE);
   let lastPluginCfgStat = await statStamp(PLUGIN_CFG_FILE);
   let lastPrefStat = await statStamp(PREFS_FILE);
+  let lastPresetsStat = await statStamp(PRESETS_STATE_FILE);
   let lastPaused = options.pauseFile ? await pathExists(options.pauseFile) : false;
 
   const writeState = async (themeId) => {
@@ -959,8 +973,35 @@ async function runWatch(options) {
   };
 
   const context = {
+    syncStatStamps: async () => {
+      [lastActiveStat, lastPluginCfgStat, lastPrefStat, lastPresetsStat] = await Promise.all([
+        statStamp(ACTIVE_THEME_FILE),
+        statStamp(PLUGIN_CFG_FILE),
+        statStamp(PREFS_FILE),
+        statStamp(PRESETS_STATE_FILE),
+      ]);
+    },
+    pushExternalParams: async () => {
+      if (options.pauseFile && await pathExists(options.pauseFile)) return;
+      currentBuilt = await buildPayload({ themeDir: options.themeDir, themeId: options.themeId });
+      const liveParams = await readThemeLiveParams(currentBuilt.theme.id, currentBuilt.theme);
+      const opticalPresets = await readOpticalPresets();
+      const expr = `window.__agyDsApplyExternalParams?.(${JSON.stringify(liveParams)}, ${JSON.stringify(opticalPresets)})`;
+      for (const [, entry] of attached) {
+        if (!entry.session.closed) {
+          if (entry.earlyId) {
+            await entry.session.send("Page.removeScriptToEvaluateOnNewDocument", { identifier: entry.earlyId }).catch(() => {});
+          }
+          const wrappedEarly = earlyPayloadFor(currentBuilt.payload, currentBuilt.revision);
+          const added = await entry.session.send("Page.addScriptToEvaluateOnNewDocument", { source: wrappedEarly }).catch(() => null);
+          entry.earlyId = added?.identifier || null;
+          await entry.session.evaluate(expr).catch(() => {});
+        }
+      }
+    },
     reloadAll: async () => {
       if (options.pauseFile && await pathExists(options.pauseFile)) return;
+      await context.syncStatStamps();
       currentBuilt = await buildPayload({ themeDir: options.themeDir, themeId: options.themeId });
       await writeState(currentBuilt.theme.id);
       for (const [id, entry] of attached) {
@@ -995,16 +1036,23 @@ async function runWatch(options) {
       }
 
       if (!isPaused) {
-        const [activeStat, pluginCfgStat, prefStat] = await Promise.all([
+        const [activeStat, pluginCfgStat, prefStat, presetsStat] = await Promise.all([
           statStamp(ACTIVE_THEME_FILE),
           statStamp(PLUGIN_CFG_FILE),
           statStamp(PREFS_FILE),
+          statStamp(PRESETS_STATE_FILE),
         ]);
-        if (activeStat !== lastActiveStat || pluginCfgStat !== lastPluginCfgStat || prefStat !== lastPrefStat) {
+        if (activeStat !== lastActiveStat) {
           lastActiveStat = activeStat;
           lastPluginCfgStat = pluginCfgStat;
           lastPrefStat = prefStat;
+          lastPresetsStat = presetsStat;
           await context.reloadAll().catch(() => {});
+        } else if (pluginCfgStat !== lastPluginCfgStat || prefStat !== lastPrefStat || presetsStat !== lastPresetsStat) {
+          lastPluginCfgStat = pluginCfgStat;
+          lastPrefStat = prefStat;
+          lastPresetsStat = presetsStat;
+          await context.pushExternalParams().catch(() => {});
         }
       }
 

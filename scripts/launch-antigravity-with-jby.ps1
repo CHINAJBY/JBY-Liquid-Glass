@@ -54,9 +54,12 @@ try {
   if ($null -ne $trayMutex) { $trayMutex.Dispose() }
 }
 
+$conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
+$psExe = (Get-Command powershell.exe -ErrorAction Stop).Source
+
 if (-not $trayRunning -and (Test-Path -LiteralPath $TrayScript -PathType Leaf)) {
-  $psExe = (Get-Command powershell.exe -ErrorAction Stop).Source
-  Start-Process -FilePath $psExe -ArgumentList "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$TrayScript`"" `
+  $trayArgs = "--headless `"$psExe`" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$TrayScript`""
+  Start-Process -FilePath $conhost -ArgumentList $trayArgs `
     -WorkingDirectory $EngineRoot -WindowStyle Hidden | Out-Null
 }
 
@@ -69,10 +72,7 @@ if (-not (Test-Path -LiteralPath $pauseFile -PathType Leaf) -and (Test-Path -Lit
     $_.CommandLine -and $_.CommandLine -match $pattern -and $_.CommandLine -match '--watch' -and $_.CommandLine -match '--port\s+9235'
   })
   if ($existing.Count -eq 0) {
-    $logOut = Join-Path $AgyRoot 'watcher.log'
-    $logErr = Join-Path $AgyRoot 'watcher-err.log'
-    $wArgs = "`"$AgyInjector`" --watch --port 9235 --pause-file `"$pauseFile`""
-    Start-Process -FilePath $NodeExe -ArgumentList $wArgs -WorkingDirectory $EngineRoot -WindowStyle Hidden `
-      -RedirectStandardOutput $logOut -RedirectStandardError $logErr | Out-Null
+    $wArgs = "--headless `"$NodeExe`" `"$AgyInjector`" --watch --port 9235 --pause-file `"$pauseFile`""
+    Start-Process -FilePath $conhost -ArgumentList $wArgs -WorkingDirectory $EngineRoot -WindowStyle Hidden | Out-Null
   }
 }

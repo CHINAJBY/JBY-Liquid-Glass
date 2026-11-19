@@ -109,13 +109,15 @@ try {
 
   function Start-DreamSkinPowerShell {
     param([Parameter(Mandatory = $true)][string]$Script, [string[]]$Arguments = @())
+    $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
     $scriptToken = ConvertTo-DreamSkinProcessArgument -Value $Script
-    $argumentLine = '-NoProfile -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File ' + $scriptToken
+    $argumentLine = '--headless ' + (ConvertTo-DreamSkinProcessArgument -Value $powershell) +
+      ' -NoProfile -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File ' + $scriptToken
     if ($Arguments.Count -gt 0) { $argumentLine += ' ' + ($Arguments -join ' ') }
     $previousLanguage = $env:DREAMSKIN_LANG
     try {
       $env:DREAMSKIN_LANG = Resolve-DreamSkinLanguage -StateRoot $StateRoot
-      Start-Process -FilePath $powershell -ArgumentList $argumentLine -WindowStyle Hidden | Out-Null
+      Start-Process -FilePath $conhost -ArgumentList $argumentLine -WindowStyle Hidden | Out-Null
     } finally {
       $env:DREAMSKIN_LANG = $previousLanguage
     }
@@ -284,12 +286,14 @@ try {
       Remove-Item -LiteralPath $startupShortcut -Force -ErrorAction SilentlyContinue
       return
     }
+    $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
     $shell = New-Object -ComObject WScript.Shell
     $shortcut = $shell.CreateShortcut($startupShortcut)
-    $shortcut.TargetPath = $powershell
-    $shortcut.Arguments = "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$PSScriptRoot\tray-jby-liquid-glass.ps1`""
+    $shortcut.TargetPath = $conhost
+    $shortcut.Arguments = "--headless `"$powershell`" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$PSScriptRoot\tray-jby-liquid-glass.ps1`""
     $shortcut.WorkingDirectory = $SkillRoot
     $shortcut.Description = 'Start JBY Liquid Glass in the notification area'
+    if (Test-Path -LiteralPath $iconPath -PathType Leaf) { $shortcut.IconLocation = "$iconPath,0" }
     $shortcut.Save()
   }
 
@@ -392,7 +396,7 @@ try {
     foreach ($p in $list) {
       try {
         $sc = $sh.CreateShortcut($p)
-        if ($sc.Arguments -notmatch '--remote-debugging-port=') { return $false }
+        if ($sc.Arguments -notmatch '--remote-debugging-port=' -and $sc.Arguments -notmatch 'launch-antigravity-with-jby\.ps1') { return $false }
       } catch { return $false }
     }
     return $true
@@ -401,15 +405,25 @@ try {
   function Set-AgyShortcutOptimization {
     param([int]$AgyPort = 9235, [bool]$Enable = $true)
     $sh = New-Object -ComObject WScript.Shell
+    $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
+    $agyLauncher = Join-Path $PSScriptRoot 'launch-antigravity-with-jby.ps1'
+    $agyExe = Get-AgyExecutablePath
     $count = 0
     foreach ($p in (Get-AgyShortcutPaths)) {
       try {
         $sc = $sh.CreateShortcut($p)
-        $clean = ($sc.Arguments -replace '(?i)(?:^|\s+)--remote-debugging-port=\d+', '').Trim()
-        $sc.Arguments = if ($Enable) {
-          if ($clean) { "$clean --remote-debugging-port=$AgyPort" } else { "--remote-debugging-port=$AgyPort" }
-        } else {
-          $clean
+        if ($Enable -and (Test-Path -LiteralPath $agyLauncher -PathType Leaf)) {
+          $sc.TargetPath = $conhost
+          $sc.Arguments = "--headless `"$powershell`" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$agyLauncher`""
+          if ($agyExe) {
+            $sc.WorkingDirectory = Split-Path -Parent $agyExe
+            $sc.IconLocation = "$agyExe,0"
+          }
+        } elseif ($agyExe) {
+          $sc.TargetPath = $agyExe
+          $sc.Arguments = ''
+          $sc.WorkingDirectory = Split-Path -Parent $agyExe
+          $sc.IconLocation = "$agyExe,0"
         }
         $sc.Save()
         $count++
@@ -1133,10 +1147,12 @@ try {
     $previousLanguage = $env:DREAMSKIN_LANG
     try {
       $env:DREAMSKIN_LANG = Resolve-DreamSkinLanguage -StateRoot $StateRoot
+      $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
       $psExe = (Get-Command powershell.exe -ErrorAction Stop).Source
-      $argLine = '-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File ' +
+      $argLine = '--headless ' + (ConvertTo-DreamSkinProcessArgument -Value $psExe) +
+        ' -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File ' +
         (ConvertTo-DreamSkinProcessArgument -Value $launcher)
-      Start-Process -FilePath $psExe -ArgumentList $argLine -WorkingDirectory $SkillRoot -WindowStyle Hidden | Out-Null
+      Start-Process -FilePath $conhost -ArgumentList $argLine -WorkingDirectory $SkillRoot -WindowStyle Hidden | Out-Null
     } finally {
       $env:DREAMSKIN_LANG = $previousLanguage
     }

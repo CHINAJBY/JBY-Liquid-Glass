@@ -211,10 +211,9 @@ try {
     Start-Sleep -Milliseconds 900
   } elseif (-not $watcherAlive) {
     Stop-AgyWatchersOnly
-    $logOut = Join-Path $AgyRoot 'watcher.log'
-    $logErr = Join-Path $AgyRoot 'watcher-err.log'
-    $watchArgs = "`"$Injector`" --watch --port $Port --pause-file `"$PauseFile`""
-    Start-Process -FilePath $node -ArgumentList $watchArgs -WindowStyle Hidden -RedirectStandardOutput $logOut -RedirectStandardError $logErr | Out-Null
+    $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
+    $watchArgs = "--headless `"$node`" `"$Injector`" --watch --port $Port --pause-file `"$PauseFile`""
+    Start-Process -FilePath $conhost -ArgumentList $watchArgs -WorkingDirectory $EngineRoot -WindowStyle Hidden | Out-Null
     Start-Sleep -Milliseconds 1200
   }
 

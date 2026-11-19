@@ -173,11 +173,13 @@ try {
     $engine = Get-DreamSkinRuntimeEnginePaths -StateRoot $stateRoot
   }
 
+  $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
   if ($LaunchTray) {
     $powershell = (Get-Command powershell.exe -ErrorAction Stop).Source
-    $argumentLine = '-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File ' +
+    $argumentLine = '--headless ' + (ConvertTo-DreamSkinProcessArgument -Value $powershell) +
+      ' -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File ' +
       (ConvertTo-DreamSkinProcessArgument -Value $engine.Tray)
-    Start-Process -FilePath $powershell -ArgumentList $argumentLine -WorkingDirectory $engine.Root -WindowStyle Hidden | Out-Null
+    Start-Process -FilePath $conhost -ArgumentList $argumentLine -WorkingDirectory $engine.Root -WindowStyle Hidden | Out-Null
   }
   if ($ShowWindow) {
     $appLauncher = Join-Path $engine.Root 'app\launch-jby-liquid-glass.ps1'
@@ -186,9 +188,10 @@ try {
     }
     if (Test-Path -LiteralPath $appLauncher -PathType Leaf) {
       $powershell = (Get-Command powershell.exe -ErrorAction Stop).Source
-      $uiArgs = '-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File ' +
+      $uiArgs = '--headless ' + (ConvertTo-DreamSkinProcessArgument -Value $powershell) +
+        ' -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File ' +
         (ConvertTo-DreamSkinProcessArgument -Value $appLauncher)
-      Start-Process -FilePath $powershell -ArgumentList $uiArgs -WorkingDirectory $engine.Root -WindowStyle Hidden | Out-Null
+      Start-Process -FilePath $conhost -ArgumentList $uiArgs -WorkingDirectory $engine.Root -WindowStyle Hidden | Out-Null
     }
   }
 } catch {

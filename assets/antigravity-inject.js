@@ -62,6 +62,8 @@
     analysisMs: null,
   };
 
+  const prevStudioBody = document.getElementById(PLUGIN_HOST_ID)?.shadowRoot?.querySelector(".body");
+  const prevStudioScrollTop = prevStudioBody ? prevStudioBody.scrollTop : 0;
   const previous = window[STATE_KEY];
   if (typeof previous?.cleanup === "function") {
     try { previous.cleanup(); } catch {}
@@ -717,13 +719,20 @@
     setStyleProperty(root, "--ds-lg-spring-settle", solveSpringLinear(0.32, 0.78, 32));
     setStyleProperty(root, "--ds-lg-spring-press", solveSpringLinear(0.17, 0.74, 26));
 
-    const csRoot = getComputedStyle(root);
-    const accentStr = csRoot.getPropertyValue("--ds-accent-rgb").trim() || "47 117 195";
-    const accentAltStr = csRoot.getPropertyValue("--ds-accent-alt-rgb").trim() || "132 168 238";
-    setStyleProperty(root, "--ds-lg-accent-rgb", accentStr);
-    setStyleProperty(root, "--ds-lg-accent-alt-rgb", accentAltStr);
-    setStyleProperty(root, "--ds-lg-prism-a", accentAltStr);
-    setStyleProperty(root, "--ds-lg-prism-b", accentStr);
+    let accentUnit = [0.2, 0.45, 0.78];
+    let accentAltUnit = [0.5, 0.65, 0.93];
+    const syncAccentUnits = () => {
+      const csRoot = getComputedStyle(root);
+      const aStr = csRoot.getPropertyValue("--ds-accent-rgb").trim() || "47 117 195";
+      const aaStr = csRoot.getPropertyValue("--ds-accent-alt-rgb").trim() || "132 168 238";
+      setStyleProperty(root, "--ds-lg-accent-rgb", aStr);
+      setStyleProperty(root, "--ds-lg-accent-alt-rgb", aaStr);
+      setStyleProperty(root, "--ds-lg-prism-a", aaStr);
+      setStyleProperty(root, "--ds-lg-prism-b", aStr);
+      accentUnit = aStr.split(/\s+/).map((n) => Number(n) / 255);
+      accentAltUnit = aaStr.split(/\s+/).map((n) => Number(n) / 255);
+    };
+    syncAccentUnits();
 
     let disposed = false;
     let radiusCache = new WeakMap();
@@ -1078,9 +1087,6 @@ void main() {
   outColor = vec4(clamp(glass, 0.0, 1.0), 1.0) * smoothstep(0.75, -0.75, sdf);
 }`;
 
-    const accentUnit = accentStr.split(/\s+/).map((n) => Number(n) / 255);
-    const accentAltUnit = accentAltStr.split(/\s+/).map((n) => Number(n) / 255);
-
     const initWebGL = () => {
       if (!gl || !artDataUrl || BOOT.videoUrl) return false;
       const comp = (type, srcStr) => {
@@ -1169,10 +1175,16 @@ void main() {
         const url = URL.createObjectURL(blob);
         allBlobUrls.add(url);
         const prev = activeTileUrls.get(el);
-        if (prev?.url) { allBlobUrls.delete(prev.url); URL.revokeObjectURL(prev.url); }
         activeTileUrls.set(el, { key, url });
         el.style.setProperty("--ds-lg-gpu-bg", `url("${url}")`);
         el.setAttribute("data-dream-lg-gpu", "1");
+        if (prev?.url) {
+          const oldUrl = prev.url;
+          setTimeout(() => {
+            allBlobUrls.delete(oldUrl);
+            try { URL.revokeObjectURL(oldUrl); } catch {}
+          }, 500);
+        }
       }, "image/png");
     };
 
@@ -1197,7 +1209,7 @@ void main() {
       const qSet = new Set(tileQueue.map((j) => j.el));
       for (const spec of GPU_TARGETS) {
         const lp = resolveZone(cur, spec.kind === "sidebar" ? "sidebar" : "cards");
-        const sig = `${shell}:${lp.transparency}:${lp.refractScale}:${lp.blurScale}:${lp.rimIntensity}:${vw}x${vh}`;
+        const sig = `${shell}:${lp.transparency}:${lp.refractScale}:${lp.blurScale}:${lp.rimIntensity}:${accentUnit.map((v) => v.toFixed(2)).join(",")}:${vw}x${vh}`;
         for (const el of querySafe(spec.selector)) {
           if (el.closest(`#${PLUGIN_HOST_ID}`)) continue;
           const rect = el.getBoundingClientRect();
@@ -1698,6 +1710,12 @@ void main() {
       clearTimeout(paramDebounce);
       paramDebounce = setTimeout(() => { if (!disposed) refreshGpuTiles(); }, 48);
     };
+    window.__dsLgRefreshAccentOptics = () => {
+      if (disposed) return;
+      syncAccentUnits();
+      syncSvgLenses();
+      refreshGpuTiles();
+    };
 
     return () => {
       if (disposed) return;
@@ -1742,6 +1760,7 @@ void main() {
         n.style.removeProperty("--ds-lg-lens-writing");
       }
       delete window.__dsLgApplyLiveParams;
+      delete window.__dsLgRefreshAccentOptics;
     };
   };
 
@@ -2293,6 +2312,8 @@ void main() {
     };
 
     const renderState = () => {
+      const bodyEl = shadow.querySelector(".body");
+      const prevScrollTop = bodyEl ? bodyEl.scrollTop : 0;
       syncStudioStyles();
       const headSub = shadow.getElementById("ds-head-sub");
       if (headSub) headSub.textContent = THEME.name || THEME.id || "JBY Liquid Glass";
@@ -2348,7 +2369,13 @@ void main() {
           : `共 ${opList.length} 项`;
       }
       if (pDelBtn) pDelBtn.hidden = !(studioRuntime.selectedPresetId && opList.some((p) => p.id === studioRuntime.selectedPresetId));
-      if (pListEl) {
+      const presetSig = JSON.stringify({
+        def: opState.defaultPresetId || "",
+        sel: studioRuntime.selectedPresetId || "",
+        items: opList.map((p) => `${p.id}:${p.name}`),
+      });
+      if (pListEl && (!pListEl.childElementCount || studioRuntime.lastPresetSig !== presetSig)) {
+        studioRuntime.lastPresetSig = presetSig;
         pListEl.textContent = "";
         for (const p of opList) {
           const btn = document.createElement("button");
@@ -2374,10 +2401,13 @@ void main() {
       if (ge) ge.checked = studioRuntime.guardConfig?.antigravityAutoGuardEnabled !== false;
       if (glCheckbox) glCheckbox.checked = Boolean(studioRuntime.guardConfig?.autoLaunchAntigravityOnBoot);
 
-      fab.hidden = studioRuntime.open;
-      drawer.hidden = !studioRuntime.open;
+      if (fab.hidden !== studioRuntime.open) fab.hidden = studioRuntime.open;
+      if (drawer.hidden !== !studioRuntime.open) drawer.hidden = !studioRuntime.open;
       syncThemeCards();
       syncPositions();
+      if (bodyEl && Math.abs(bodyEl.scrollTop - prevScrollTop) > 1) {
+        bodyEl.scrollTop = prevScrollTop;
+      }
     };
 
     const setPanelOpen = (open, persist = false) => {
@@ -2611,11 +2641,21 @@ void main() {
     const onResize = () => syncPositions();
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
+    window.__agyDsApplyExternalParams = (nextParams, nextPresets) => {
+      if (nextPresets) studioRuntime.opticalPresets = nextPresets;
+      if (nextParams) applyLiveTuneRuntime(nextParams);
+      renderState();
+    };
     studioRefreshFn = renderState;
     renderState();
+    if (prevStudioScrollTop > 0) {
+      const initBody = shadow.querySelector(".body");
+      if (initBody) initBody.scrollTop = prevStudioScrollTop;
+    }
     studioCleanupFn = () => {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("resize", onResize);
+      delete window.__agyDsApplyExternalParams;
       studioRefreshFn = null;
       host?.remove();
     };
@@ -2679,8 +2719,7 @@ void main() {
       if (!window[DISABLED_KEY]) {
         lastRootSig = "";
         applyRootState(root);
-        lgTeardown?.();
-        lgTeardown = initLiquidGlassEdition();
+        window.__dsLgRefreshAccentOptics?.();
       }
     });
 

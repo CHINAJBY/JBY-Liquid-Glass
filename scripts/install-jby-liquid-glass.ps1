@@ -50,6 +50,7 @@ try {
     $shell = New-Object -ComObject WScript.Shell
     $desktop = [Environment]::GetFolderPath('Desktop')
     $startMenu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'
+    $conhost = Join-Path $env:SystemRoot 'System32\conhost.exe'
     $powershell = (Get-Command powershell.exe -ErrorAction Stop).Source
     $startScript = $engine.Start
     $restoreScript = $engine.Restore
@@ -59,8 +60,8 @@ try {
 
     foreach ($folder in @($desktop, $startMenu)) {
       $shortcut = $shell.CreateShortcut((Join-Path $folder 'JBY Liquid Glass.lnk'))
-      $shortcut.TargetPath = $powershell
-      $shortcut.Arguments = "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$trayScript`"$portArgument -ShowWindow"
+      $shortcut.TargetPath = $conhost
+      $shortcut.Arguments = "--headless `"$powershell`" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$trayScript`"$portArgument -ShowWindow"
       $shortcut.WorkingDirectory = $engine.Root
       $shortcut.Description = 'Open JBY Liquid Glass themes and apply a verified theme'
       if (Test-Path -LiteralPath $iconPath -PathType Leaf) { $shortcut.IconLocation = "$iconPath,0" }
@@ -68,8 +69,8 @@ try {
     }
 
     $restore = $shell.CreateShortcut((Join-Path $desktop 'JBY Liquid Glass - Restore.lnk'))
-    $restore.TargetPath = $powershell
-    $restore.Arguments = "-NoProfile -ExecutionPolicy RemoteSigned -File `"$restoreScript`"$portArgument -RestoreBaseTheme -PromptRestart"
+    $restore.TargetPath = $conhost
+    $restore.Arguments = "--headless `"$powershell`" -NoProfile -ExecutionPolicy RemoteSigned -File `"$restoreScript`"$portArgument -RestoreBaseTheme -PromptRestart"
     $restore.WorkingDirectory = $engine.Root
     $restore.Description = 'Restore the official Codex appearance and close the CDP session'
     if (Test-Path -LiteralPath $iconPath -PathType Leaf) { $restore.IconLocation = "$iconPath,0" }
@@ -77,15 +78,15 @@ try {
 
     foreach ($folder in @($desktop, $startMenu)) {
       $tray = $shell.CreateShortcut((Join-Path $folder 'JBY Liquid Glass - Tray.lnk'))
-      $tray.TargetPath = $powershell
-      $tray.Arguments = "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$trayScript`"$portArgument"
+      $tray.TargetPath = $conhost
+      $tray.Arguments = "--headless `"$powershell`" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$trayScript`"$portArgument"
       $tray.WorkingDirectory = $engine.Root
       $tray.Description = 'Open JBY Liquid Glass status and theme controls in the system tray'
       if (Test-Path -LiteralPath $iconPath -PathType Leaf) { $tray.IconLocation = "$iconPath,0" }
       $tray.Save()
     }
-    Start-Process -FilePath $powershell -ArgumentList `
-      "-NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$trayScript`"$portArgument" `
+    Start-Process -FilePath $conhost -ArgumentList `
+      "--headless `"$powershell`" -NoProfile -STA -WindowStyle Hidden -ExecutionPolicy RemoteSigned -File `"$trayScript`"$portArgument" `
       -WindowStyle Hidden | Out-Null
   }
 

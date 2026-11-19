@@ -1,8 +1,8 @@
-# JBY Liquid Glass (Desktop Control Center · `v3.1.0`)
+# JBY Liquid Glass (Desktop Control Center · `v3.1.1`)
 
-Dual-app **iOS 26 / S26 Clear Liquid Glass & HarmonyOS 7 Fluid Physics** desktop application for **OpenAI Codex Desktop** (`127.0.0.1:9335`) and **Antigravity Desktop** (`127.0.0.1:9235`), powered by one unified system tray daemon, one shared theme & optical preset library, and direct-click native app launchers.
+Dual-app **iOS 26 / S26 Clear Liquid Glass & HarmonyOS 7 Fluid Physics** desktop application for **OpenAI Codex Desktop** (`127.0.0.1:9335`) and **Antigravity Desktop** (`127.0.0.1:9235`), powered by one unified system tray daemon, one shared theme & optical preset library, and zero-console direct-click native app launchers.
 
-> 双端一体化液态玻璃桌面皮肤应用（`v3.1.0`）：同时支持 **OpenAI Codex** 与 **Antigravity**，共享主题库与光学预设，支持商店主题包导入一键自动液态玻璃化、单端/双端独立切换与推送，以及桌面应用直接点击拉起。
+> 双端一体化液态玻璃桌面皮肤应用（`v3.1.1`）：同时支持 **OpenAI Codex** 与 **Antigravity**，共享主题库与光学预设，支持商店主题包导入一键自动液态玻璃化、单端/双端独立切换与推送，以及零终端窗口（`conhost.exe --headless`）直接点击拉起与无闪烁 Studio 调校。
 
 ---
 
@@ -19,8 +19,9 @@ Dual-app **iOS 26 / S26 Clear Liquid Glass & HarmonyOS 7 Fluid Physics** desktop
    - `assets\optical-presets.mjs` manages `%LOCALAPPDATA%\JBYLiquidGlass\optical-presets.json` across both floating Crystal Studios (`Ctrl+Shift+D`) and the desktop WPF manager.
    - Save custom or auto-numbered presets (`预设 1`, `预设 2`, ...), switch in one click, delete, or mark any preset as **Default** (`defaultPresetId`) so new/unconfigured themes on either Codex or Antigravity automatically inherit your tuned optical parameters (global + per-zone).
 
-4. **Direct-Click App Launchers & Smart App Control Compatible WPF UI（直接点击应用拉起 & 免签名拦截兼容）**
-   - Optimized `Antigravity` and `ChatGPT (Codex)` shortcuts invoke `scripts\launch-antigravity-with-jby.ps1` and `scripts\launch-codex-with-jby.ps1`, keeping native app icons while automatically waking the unified tray and Liquid Glass engine even from a cold state (with stale headless zombie cleanup for Store `ChatGPT.exe`).
+4. **Zero-Console Direct-Click App Launchers & Flicker-Free Studio (`v3.1.1`)（无终端静默拉起 & 零闪烁 Studio 调校）**
+   - Optimized `Antigravity`, `ChatGPT (Codex)`, and `JBY Liquid Glass` shortcuts invoke inbox `C:\Windows\System32\conhost.exe --headless` so Windows 11 Windows Terminal never opens a taskbar console window, while background tray/watcher daemons stay strictly inside the bottom-right system tray.
+   - Antigravity floating Crystal Studio (`Ctrl+Shift+D`) syncs file timestamps on RPC writes and pushes external parameter/preset updates in-place without tearing down the Shadow DOM or WebGL2 sidebar tiles, preserving `.body.scrollTop` and eliminating sidebar flicker.
    - Windows 11 Smart App Control compatible launcher (`app\launch-jby-liquid-glass.ps1`) hosts the WPF UI (`app\JBYLiquidGlass.cs`) under Windows-signed `powershell.exe -STA`.
 
 ---
