@@ -1336,6 +1336,7 @@
       el.removeAttribute("data-dream-lg-pair-active");
       el.removeAttribute("data-dream-lg-surface");
       el.style.removeProperty("--ds-lg-lens-filter");
+      el.style.removeProperty("--ds-lg-lens-slash");
       el.style.removeProperty("--ds-lg-lens-writing");
       el.style.removeProperty("--ds-lg-gpu-bg");
       el.style.removeProperty("--ds-lg-seg-x");
@@ -1468,14 +1469,19 @@
 
     const COMPOSER_SEL = '.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant], [data-ds-part="composer"]';
     const RAIL_SEL = '[data-composer-rail][class*="attached-"], [class*="rail-"][class*="attached-"], [class*="homeUtilityBar"], [class*="ComposerHomeUtilityBar"]';
-    const WRITING_SEL = '[data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"]';
+    const SLASH_SEL = '[data-composer-overlay-floating-ui="true"] > :has(> [data-mention-list-scroll-area]), [data-composer-overlay-floating-ui="true"] [role="listbox"]';
+    const WRITING_SEL = '[data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"], .thread-scroll-container [data-user-message-bubble="true"], .thread-scroll-container [class~="bg-user-message"], .thread-scroll-container [data-local-conversation-user-anchor] [class*="max-w-"][class*="rounded-2xl"], .thread-scroll-container [data-local-conversation-item-target-ids] [class*="max-w-"][class*="rounded-2xl"]:not([data-oai-writing-block-surface] *):not([data-testid="chatgpt-writing-block"] *)';
     const BANNER_SEL = 'aside[class*="banner-"], [class*="ComposerBannerPortal"] aside';
     const LENS_SLOTS = [
-      { name: "composer", zone: "composer", filterId: "ds-lg-lens-composer", cssVar: "--ds-lg-lens-filter", selector: COMPOSER_SEL, baseScale: 36, defaultR: 28, bezelFn: (w, h) => Math.max(15, Math.min(26, Math.min(w, h) * 0.32)) },
-      { name: "rail", zone: "composer", filterId: "ds-lg-lens-rail", cssVar: "--ds-lg-lens-filter", selector: `[data-dream-lg-surface="work-composer"] [data-composer-utility-rail], ${RAIL_SEL}`, excludeClosest: `:is(${COMPOSER_SEL}):not([data-dream-lg-surface="work-composer"])`, baseScale: 20, defaultR: 18, bezelFn: (w, h) => Math.max(8, Math.min(16, Math.min(w, h) * 0.30)) },
+      { name: "composer", zone: "composer", filterId: "ds-lg-lens-composer", cssVar: "--ds-lg-lens-filter", selector: COMPOSER_SEL, multi: true, baseScale: 36, defaultR: 28, bezelFn: (w, h) => Math.max(15, Math.min(26, Math.min(w, h) * 0.32)) },
+      { name: "rail", zone: "composer", filterId: "ds-lg-lens-rail", cssVar: "--ds-lg-lens-filter", selector: `[data-dream-lg-surface="work-composer"] [data-composer-utility-rail], ${RAIL_SEL}`, excludeClosest: `:is(${COMPOSER_SEL}):not([data-dream-lg-surface="work-composer"])`, multi: true, baseScale: 20, defaultR: 18, bezelFn: (w, h) => Math.max(8, Math.min(16, Math.min(w, h) * 0.30)) },
+      { name: "slash", zone: "slash", filterId: "ds-lg-lens-slash", cssVar: "--ds-lg-lens-slash", selector: SLASH_SEL, multi: true, baseScale: 28, defaultR: 22, bezelFn: (w, h) => Math.max(12, Math.min(22, Math.min(w, h) * 0.26)) },
       { name: "writing", zone: "writing", filterId: "ds-lg-lens-writing", cssVar: "--ds-lg-lens-writing", selector: WRITING_SEL, multi: true, baseScale: 32, defaultR: 24, bezelFn: (w, h) => Math.max(14, Math.min(24, Math.min(w, h) * 0.24)) },
     ];
     const SHARED_FILTERS = [
+      { name: "composerShared", zone: "composer", filterId: "ds-lg-lens-composer-shared", cssVar: "--ds-lg-lens-filter", w: 320, h: 96, r: 28, bez: 22, baseScale: 36 },
+      { name: "writingShared", zone: "writing", filterId: "ds-lg-lens-writing-shared", cssVar: "--ds-lg-lens-writing", w: 220, h: 100, r: 20, bez: 18, baseScale: 32 },
+      { name: "slashShared", zone: "slash", filterId: "ds-lg-lens-slash-shared", cssVar: "--ds-lg-lens-slash", w: 220, h: 140, r: 22, bez: 18, baseScale: 28 },
       { name: "card", zone: "cards", filterId: "ds-lg-lens-card", cssVar: "--ds-lg-lens-card", w: 160, h: 160, r: 20, bez: 18, baseScale: 22 },
       { name: "popover", zone: "popover", filterId: "ds-lg-lens-popover", cssVar: "--ds-lg-lens-popover", w: 160, h: 160, r: 22, bez: 18, baseScale: 26 },
     ];
@@ -1641,6 +1647,7 @@
       const out = [];
       for (const rawEl of document.querySelectorAll(slot.selector)) {
         if (rawEl.closest("#codex-dream-skin-plugin-host")) continue;
+        if (rawEl.closest('[data-app-shell-active-page="false"]')) continue;
         if (slot.excludeClosest && rawEl.closest(slot.excludeClosest)) continue;
         if (slot.name === "rail" && rawEl.closest('[data-dream-lg-surface="work-composer"]') && !rawEl.matches('[data-composer-utility-rail]')) continue;
         if (rawEl.parentElement?.closest(slot.selector) && !(slot.name === "rail" && rawEl.matches('[data-composer-utility-rail]') && rawEl.closest('[data-dream-lg-surface="work-composer"]'))) continue;
@@ -1659,10 +1666,11 @@
     const resolveLgZone = (zone) => {
       const base = window.__dsCurrentLiveParams || { transparency: 80, refractScale: 100, blurScale: 100, rimIntensity: 100 };
       const ov = base.zones && zone && base.zones[zone];
+      const defaultBlur = zone === "slash" ? Math.max(40, Number(base.blurScale ?? 100)) : Number(base.blurScale ?? 100);
       return {
         transparency: Number(ov?.transparency ?? base.transparency ?? 80),
         refractScale: Number(ov?.refractScale ?? base.refractScale ?? 100),
-        blurScale: Number(ov?.blurScale ?? base.blurScale ?? 100),
+        blurScale: Number(ov?.blurScale ?? defaultBlur),
         rimIntensity: Number(ov?.rimIntensity ?? base.rimIntensity ?? 100),
       };
     };
@@ -2019,13 +2027,18 @@ void main() {
         const url = URL.createObjectURL(blob);
         allBlobUrls.add(url);
         const prev = activeTileUrls.get(el);
-        if (prev?.url) {
-          allBlobUrls.delete(prev.url);
-          URL.revokeObjectURL(prev.url);
-        }
+        const oldUrl = prev?.url && prev.url !== url ? prev.url : null;
         activeTileUrls.set(el, { key, url });
         el.style.setProperty("--ds-lg-gpu-bg", `url("${url}")`);
-        el.setAttribute("data-dream-lg-gpu", "1");
+        if (el.getAttribute("data-dream-lg-gpu") !== "1") {
+          el.setAttribute("data-dream-lg-gpu", "1");
+        }
+        if (oldUrl) {
+          setTimeout(() => {
+            allBlobUrls.delete(oldUrl);
+            try { URL.revokeObjectURL(oldUrl); } catch {}
+          }, 500);
+        }
       }, "image/png");
     };
 
@@ -2441,7 +2454,7 @@ void main() {
     const observedResizeNodes = new WeakSet();
     const observeLensNodes = () => {
       if (!resizeObs) return;
-      for (const sel of [COMPOSER_SEL, WORK_BODY_SEL, RAIL_SEL, WRITING_SEL, BANNER_SEL, 'aside.app-shell-left-panel']) {
+      for (const sel of [COMPOSER_SEL, WORK_BODY_SEL, RAIL_SEL, SLASH_SEL, WRITING_SEL, BANNER_SEL, 'aside.app-shell-left-panel']) {
         for (const node of document.querySelectorAll(sel)) {
           if (!observedResizeNodes.has(node) && !node.closest("#codex-dream-skin-plugin-host")) {
             observedResizeNodes.add(node);
@@ -2459,15 +2472,26 @@ void main() {
     let settledTimer = 0;
     const syncBusyState = () => {
       if (disposed) return;
-      const stopBtn = document.querySelector('button[aria-label="停止"], button[aria-label*="stop" i]');
-      const busy = Boolean(stopBtn && !stopBtn.disabled && stopBtn.offsetParent !== null);
+      const stopButtons = document.querySelectorAll(
+        `:is([data-codex-composer-root], ${COMPOSER_SEL}) :is(button[aria-label="停止"], button[aria-label="停止生成"], button[aria-label="引导"], button[aria-label="Steer" i], button[aria-label="Stop" i], button[aria-label="Stop generating" i], button[data-testid="stop-button"])`
+      );
+      const busy = [...stopButtons].some((button) =>
+        !button.matches(':disabled, [aria-disabled="true"]') &&
+        !button.closest('[data-app-shell-active-page="false"], [data-composer-rail], [inert]') &&
+        button.getClientRects().length > 0 &&
+        getComputedStyle(button).visibility === "visible"
+      );
       if (busy) {
         wasBusy = true;
         clearTimeout(settledTimer);
         root.removeAttribute("data-dream-lg-settled");
-        root.setAttribute("data-dream-lg-busy", "true");
+        if (root.getAttribute("data-dream-lg-busy") !== "true") {
+          root.setAttribute("data-dream-lg-busy", "true");
+        }
       } else {
-        root.removeAttribute("data-dream-lg-busy");
+        if (root.hasAttribute("data-dream-lg-busy")) {
+          root.removeAttribute("data-dream-lg-busy");
+        }
         if (wasBusy) {
           wasBusy = false;
           root.setAttribute("data-dream-lg-settled", "1");
@@ -2476,6 +2500,7 @@ void main() {
         }
       }
     };
+    const busyPollTimer = setInterval(syncBusyState, 480);
 
     let domObsTimer = 0;
     const domObs = new MutationObserver((records) => {
@@ -2556,6 +2581,7 @@ void main() {
       clearTimeout(domObsTimer);
       clearTimeout(settledTimer);
       clearTimeout(liveParamDebounce);
+      clearInterval(busyPollTimer);
       resizeObs?.disconnect();
       domObs.disconnect();
       document.removeEventListener("pointerover", onPointerOver);
@@ -2590,9 +2616,10 @@ void main() {
   } catch (e) {}
 
   // === Live Optical Parameters Engine (0ms rAF + Multi-Zone updates across all themes) ===
-  const LIQUID_ZONES = ["composer", "writing", "sidebar", "cards", "popover"];
+  const LIQUID_ZONES = ["composer", "slash", "writing", "sidebar", "cards", "popover"];
   const ZONE_OPTICS = {
     composer: { hi: 0.10, mid: 0.025, lo: 0.065, blur: 1.1, rim: 0.15, darkHi: 0.11, darkMid: 0.18, darkLo: 0.24, darkRim: 0.22 },
+    slash:    { hi: 0.34, mid: 0.140, lo: 0.240, blur: 7.5, rim: 0.18, darkHi: 0.32, darkMid: 0.44, darkLo: 0.50, darkRim: 0.26, darkTintPopover: true },
     writing:  { hi: 0.24, mid: 0.070, lo: 0.150, blur: 5.0, rim: 0.16, darkHi: 0.11, darkMid: 0.24, darkLo: 0.30, darkRim: 0.24 },
     sidebar:  { hi: 0.22, mid: 0.080, lo: 0.140, blur: 4.0, rim: 0.15, darkHi: 0.11, darkMid: 0.20, darkLo: 0.24, darkRim: 0.22 },
     cards:    { hi: 0.22, mid: 0.070, lo: 0.140, blur: 5.0, rim: 0.15, darkHi: 0.11, darkMid: 0.20, darkLo: 0.24, darkRim: 0.22 },
@@ -2640,10 +2667,11 @@ void main() {
   };
   const resolveZoneEffective = (p, zone) => {
     const ov = zone && zone !== "global" ? p.zones?.[zone] : null;
+    const defaultBlur = zone === "slash" ? Math.max(40, Number(p.blurScale ?? 100)) : p.blurScale;
     return {
       transparency: ov?.transparency ?? p.transparency,
       refractScale: ov?.refractScale ?? p.refractScale,
-      blurScale: ov?.blurScale ?? p.blurScale,
+      blurScale: ov?.blurScale ?? defaultBlur,
       rimIntensity: ov?.rimIntensity ?? p.rimIntensity,
     };
   };
@@ -3145,6 +3173,7 @@ void main() {
                 <div class="zone-chips" id="ds-zone-bar">
                   <button type="button" class="chip" data-zone="global">全部</button>
                   <button type="button" class="chip" data-zone="composer">输入栏</button>
+                  <button type="button" class="chip" data-zone="slash">斜杠菜单</button>
                   <button type="button" class="chip" data-zone="writing">输出框</button>
                   <button type="button" class="chip" data-zone="sidebar">侧边栏</button>
                   <button type="button" class="chip" data-zone="cards">设置·卡片</button>
@@ -3867,6 +3896,8 @@ void main() {
     };
 
     const renderState = () => {
+      const bodyEl = shadow.querySelector(".body");
+      const prevScrollTop = bodyEl ? bodyEl.scrollTop : 0;
       syncStyles();
       const s = runtime.state;
       const activeName = s?.activeThemeName || THEME.name || "JBY Liquid Glass";
@@ -3896,7 +3927,8 @@ void main() {
       const ZONE_NAME_MAP = {
         global: "全部全局",
         composer: "对话输入栏",
-        writing: "文字输出框",
+        slash: "斜杠菜单",
+        writing: "气泡·产物",
         sidebar: "左侧边栏",
         cards: "设置·卡片",
         popover: "弹窗·胶囊",
@@ -3938,7 +3970,13 @@ void main() {
           : `共 ${opList.length} 项`;
       }
       if (pDelBtn) pDelBtn.hidden = !(runtime.selectedPresetId && opList.some((p) => p.id === runtime.selectedPresetId));
-      if (pListEl) {
+      const presetSig = JSON.stringify({
+        def: opState.defaultPresetId || "",
+        sel: runtime.selectedPresetId || "",
+        items: opList.map((p) => `${p.id}:${p.name}`),
+      });
+      if (pListEl && (!pListEl.childElementCount || runtime.lastPresetSig !== presetSig)) {
+        runtime.lastPresetSig = presetSig;
         pListEl.textContent = "";
         for (const p of opList) {
           const btn = document.createElement("button");
@@ -3971,10 +4009,13 @@ void main() {
       if (ge) ge.checked = Boolean(s?.guardConfig?.autoGuardEnabled);
       if (glCheckbox) glCheckbox.checked = Boolean(s?.guardConfig?.autoLaunchCodexOnBoot);
 
-      fab.hidden = runtime.open;
-      drawer.hidden = !runtime.open;
+      if (fab.hidden !== runtime.open) fab.hidden = runtime.open;
+      if (drawer.hidden !== !runtime.open) drawer.hidden = !runtime.open;
       syncThemeCards();
       syncPositions();
+      if (bodyEl && Math.abs(bodyEl.scrollTop - prevScrollTop) > 1) {
+        bodyEl.scrollTop = prevScrollTop;
+      }
     };
 
     if (!runtime.inited) {

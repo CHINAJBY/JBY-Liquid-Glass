@@ -1,5 +1,5 @@
 #ifndef AppVersion
-  #define AppVersion "3.0.0"
+  #define AppVersion "3.2.0"
 #endif
 #ifndef StageRoot
   #define StageRoot "..\dist-stage"

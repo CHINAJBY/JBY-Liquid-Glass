@@ -42,7 +42,7 @@ const ENGINE_ROOT = path.resolve(__dirname, "..");
 const ASSETS_DIR = path.join(ENGINE_ROOT, "assets");
 const PRESETS_DIR = path.join(ENGINE_ROOT, "presets");
 
-const SKIN_VERSION = "3.1.1";
+const SKIN_VERSION = "3.2.0";
 const DEFAULT_PORT = 9235;
 
 const CODEX_ROOT = codexStateRoot();

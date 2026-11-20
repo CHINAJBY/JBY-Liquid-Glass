@@ -266,6 +266,7 @@
 
     --ds-lg-composer-bg: linear-gradient(162deg, rgb(255 255 255 / var(--ds-lg-z-composer-hi, .10)) 0%, rgb(255 255 255 / var(--ds-lg-z-composer-mid, .025)) 56%, rgb(255 255 255 / var(--ds-lg-z-composer-lo, .065)) 100%);
     --ds-lg-rail-bg: linear-gradient(162deg, rgb(255 255 255 / var(--ds-lg-z-composer-hi, .11)) 0%, rgb(255 255 255 / var(--ds-lg-z-composer-mid, .03)) 56%, rgb(255 255 255 / var(--ds-lg-z-composer-lo, .07)) 100%);
+    --ds-lg-slash-bg: linear-gradient(158deg, rgb(255 255 255 / var(--ds-lg-z-slash-hi, .34)) 0%, rgb(248 251 255 / var(--ds-lg-z-slash-mid, .14)) 58%, rgb(244 248 255 / var(--ds-lg-z-slash-lo, .24)) 100%);
     --ds-lg-writing-bg: linear-gradient(156deg, rgb(255 255 255 / var(--ds-lg-z-writing-hi, .24)) 0%, rgb(255 255 255 / var(--ds-lg-z-writing-mid, .07)) 56%, rgb(255 255 255 / var(--ds-lg-z-writing-lo, .15)) 100%);
     --ds-lg-sidebar-bg: linear-gradient(160deg, rgb(255 255 255 / var(--ds-lg-z-sidebar-hi, .22)) 0%, rgb(255 255 255 / var(--ds-lg-z-sidebar-mid, .08)) 62%, rgb(255 255 255 / var(--ds-lg-z-sidebar-lo, .14)) 100%);
     --ds-lg-card-bg: linear-gradient(158deg, rgb(255 255 255 / var(--ds-lg-z-cards-hi, .22)) 0%, rgb(255 255 255 / var(--ds-lg-z-cards-mid, .07)) 60%, rgb(255 255 255 / var(--ds-lg-z-cards-lo, .14)) 100%);
@@ -295,6 +296,7 @@
 
     --ds-lg-composer-bg: linear-gradient(162deg, var(--ds-lg-z-composer-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-composer-dark-mid, rgb(14 18 28 / .18)) 56%, var(--ds-lg-z-composer-dark-lo, rgb(14 18 28 / .24)) 100%);
     --ds-lg-rail-bg: linear-gradient(164deg, var(--ds-lg-z-composer-dark-hi, rgb(255 255 255 / .12)) 0%, var(--ds-lg-z-composer-dark-lo, rgb(14 18 28 / .24)) 100%);
+    --ds-lg-slash-bg: linear-gradient(158deg, var(--ds-lg-z-slash-dark-hi, rgb(28 35 52 / .48)) 0%, var(--ds-lg-z-slash-dark-lo, rgb(14 18 28 / .38)) 100%);
     --ds-lg-writing-bg: linear-gradient(156deg, var(--ds-lg-z-writing-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-writing-dark-mid, rgb(16 20 32 / .24)) 56%, var(--ds-lg-z-writing-dark-lo, rgb(14 18 28 / .30)) 100%);
     --ds-lg-sidebar-bg: linear-gradient(160deg, var(--ds-lg-z-sidebar-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-sidebar-dark-lo, rgb(16 22 36 / .24)) 100%);
     --ds-lg-card-bg: linear-gradient(158deg, var(--ds-lg-z-cards-dark-hi, rgb(255 255 255 / .11)) 0%, var(--ds-lg-z-cards-dark-lo, rgb(16 22 36 / .24)) 100%);
@@ -724,7 +726,54 @@
     box-shadow: 0 0 0 2px rgb(var(--ds-accent-rgb, 47 117 195) / .22), inset 0 1px 0 var(--ds-lg-rim-spec) !important;
   }
 
-  /* 6. POPOVER / DIALOG / SETTINGS / MENUS / TOOLTIPS ZONE */
+  /* 6A. SLASH / MENTION / SKILLS AUTOCOMPLETE MENU ZONE (Independently Tunable 'slash' Zone) */
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    [data-mention-menu],
+    #typeahead-menu,
+    .typeahead-popover.mentions-menu
+  ) {
+    isolation: isolate;
+    background: var(--ds-lg-slash-bg) !important;
+    background-color: transparent !important;
+    border: 1px solid rgb(18 28 48 / var(--ds-lg-z-slash-rim-a, .18)) !important;
+    border-radius: 22px !important;
+    backdrop-filter: var(--ds-lg-lens-slash, blur(0px)) blur(var(--ds-lg-z-slash-blur, 5px)) saturate(1.48) brightness(1.02) !important;
+    -webkit-backdrop-filter: var(--ds-lg-lens-slash, blur(0px)) blur(var(--ds-lg-z-slash-blur, 5px)) saturate(1.48) brightness(1.02) !important;
+    box-shadow:
+      var(--ds-lg-shadow-sep),
+      inset 0 1.5px 1px var(--ds-lg-rim-spec),
+      inset 1px 0 0 rgb(255 255 255 / .76),
+      inset -1px 0 0 rgb(255 255 255 / .56) !important;
+    text-shadow: var(--ds-lg-text-halo);
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-shell="dark"][data-dream-lg="on"] :is(
+    [data-mention-menu],
+    #typeahead-menu,
+    .typeahead-popover.mentions-menu
+  ) {
+    border-color: rgb(255 255 255 / var(--ds-lg-z-slash-rim-a, .26)) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    [data-mention-menu],
+    #typeahead-menu,
+    .typeahead-popover.mentions-menu
+  ) :is([id^="typeahead-item-"], [role="option"]) {
+    border-radius: 12px !important;
+    transition: background-color 80ms ease, transform 140ms cubic-bezier(.22, 1.22, .36, 1) !important;
+  }
+
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
+    [data-mention-menu],
+    #typeahead-menu,
+    .typeahead-popover.mentions-menu
+  ) :is([id^="typeahead-item-"]:hover, [id^="typeahead-item-"].selected, [role="option"][aria-selected="true"], [role="option"]:hover) {
+    background: linear-gradient(135deg, rgb(255 255 255 / .38), rgb(var(--ds-lg-accent-rgb, var(--ds-accent-rgb, 47 117 195)) / .16)) !important;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .76) !important;
+  }
+
+  /* 6B. POPOVER / DIALOG / SETTINGS / MENUS / TOOLTIPS ZONE */
   html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] .settings-modal-backdrop {
     background: rgb(10 14 24 / 0.22) !important;
     backdrop-filter: blur(4px) !important;
@@ -857,6 +906,9 @@
   html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(
     .surface-composer-card,
     .agy-takeover-frame > .agy-takeover-card,
+    [data-mention-menu],
+    #typeahead-menu,
+    .typeahead-popover.mentions-menu,
     [data-ds-part="sidebar"],
     .agy-user-bubble,
     .artifact-card,
@@ -912,7 +964,7 @@
     animation: ds-lg-enter-turn 240ms cubic-bezier(.22, 1, .36, 1) both;
   }
 
-  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-dialog, [role="dialog"], [role="menu"], [role="listbox"], .compact-tooltip, .agy-toast)[data-dream-lg-seen="enter"] {
+  html[data-dream-skin="active"][data-dream-wallpaper-ready="1"][data-dream-lg="on"] :is(.agy-dialog, [data-mention-menu], #typeahead-menu, [role="dialog"], [role="menu"], [role="listbox"], .compact-tooltip, .agy-toast)[data-dream-lg-seen="enter"] {
     animation: ds-lg-pop-in 185ms cubic-bezier(.22, 1.18, .36, 1) both;
   }
 

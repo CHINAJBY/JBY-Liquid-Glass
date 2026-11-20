@@ -1,8 +1,8 @@
-# JBY Liquid Glass (Desktop Control Center · `v3.1.1`)
+# JBY Liquid Glass (Desktop Control Center · `v3.2.0`)
 
 Dual-app **iOS 26 / S26 Clear Liquid Glass & HarmonyOS 7 Fluid Physics** desktop application for **OpenAI Codex Desktop** (`127.0.0.1:9335`) and **Antigravity Desktop** (`127.0.0.1:9235`), powered by one unified system tray daemon, one shared theme & optical preset library, and zero-console direct-click native app launchers.
 
-> 双端一体化液态玻璃桌面皮肤应用（`v3.1.1`）：同时支持 **OpenAI Codex** 与 **Antigravity**，共享主题库与光学预设，支持商店主题包导入一键自动液态玻璃化、单端/双端独立切换与推送，以及零终端窗口（`conhost.exe --headless`）直接点击拉起与无闪烁 Studio 调校。
+> 双端一体化液态玻璃桌面皮肤应用（`v3.2.0`）：同时支持 **OpenAI Codex** 与 **Antigravity**，共享主题库与光学预设，支持商店主题包导入一键自动液态玻璃化、单端/双端独立切换与推送，以及零终端窗口（`conhost.exe --headless`）直接点击拉起与无闪烁 Studio 调校。
 
 ---
 

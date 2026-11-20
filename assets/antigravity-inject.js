@@ -8,7 +8,7 @@
     videoUrl: "",
     customMediaKind: "none",
     revision: "1",
-    version: "3.0.0",
+    version: "3.2.0",
     liveParams: {},
     pluginUi: {},
     themesCatalog: [],
@@ -32,11 +32,11 @@
   const THEME = BOOT.theme && typeof BOOT.theme === "object" ? BOOT.theme : {};
   const SELECTORS = Array.isArray(BOOT.selectors) ? BOOT.selectors : [];
   const PAYLOAD_REVISION = String(BOOT.revision || "1");
-  const SKIN_VERSION = String(BOOT.version || "3.0.0");
+  const SKIN_VERSION = String(BOOT.version || "3.2.0");
   const cssText = [String(BOOT.cssText || ""), String(BOOT.safeCssText || "")].filter(Boolean).join("\n");
   const selectorByKey = new Map(SELECTORS.map((item) => [item.key, item]));
 
-  const LIQUID_ZONES = ["composer", "writing", "sidebar", "cards", "popover"];
+  const LIQUID_ZONES = ["composer", "slash", "writing", "sidebar", "cards", "popover"];
   const DEFAULT_LIVE_PARAMS = {
     transparency: 80,
     refractScale: 100,
@@ -513,6 +513,14 @@
   };
 
   let lastRootSig = "";
+  const syncWindowTitleBarOverlay = (shell) => {
+    try {
+      window.electronNative?.setTitleBarOverlay?.({
+        color: "#00000000",
+        symbolColor: shell === "dark" ? "#f3f6fc" : "#141c2c",
+      });
+    } catch {}
+  };
   const applyRootState = (root) => {
     metrics.rootPasses += 1;
     ensureStyle();
@@ -523,6 +531,7 @@
       return shell;
     }
     lastRootSig = sig;
+    syncWindowTitleBarOverlay(shell);
     setAttribute(root, "data-dream-skin", "active");
     setAttribute(root, SHELL_ATTR, shell);
     setAttribute(root, THEME_ATTR, THEME.id || "custom");
@@ -581,6 +590,7 @@
   window.__dsCurrentLiveParams = { ...DEFAULT_LIVE_PARAMS, ...(BOOT.liveParams || {}) };
   const ZONE_OPTICS = {
     composer: { hi: 0.10, mid: 0.025, lo: 0.065, blur: 1.1, rim: 0.15, darkHi: 0.11, darkMid: 0.18, darkLo: 0.24, darkRim: 0.22 },
+    slash:    { hi: 0.34, mid: 0.140, lo: 0.240, blur: 7.5, rim: 0.18, darkHi: 0.32, darkMid: 0.44, darkLo: 0.50, darkRim: 0.26, darkTintPopover: true },
     writing:  { hi: 0.24, mid: 0.070, lo: 0.150, blur: 5.0, rim: 0.16, darkHi: 0.11, darkMid: 0.24, darkLo: 0.30, darkRim: 0.24 },
     sidebar:  { hi: 0.22, mid: 0.080, lo: 0.140, blur: 4.0, rim: 0.15, darkHi: 0.11, darkMid: 0.20, darkLo: 0.24, darkRim: 0.22 },
     cards:    { hi: 0.22, mid: 0.070, lo: 0.140, blur: 5.0, rim: 0.15, darkHi: 0.11, darkMid: 0.20, darkLo: 0.24, darkRim: 0.22 },
@@ -589,10 +599,11 @@
 
   const resolveZone = (params, zone) => {
     const ov = params.zones && zone && params.zones[zone];
+    const defaultBlur = zone === "slash" ? Math.max(40, Number(params.blurScale ?? 100)) : Number(params.blurScale ?? 100);
     return {
       transparency: clamp(Number(ov?.transparency ?? params.transparency ?? 80), 0, 100),
       refractScale: clamp(Number(ov?.refractScale ?? params.refractScale ?? 100), 0, 200),
-      blurScale: clamp(Number(ov?.blurScale ?? params.blurScale ?? 100), 0, 200),
+      blurScale: clamp(Number(ov?.blurScale ?? defaultBlur), 0, 200),
       rimIntensity: clamp(Number(ov?.rimIntensity ?? params.rimIntensity ?? 100), 0, 200),
     };
   };
@@ -763,15 +774,18 @@
 
     const COMPOSER_SEL = '[data-testid="agent-input-box"] .surface-composer-card, .surface-composer-card, .agy-takeover-frame > .agy-takeover-card, .interactive-input-part';
     const RAIL_SEL = '[data-testid="agent-input-box"] [data-testid="input-box-bottom-toolbar"]';
+    const SLASH_SEL = '[data-mention-menu], #typeahead-menu, .typeahead-popover.mentions-menu';
     const WRITING_SEL = '.agy-user-bubble, .artifact-card, .agy-callout, .agy-md-table, .md-table-host, .animate-overview-panel';
     const LENS_SLOTS = [
-      { name: "composer", zone: "composer", filterId: "ds-lg-lens-composer", cssVar: "--ds-lg-lens-filter", selector: COMPOSER_SEL, baseScale: 36, defaultR: 28, bezelFn: (w, h) => Math.max(15, Math.min(26, Math.min(w, h) * 0.32)) },
-      { name: "rail", zone: "composer", filterId: "ds-lg-lens-rail", cssVar: "--ds-lg-lens-rail", selector: RAIL_SEL, baseScale: 20, defaultR: 18, bezelFn: (w, h) => Math.max(8, Math.min(16, Math.min(w, h) * 0.30)) },
+      { name: "composer", zone: "composer", filterId: "ds-lg-lens-composer", cssVar: "--ds-lg-lens-filter", selector: COMPOSER_SEL, multi: true, baseScale: 36, defaultR: 28, bezelFn: (w, h) => Math.max(15, Math.min(26, Math.min(w, h) * 0.32)) },
+      { name: "rail", zone: "composer", filterId: "ds-lg-lens-rail", cssVar: "--ds-lg-lens-rail", selector: RAIL_SEL, multi: true, baseScale: 20, defaultR: 18, bezelFn: (w, h) => Math.max(8, Math.min(16, Math.min(w, h) * 0.30)) },
+      { name: "slash", zone: "slash", filterId: "ds-lg-lens-slash", cssVar: "--ds-lg-lens-slash", selector: SLASH_SEL, multi: true, baseScale: 28, defaultR: 22, bezelFn: (w, h) => Math.max(12, Math.min(22, Math.min(w, h) * 0.26)) },
       { name: "writing", zone: "writing", filterId: "ds-lg-lens-writing", cssVar: "--ds-lg-lens-writing", selector: WRITING_SEL, multi: true, baseScale: 32, defaultR: 24, bezelFn: (w, h) => Math.max(14, Math.min(24, Math.min(w, h) * 0.24)) },
     ];
     const SHARED_FILTERS = [
       { name: "card", zone: "cards", filterId: "ds-lg-lens-card", cssVar: "--ds-lg-lens-card", w: 160, h: 160, r: 20, bez: 18, baseScale: 22 },
       { name: "popover", zone: "popover", filterId: "ds-lg-lens-popover", cssVar: "--ds-lg-lens-popover", w: 160, h: 160, r: 22, bez: 18, baseScale: 26 },
+      { name: "slashShared", zone: "slash", filterId: "ds-lg-lens-slash-shared", cssVar: "--ds-lg-lens-slash", w: 220, h: 140, r: 22, bez: 18, baseScale: 28 },
     ];
 
     const createDisplacementFilter = (id, baseScale) => {
@@ -1622,7 +1636,7 @@ void main() {
     const observedNodes = new WeakSet();
     const observeOpticsTargets = () => {
       if (!resizeObs) return;
-      for (const sel of [COMPOSER_SEL, RAIL_SEL, WRITING_SEL, '[data-ds-part="sidebar"]', '[data-dream-agy-composer-dock="1"]', '[data-has-browser-hole="true"]:not(body)']) {
+      for (const sel of [COMPOSER_SEL, RAIL_SEL, SLASH_SEL, WRITING_SEL, '[data-ds-part="sidebar"]', '[data-dream-agy-composer-dock="1"]', '[data-has-browser-hole="true"]:not(body)']) {
         for (const n of querySafe(sel)) {
           if (!observedNodes.has(n) && !n.closest(`#${PLUGIN_HOST_ID}`)) {
             observedNodes.add(n);
@@ -1651,7 +1665,7 @@ void main() {
           for (const n of rec.addedNodes) {
             if (n.nodeType !== 1 || n.id === LG_SVG_ID || n.id === LG_CANVAS_ID || n.id === PLUGIN_HOST_ID || n.id === WALLPAPER_LAYER_ID) continue;
             dirty = true;
-            if (!reducedMotion && enterCount < 2 && n.matches?.('.agy-user-bubble, .artifact-card, .agy-dialog, [role="dialog"], [role="menu"], [role="listbox"], .compact-tooltip, .agy-toast') && !n.hasAttribute("data-dream-lg-seen")) {
+            if (!reducedMotion && enterCount < 2 && n.matches?.('.agy-user-bubble, .artifact-card, .agy-dialog, [data-mention-menu], #typeahead-menu, [role="dialog"], [role="menu"], [role="listbox"], .compact-tooltip, .agy-toast') && !n.hasAttribute("data-dream-lg-seen")) {
               n.setAttribute("data-dream-lg-seen", "enter");
               enterCount += 1;
             }
@@ -1757,6 +1771,7 @@ void main() {
         n.style.removeProperty("--ds-lg-gpu-bg");
         n.style.removeProperty("--ds-lg-lens-filter");
         n.style.removeProperty("--ds-lg-lens-rail");
+        n.style.removeProperty("--ds-lg-lens-slash");
         n.style.removeProperty("--ds-lg-lens-writing");
       }
       delete window.__dsLgApplyLiveParams;
@@ -1993,6 +2008,7 @@ void main() {
                 <div class="zone-chips">
                   <button type="button" class="chip" data-zone="global">全部</button>
                   <button type="button" class="chip" data-zone="composer">输入栏</button>
+                  <button type="button" class="chip" data-zone="slash">斜杠菜单</button>
                   <button type="button" class="chip" data-zone="writing">气泡·产物</button>
                   <button type="button" class="chip" data-zone="sidebar">侧边栏</button>
                   <button type="button" class="chip" data-zone="cards">面板·卡片</button>
@@ -2245,7 +2261,7 @@ void main() {
       drawer.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)`;
     };
 
-    const ZONE_LABELS = { global: "全部全局", composer: "输入栏", writing: "气泡·产物", sidebar: "侧边栏", cards: "面板·卡片", popover: "弹窗·胶囊" };
+    const ZONE_LABELS = { global: "全部全局", composer: "输入栏", slash: "斜杠菜单", writing: "气泡·产物", sidebar: "侧边栏", cards: "面板·卡片", popover: "弹窗·胶囊" };
     const cardMap = new Map();
 
     const syncThemeCards = () => {
@@ -2703,6 +2719,13 @@ void main() {
     if (!keepStudio) {
       try { if (artUrl.startsWith("blob:")) URL.revokeObjectURL(artUrl); } catch {}
       delete window[STATE_KEY];
+      try {
+        const isDark = detectShellAppearance() === "dark";
+        window.electronNative?.setTitleBarOverlay?.({
+          color: isDark ? "#131313" : "#FFFFFF",
+          symbolColor: isDark ? "#FAFAFA" : "#000000",
+        });
+      } catch {}
     }
     return true;
   };

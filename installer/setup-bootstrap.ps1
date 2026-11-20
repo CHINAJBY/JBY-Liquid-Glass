@@ -78,8 +78,8 @@ function Wait-JbyCodexClosedForSetup {
 }
 
 try {
-  if ($Install -and ($LaunchTray -or $Uninstall)) {
-    throw 'Choose exactly one bootstrap action.'
+  if ($Uninstall -and ($Install -or $LaunchTray -or $ShowWindow)) {
+    throw 'Uninstall cannot be combined with install or launch actions.'
   }
   if (-not (Test-Path -LiteralPath $commonPath -PathType Leaf) -or
     -not (Test-Path -LiteralPath $themePath -PathType Leaf)) {
@@ -129,7 +129,6 @@ try {
   $installedVersion = if (Test-Path -LiteralPath $engine.Version -PathType Leaf) {
     ([System.IO.File]::ReadAllText($engine.Version)).Trim()
   } else { '' }
-  $backupExists = Test-Path -LiteralPath (Join-Path $stateRoot 'config.before-dream-skin.toml') -PathType Leaf
   $requiredEngineFiles = @(
     'VERSION',
     'assets\jby-liquid-glass.ico',
@@ -164,7 +163,7 @@ try {
   if ($needsInstall) {
     $registeredInstalls = @()
     try { $registeredInstalls = @(Get-DreamSkinRegisteredCodexInstalls) } catch {}
-    if ($registeredInstalls.Count -gt 0 -and -not $backupExists) {
+    if ($registeredInstalls.Count -gt 0) {
       Wait-JbyCodexClosedForSetup
     }
     Stop-DreamSkinTrayProcess -ScriptPaths @($engine.Tray) -RequireStopped

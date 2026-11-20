@@ -6,7 +6,7 @@ import { resolveDefaultLiveParams } from "./optical-presets.mjs";
 const warned = new Set();
 const MAX_BYTES = 131072;
 
-export const LIQUID_ZONES = Object.freeze(["composer", "writing", "sidebar", "cards", "popover"]);
+export const LIQUID_ZONES = Object.freeze(["composer", "slash", "writing", "sidebar", "cards", "popover"]);
 
 export const DEFAULT_LIVE_PARAMS = Object.freeze({
   transparency: 80,
