@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
-export const LIQUID_ZONES = Object.freeze(["composer", "slash", "writing", "sidebar", "cards", "popover"]);
+export const LIQUID_ZONES = Object.freeze(["composer", "slash", "attach", "writing", "sidebar", "cards", "popover"]);
 
 export const DEFAULT_LIVE_PARAMS = Object.freeze({
   transparency: 80,

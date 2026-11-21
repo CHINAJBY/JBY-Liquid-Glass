@@ -23,7 +23,7 @@ import {
   saveOpticalPreset,
   setDefaultOpticalPreset,
 } from "../assets/optical-presets.mjs";
-import { constants as fsConstants } from "node:fs";
+import { constants as fsConstants, watch as watchDirectory } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -1887,17 +1887,23 @@ async function runWatch(options) {
     }
     return syncState;
   };
-  const pushPayloadToSessions = async (nextPayload, skipLiveApplyOnSession = null, { skipEarlyRefresh = false } = {}) => {
+  const applyOpticsToSession = async (session, payload) => {
+    const args = [payload.cachedStyleRevision, payload.theme.artKey,
+      payload.theme.id, payload.revision, payload.theme.liveParams];
+    return await session.evaluate(`window.__CODEX_DREAM_SKIN_STATE__?.applyOptics?.(...${JSON.stringify(args)}) === true`);
+  };
+  const pushPayloadToSessions = async (nextPayload, skipLiveApplyOnSession = null, { skipEarlyRefresh = false, opticsOnly = false } = {}) => {
     loadedPayload = nextPayload;
     if (skipEarlyRefresh && skipLiveApplyOnSession) {
       for (const [, session] of sessions) {
         if (session === skipLiveApplyOnSession || session.closed) continue;
-        applyToSession(session, loadedPayload.payload).catch(() => {});
+        applyOpticsToSession(session, loadedPayload).catch(() => {});
       }
       return;
     }
     for (const [id, session] of sessions) {
       try {
+        const applied = opticsOnly && await applyOpticsToSession(session, nextPayload);
         const previousEarlyScript = earlyScripts.get(id);
         let nextEarlyScript = null;
         try {
@@ -1916,9 +1922,7 @@ async function runWatch(options) {
         if (nextEarlyScript) earlyScripts.set(id, nextEarlyScript);
         else earlyScripts.delete(id);
         await removeEarlyPayload(session, previousEarlyScript);
-        if (session !== skipLiveApplyOnSession) {
-          await applyToSession(session, loadedPayload.payload);
-        }
+        if (!applied && session !== skipLiveApplyOnSession) await applyToSession(session, loadedPayload.payload);
       } catch (error) {
         console.error(`[dream-skin] live theme update failed for ${id}: ${error.message}`);
         await removeEarlyPayload(session, earlyScripts.get(id));
@@ -2013,7 +2017,7 @@ async function runWatch(options) {
           const nextPayload = rebuildPayloadFast(loadedPayload, nextParams) ?? await loadPayload(options.themeDir);
           lastStrongThemeAuditAt = Date.now();
           const isDragTick = action === "setLiveParams" && args.commit === false;
-          await pushPayloadToSessions(nextPayload, action === "setLiveParams" ? session : null, { skipEarlyRefresh: isDragTick });
+          await pushPayloadToSessions(nextPayload, action === "setLiveParams" ? session : null, { skipEarlyRefresh: isDragTick, opticsOnly: true });
           const syncState = await broadcastSync(action === "setLiveParams" ? session : null);
           await reply(syncState);
           return;
@@ -2113,6 +2117,25 @@ async function runWatch(options) {
       }
     });
   };
+  let wakePreferenceWait;
+  let preferencesDirty = false;
+  let preferenceWatch;
+  const markPreferencesDirty = () => {
+    preferencesDirty = true;
+    wakePreferenceWait?.();
+  };
+  const waitForNextAudit = () => new Promise((resolve) => {
+    if (preferencesDirty) return resolve();
+    const timer = setTimeout(() => {
+      wakePreferenceWait = null;
+      resolve();
+    }, 700);
+    wakePreferenceWait = () => {
+      clearTimeout(timer);
+      wakePreferenceWait = null;
+      resolve();
+    };
+  });
   process.on("SIGINT", stop);
   process.on("SIGTERM", stop);
 
@@ -2125,7 +2148,15 @@ async function runWatch(options) {
       readOptionalFileStamp(pluginConfigPath("win32")),
       readOptionalFileStamp(opticalPresetsPath()),
     ]);
+    try {
+      const filenames = new Set([themePreferencesPath("win32"), pluginConfigPath("win32"), opticalPresetsPath()].map(file => path.basename(file)));
+      preferenceWatch = watchDirectory(stateRoot, (_event, filename) => {
+        if (filename && filenames.has(String(filename))) markPreferencesDirty();
+      });
+      preferenceWatch.on("error", () => preferenceWatch?.close());
+    } catch { /* periodic audit still covers filesystem events */ }
     while (!stopping) {
+      preferencesDirty = false;
       if (identityAnchor.closed) {
         console.error("[dream-skin] original CDP browser identity closed; watcher is stopping instead of reconnecting");
         process.exitCode = 3;
@@ -2150,6 +2181,7 @@ async function runWatch(options) {
       const nextPaused = await fileExists(options.pauseFile);
       let nextPayload = loadedPayload;
       let presetsChanged = false;
+      let opticsOnly = false;
       if (!nextPaused) {
         try {
           const now = Date.now();
@@ -2159,23 +2191,25 @@ async function runWatch(options) {
             readOptionalFileStamp(pluginConfigPath("win32")),
             readOptionalFileStamp(opticalPresetsPath()),
           ]);
-          if (curPresetsStamp !== lastPresetsStamp) {
-            lastPresetsStamp = curPresetsStamp;
-            presetsChanged = true;
-            shouldAudit = true;
-          }
-          if (curPrefStamp !== lastPrefStamp || curPluginCfgStamp !== lastPluginCfgStamp) {
-            lastPrefStamp = curPrefStamp;
-            lastPluginCfgStamp = curPluginCfgStamp;
-            shouldAudit = true;
-          }
-          if (!shouldAudit) {
-            try {
-              shouldAudit = await readThemeSourceStamp(loadedPayload) !== loadedPayload.sourceStamp;
-            } catch {
-              shouldAudit = true;
+          presetsChanged = curPresetsStamp !== lastPresetsStamp;
+          const preferencesChanged = curPrefStamp !== lastPrefStamp || curPluginCfgStamp !== lastPluginCfgStamp || presetsChanged;
+          lastPrefStamp = curPrefStamp;
+          lastPluginCfgStamp = curPluginCfgStamp;
+          lastPresetsStamp = curPresetsStamp;
+          const sourceChanged = !loadedPayload || await readThemeSourceStamp(loadedPayload).catch(() => "") !== loadedPayload.sourceStamp;
+          if (preferencesChanged && !sourceChanged) {
+            const { params } = await readThemeLiveParams(loadedPayload.theme.id);
+            if (JSON.stringify(params) !== JSON.stringify(loadedPayload.theme.liveParams)) {
+              const updated = rebuildPayloadFast(loadedPayload, params);
+              if (updated) {
+                nextPayload = updated;
+                opticsOnly = true;
+              } else {
+                shouldAudit = true;
+              }
             }
           }
+          shouldAudit ||= sourceChanged;
           if (shouldAudit) {
             const candidateTheme = await loadTheme(options.themeDir);
             lastStrongThemeAuditAt = now;
@@ -2201,7 +2235,10 @@ async function runWatch(options) {
         await broadcastSync().catch(() => {});
       }
 
-      if (pauseChanged || payloadChanged) {
+      if (!pauseChanged && payloadChanged && opticsOnly) {
+        await pushPayloadToSessions(loadedPayload, null, { opticsOnly: true });
+        if (presetsChanged) await broadcastSync().catch(() => {});
+      } else if (pauseChanged || payloadChanged) {
         for (const [id, session] of sessions) {
           try {
             const previousEarlyScript = earlyScripts.get(id);
@@ -2322,9 +2359,11 @@ async function runWatch(options) {
           rejectTarget(target, 2500, error);
         }
       }
-      await new Promise((resolve) => setTimeout(resolve, 700));
+      await waitForNextAudit();
     }
   } finally {
+    preferenceWatch?.close();
+    wakePreferenceWait?.();
     identityAnchor.close();
     for (const [id, session] of sessions) {
       await removeEarlyPayload(session, earlyScripts.get(id));

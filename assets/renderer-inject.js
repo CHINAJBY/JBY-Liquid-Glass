@@ -1,6 +1,6 @@
 // Canonical cross-platform renderer. Run tools/sync-runtime-assets.mjs after editing.
 ((cssText, artDataUrl, themeConfig) => {
-  const SELECTOR_CONTRACT = {"schema":"codex-dream-skin-selectors/1","selectors":[{"key":"shell-main","selector":"main:is(.main-surface, [data-app-shell-main-surface], [class*=\"_MainContentSurface_\"])","tier":"L1","scope":"all","required":true},{"key":"left-panel","selector":"aside.app-shell-left-panel","tier":"L1","scope":"all","required":true},{"key":"header-tint","selector":"header:is(.app-header-tint, [data-app-shell-header-edge-scroll], [class*=\"_Header_\"])","tier":"L1","scope":"all","required":true},{"key":"main-content-top-fade","selector":":is(.app-shell-main-content-top-fade, [data-app-shell-main-content-top-fade]:not(:has(*)), [class*=\"_MainContentTopFade_\"])","tier":"L2","scope":"all","required":false},{"key":"home-icon","selector":"[data-testid=\"home-icon\"]","tier":"L1","scope":"home","required":true},{"key":"home-route","selector":"[role=\"main\"]:has([data-testid=\"home-icon\"])","tier":"L1","scope":"home","required":true},{"key":"home-route-css","selector":"[role=\"main\"]","tier":"L1","scope":"home","required":true},{"key":"home-banners","selector":".home-banners","tier":"L2","scope":"home","required":false},{"key":"composer-chrome","selector":":is(.composer-surface-chrome, [class*=\"_ComposerLayoutRoot_\"], [data-composer-surface-variant][data-composer-radius-variant])","tier":"L2","scope":"home+thread","required":false},{"key":"composer-toolbar","selector":":is(.composer-surface-chrome [class*=\"_footer_\"], [class*=\"_ComposerLayoutRoot_\"] [class*=\"_ComposerLayoutFooter_\"], [data-composer-surface-variant][data-composer-radius-variant] :is([data-composer-footer-responsive], [class*=\"_ComposerLayoutFooter_\"], [class*=\"_footer_\"]))","tier":"L2","scope":"home+thread","required":false},{"key":"home-utility","selector":":is([class*=\"_homeUtilityBar_\"], [class*=\"_ComposerHomeUtilityBar_\"])","tier":"L2","scope":"home","required":false},{"key":"game-source","selector":"[data-feature=\"game-source\"]","tier":"L2","scope":"home","required":false},{"key":"home-suggestions","selector":".group\\/home-suggestions","tier":"L2","scope":"home","required":false},{"key":"project-selector","selector":".group\\/project-selector","tier":"L2","scope":"home config","required":false},{"key":"markdown","selector":"[class*=\"_markdown\"]","tier":"L2","scope":"thread","required":false},{"key":"thread-surface","selector":".thread-scroll-container","tier":"L2","scope":"thread","required":false},{"key":"message","selector":":is([data-message-author-role], [data-local-conversation-user-anchor], [data-local-conversation-final-assistant])","tier":"L2","scope":"thread","required":false},{"key":"settings-panel","selector":"[data-settings-panel-slug=\"general-settings\"]","tier":"L2","scope":"settings","required":false},{"key":"appearance-radio","selector":"input[name=\"appearance-theme\"]","tier":"L2","scope":"settings","required":false},{"key":"overlay-menu","selector":"[role=\"menu\"]","tier":"L2","scope":"overlay","required":false},{"key":"overlay-dialog","selector":"[role=\"dialog\"]","tier":"L2","scope":"overlay","required":false},{"key":"overlay-popper","selector":"[data-radix-popper-content-wrapper]","tier":"L2","scope":"overlay","required":false}],"stableTestids":["app-shell-header-context-menu-surface","home-icon","theme-preview"]};
+  const SELECTOR_CONTRACT = {"schema":"codex-dream-skin-selectors/1","selectors":[{"key":"shell-main","selector":"main:is(.main-surface, [data-app-shell-main-surface], [class*=\"_MainContentSurface_\"])","tier":"L1","scope":"all","required":true},{"key":"left-panel","selector":"aside.app-shell-left-panel","tier":"L1","scope":"all","required":true},{"key":"header-tint","selector":"header:is(.app-header-tint, [data-app-shell-header-edge-scroll], [class*=\"_Header_\"]), header[data-app-shell-titlebar=\"true\"] [data-app-shell-main-titlebar=\"true\"][data-testid=\"app-shell-header-context-menu-surface\"]","tier":"L1","scope":"all","required":true},{"key":"main-content-top-fade","selector":":is(.app-shell-main-content-top-fade, [data-app-shell-main-content-top-fade]:not(:has(*)), [class*=\"_MainContentTopFade_\"])","tier":"L2","scope":"all","required":false},{"key":"home-icon","selector":"[data-testid=\"home-icon\"]","tier":"L1","scope":"home","required":true},{"key":"home-route","selector":"[role=\"main\"]:has([data-testid=\"home-icon\"])","tier":"L1","scope":"home","required":true},{"key":"home-route-css","selector":"[role=\"main\"]","tier":"L1","scope":"home","required":true},{"key":"home-banners","selector":".home-banners","tier":"L2","scope":"home","required":false},{"key":"composer-chrome","selector":":is(.composer-surface-chrome, [class*=\"_ComposerLayoutRoot_\"], [data-composer-surface-variant][data-composer-radius-variant])","tier":"L2","scope":"home+thread","required":false},{"key":"composer-toolbar","selector":":is(.composer-surface-chrome [class*=\"_footer_\"], [class*=\"_ComposerLayoutRoot_\"] [class*=\"_ComposerLayoutFooter_\"], [data-composer-surface-variant][data-composer-radius-variant] :is([data-composer-footer-responsive], [class*=\"_ComposerLayoutFooter_\"], [class*=\"_footer_\"]))","tier":"L2","scope":"home+thread","required":false},{"key":"home-utility","selector":":is([class*=\"_homeUtilityBar_\"], [class*=\"_ComposerHomeUtilityBar_\"])","tier":"L2","scope":"home","required":false},{"key":"game-source","selector":"[data-feature=\"game-source\"]","tier":"L2","scope":"home","required":false},{"key":"home-suggestions","selector":".group\\/home-suggestions","tier":"L2","scope":"home","required":false},{"key":"project-selector","selector":".group\\/project-selector","tier":"L2","scope":"home config","required":false},{"key":"markdown","selector":"[class*=\"_markdown\"]","tier":"L2","scope":"thread","required":false},{"key":"thread-surface","selector":".thread-scroll-container","tier":"L2","scope":"thread","required":false},{"key":"message","selector":":is([data-message-author-role], [data-local-conversation-user-anchor], [data-local-conversation-final-assistant])","tier":"L2","scope":"thread","required":false},{"key":"settings-panel","selector":"[data-settings-panel-slug=\"general-settings\"]","tier":"L2","scope":"settings","required":false},{"key":"appearance-radio","selector":"input[name=\"appearance-theme\"]","tier":"L2","scope":"settings","required":false},{"key":"overlay-menu","selector":"[role=\"menu\"]","tier":"L2","scope":"overlay","required":false},{"key":"overlay-dialog","selector":"[role=\"dialog\"]","tier":"L2","scope":"overlay","required":false},{"key":"overlay-popper","selector":"[data-radix-popper-content-wrapper]","tier":"L2","scope":"overlay","required":false}],"stableTestids":["app-shell-header-context-menu-surface","home-icon","theme-preview"]};
   const STATE_KEY = "__CODEX_DREAM_SKIN_STATE__";
   const DISABLED_KEY = "__CODEX_DREAM_SKIN_DISABLED__";
   const STYLE_REGISTRY_KEY = "__CODEX_DREAM_SKIN_STYLE_SHEETS__";
@@ -1145,6 +1145,11 @@
           return false;
         }
         if (record.type === "childList") {
+          if (el.closest(".thread-scroll-container")) {
+            const relevant = '[data-local-conversation-user-anchor], [data-user-message-bubble], [data-local-conversation-final-assistant], [data-codex-composer-root], [role="dialog"], [role="menu"]';
+            return [...record.addedNodes, ...record.removedNodes].some((node) =>
+              node.nodeType === 1 && (node.matches(relevant) || node.querySelector(relevant)));
+          }
           for (const n of record.addedNodes) {
             if (n.nodeType === 1 && n.id !== "codex-dream-skin-plugin-host" && n.id !== "ds-lg-svg-defs" && n.id !== "ds-lg-fx-canvas") {
               return true;
@@ -1351,6 +1356,28 @@
     delete window.__dsLgEditionInstalled;
   };
 
+  const DEFAULT_LIVE_PARAMS = {
+    transparency: 80,
+    refractScale: 100,
+    blurScale: 100,
+    rimIntensity: 100,
+    motionMode: "spring",
+    particlesEnabled: true,
+    fontWeightBoost: 0,
+    zones: {},
+  };
+  const resolveZoneEffective = (p, zone) => {
+    const ov = p.zones?.[zone];
+    // Keep labels readable when older themes set global blur to zero.
+    const defaultBlur = zone === "slash" || zone === "attach" ? Math.max(40, p.blurScale) : p.blurScale;
+    return {
+      transparency: ov?.transparency ?? p.transparency,
+      refractScale: ov?.refractScale ?? p.refractScale,
+      blurScale: ov?.blurScale ?? defaultBlur,
+      rimIntensity: ov?.rimIntensity ?? p.rimIntensity,
+    };
+  };
+
   const initLiquidGlassEdition = () => {
     if (!isLiquidGlassEdition() || window[DISABLED_KEY]) {
       teardownLiquidGlassEdition();
@@ -1456,7 +1483,6 @@
     };
 
     // === Tier 1: Live Single-Pass SVG Snell Displacement Lens (Composer & Attached Rail) ===
-    // Renders TRUE underlying pixels (including white pages -> 100% colorless clear crystal!) at 140+ FPS.
     const SVG_NS = "http://www.w3.org/2000/svg";
     const XLINK_NS = "http://www.w3.org/1999/xlink";
     const svgRoot = document.createElementNS(SVG_NS, "svg");
@@ -1469,19 +1495,28 @@
 
     const COMPOSER_SEL = '.composer-surface-chrome, [class*="ComposerLayoutRoot"], [data-composer-surface-variant][data-composer-radius-variant], [data-ds-part="composer"]';
     const RAIL_SEL = '[data-composer-rail][class*="attached-"], [class*="rail-"][class*="attached-"], [class*="homeUtilityBar"], [class*="ComposerHomeUtilityBar"]';
-    const SLASH_SEL = '[data-composer-overlay-floating-ui="true"] > :has(> [data-mention-list-scroll-area]), [data-composer-overlay-floating-ui="true"] [role="listbox"]';
-    const WRITING_SEL = '[data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"], .thread-scroll-container [data-user-message-bubble="true"], .thread-scroll-container [class~="bg-user-message"], .thread-scroll-container [data-local-conversation-user-anchor] [class*="max-w-"][class*="rounded-2xl"], .thread-scroll-container [data-local-conversation-item-target-ids] [class*="max-w-"][class*="rounded-2xl"]:not([data-oai-writing-block-surface] *):not([data-testid="chatgpt-writing-block"] *)';
+    const MENU_OVERLAY_SEL = '[data-composer-overlay-floating-ui="true"]';
+    const MENU_PANEL_SEL = `:is(${MENU_OVERLAY_SEL}, ${MENU_OVERLAY_SEL} *):has(> [data-mention-list-scroll-area])`;
+    const SLASH_SEL = '[data-dream-lg-menu="slash"]';
+    const ATTACH_SEL = '[data-dream-lg-menu="attach"]';
+    const ADD_CONTEXT_SEL = '[data-composer-navigation-target="add-context"]:is([aria-expanded="true"], [data-state="open"])';
+    const MENU_EDITOR_SEL = '[contenteditable="true"]:is([data-codex-composer], [data-composer-markdown])';
+    const WRITING_SEL = '[data-oai-writing-block-surface], [data-testid="chatgpt-writing-block"]';
+    const BUBBLE_SEL = '.thread-scroll-container :is([data-user-message-bubble="true"], [class~="bg-user-message"], [data-local-conversation-user-anchor] [class*="max-w-"][class*="rounded-2xl"])';
+    const GOAL_BUTTON_SEL = 'button:is([aria-label="Clear goal" i], [aria-label="清除目标"])';
+    const ACTIVE_PAGE_OFF = '[data-app-shell-active-page="false"], [inert]';
+    const OPTICS_STRUCTURAL_SEL = `[data-codex-composer-root], [data-composer-rail-item], ${COMPOSER_SEL}, ${RAIL_SEL}, ${MENU_OVERLAY_SEL}, [data-mention-list-scroll-area], [data-mention-section-id], ${WRITING_SEL}, [data-user-message-bubble], [data-local-conversation-user-anchor], [role="dialog"], [role="menu"], [role="tablist"], [role="radiogroup"], aside.app-shell-left-panel, .group\\/turn-diff-header`;
     const BANNER_SEL = 'aside[class*="banner-"], [class*="ComposerBannerPortal"] aside';
     const LENS_SLOTS = [
       { name: "composer", zone: "composer", filterId: "ds-lg-lens-composer", cssVar: "--ds-lg-lens-filter", selector: COMPOSER_SEL, multi: true, baseScale: 36, defaultR: 28, bezelFn: (w, h) => Math.max(15, Math.min(26, Math.min(w, h) * 0.32)) },
       { name: "rail", zone: "composer", filterId: "ds-lg-lens-rail", cssVar: "--ds-lg-lens-filter", selector: `[data-dream-lg-surface="work-composer"] [data-composer-utility-rail], ${RAIL_SEL}`, excludeClosest: `:is(${COMPOSER_SEL}):not([data-dream-lg-surface="work-composer"])`, multi: true, baseScale: 20, defaultR: 18, bezelFn: (w, h) => Math.max(8, Math.min(16, Math.min(w, h) * 0.30)) },
       { name: "slash", zone: "slash", filterId: "ds-lg-lens-slash", cssVar: "--ds-lg-lens-slash", selector: SLASH_SEL, multi: true, baseScale: 28, defaultR: 22, bezelFn: (w, h) => Math.max(12, Math.min(22, Math.min(w, h) * 0.26)) },
+      { name: "attach", zone: "attach", filterId: "ds-lg-lens-attach", cssVar: "--ds-lg-lens-attach", selector: ATTACH_SEL, multi: true, baseScale: 28, defaultR: 22, bezelFn: (w, h) => Math.max(12, Math.min(22, Math.min(w, h) * 0.26)) },
       { name: "writing", zone: "writing", filterId: "ds-lg-lens-writing", cssVar: "--ds-lg-lens-writing", selector: WRITING_SEL, multi: true, baseScale: 32, defaultR: 24, bezelFn: (w, h) => Math.max(14, Math.min(24, Math.min(w, h) * 0.24)) },
     ];
     const SHARED_FILTERS = [
       { name: "composerShared", zone: "composer", filterId: "ds-lg-lens-composer-shared", cssVar: "--ds-lg-lens-filter", w: 320, h: 96, r: 28, bez: 22, baseScale: 36 },
       { name: "writingShared", zone: "writing", filterId: "ds-lg-lens-writing-shared", cssVar: "--ds-lg-lens-writing", w: 220, h: 100, r: 20, bez: 18, baseScale: 32 },
-      { name: "slashShared", zone: "slash", filterId: "ds-lg-lens-slash-shared", cssVar: "--ds-lg-lens-slash", w: 220, h: 140, r: 22, bez: 18, baseScale: 28 },
       { name: "card", zone: "cards", filterId: "ds-lg-lens-card", cssVar: "--ds-lg-lens-card", w: 160, h: 160, r: 20, bez: 18, baseScale: 22 },
       { name: "popover", zone: "popover", filterId: "ds-lg-lens-popover", cssVar: "--ds-lg-lens-popover", w: 160, h: 160, r: 22, bez: 18, baseScale: 26 },
     ];
@@ -1516,7 +1551,7 @@
     };
     for (const slot of LENS_SLOTS) {
       const { filter, feImg, feDisp } = createDisplacementFilter(slot.filterId, slot.baseScale);
-      slotNodes.set(slot.name, { slot, filter, feImg, feDisp, lastKey: "", lastScale: "", activeEls: new Set() });
+      slotNodes.set(slot.name, { slot, filter, feImg, feDisp, lastKey: "", lastScale: "", activeEls: new Set(), targets: [] });
     }
 
     const snellMapCache = new Map();
@@ -1645,8 +1680,12 @@
 
     const pickOutermostVisibleList = (slot) => {
       const out = [];
+      let preview = null;
       for (const rawEl of document.querySelectorAll(slot.selector)) {
-        if (rawEl.closest("#codex-dream-skin-plugin-host")) continue;
+        if (rawEl.closest("#codex-dream-skin-plugin-host")) {
+          if (rawEl.hasAttribute("data-dream-lg-menu-preview")) preview = rawEl;
+          continue;
+        }
         if (rawEl.closest('[data-app-shell-active-page="false"]')) continue;
         if (slot.excludeClosest && rawEl.closest(slot.excludeClosest)) continue;
         if (slot.name === "rail" && rawEl.closest('[data-dream-lg-surface="work-composer"]') && !rawEl.matches('[data-composer-utility-rail]')) continue;
@@ -1660,21 +1699,40 @@
           if (!slot.multi) break;
         }
       }
+      if (!out.length && preview) {
+        const r = preview.getBoundingClientRect();
+        if (r.width >= 24 && r.height >= 18) out.push({ el: preview, r });
+      }
       return out;
     };
 
     const resolveLgZone = (zone) => {
-      const base = window.__dsCurrentLiveParams || { transparency: 80, refractScale: 100, blurScale: 100, rimIntensity: 100 };
-      const ov = base.zones && zone && base.zones[zone];
-      const defaultBlur = zone === "slash" ? Math.max(40, Number(base.blurScale ?? 100)) : Number(base.blurScale ?? 100);
-      return {
-        transparency: Number(ov?.transparency ?? base.transparency ?? 80),
-        refractScale: Number(ov?.refractScale ?? base.refractScale ?? 100),
-        blurScale: Number(ov?.blurScale ?? defaultBlur),
-        rimIntensity: Number(ov?.rimIntensity ?? base.rimIntensity ?? 100),
-      };
+      return resolveZoneEffective(window.__dsCurrentLiveParams || DEFAULT_LIVE_PARAMS, zone);
     };
 
+    let slashOwner = null;
+    const isVisibleMenuNode = (node) => node?.isConnected &&
+      !node.closest(ACTIVE_PAGE_OFF) && node.getClientRects().length > 0;
+    const isSlashQuery = (editor) => /(?:^|\s)\/[^\s]*$/.test(editor?.textContent || "");
+    const syncComposerMenuMarkers = () => {
+      const hasAttach = Array.from(document.querySelectorAll(ADD_CONTEXT_SEL)).some(isVisibleMenuNode);
+      const activeEditor = document.activeElement?.closest?.(MENU_EDITOR_SEL);
+      if (isSlashQuery(activeEditor)) slashOwner = activeEditor;
+      if (!isVisibleMenuNode(slashOwner) || !isSlashQuery(slashOwner)) slashOwner = null;
+      const panels = [...document.querySelectorAll(MENU_PANEL_SEL)].filter(isVisibleMenuNode);
+      for (const panel of panels) {
+        const attachSection = panel.querySelector('[data-mention-section-id="context-actions"], [data-mention-section-id="chatgpt-primary"]');
+        const commandSection = panel.querySelector('[data-mention-list-scroll-area][role="listbox"] [data-mention-section-id="commands"]');
+        const zone = hasAttach && (attachSection || panels.length === 1) ? "attach" :
+          !hasAttach && (commandSection || slashOwner) ? "slash" : null;
+        const current = panel.getAttribute("data-dream-lg-menu");
+        if (zone && current !== zone) panel.setAttribute("data-dream-lg-menu", zone);
+        else if (!zone && current) panel.removeAttribute("data-dream-lg-menu");
+      }
+      for (const panel of document.querySelectorAll('[data-dream-lg-menu]:not([data-dream-lg-menu-preview])')) {
+        if (!panels.includes(panel)) panel.removeAttribute("data-dream-lg-menu");
+      }
+    };
     const syncSurfaceMarkers = () => {
       for (const rootEl of document.querySelectorAll('[class*="ComposerLayoutRoot"][data-composer-utility-bar-variant="home"], [data-dream-lg-surface="work-composer"]')) {
         const isWork = isWorkComposerNode(rootEl);
@@ -1703,14 +1761,14 @@
             tray.setAttribute("data-dream-lg-surface", "thread-tray");
           }
         }
-        const outer = tray.parentElement;
-        if (outer) {
-          for (const ch of outer.children) {
-            if (ch !== tray && ch.querySelector?.('button[class*="text-codex-description"]') && ch.getAttribute("data-dream-lg-surface") !== "queued-strip") {
-              ch.setAttribute("data-dream-lg-surface", "queued-strip");
-            }
-          }
+      }
+      for (const rail of document.querySelectorAll('[data-composer-rail]')) {
+        const goalItem = rail.querySelector(`[data-composer-rail-item="present"]:has(${GOAL_BUTTON_SEL})`);
+        rail.toggleAttribute("data-dream-lg-goal-rail", Boolean(goalItem));
+        for (const item of rail.querySelectorAll("[data-dream-lg-goal-item]")) {
+          if (item !== goalItem) item.removeAttribute("data-dream-lg-goal-item");
         }
+        goalItem?.setAttribute("data-dream-lg-goal-item", "");
       }
       for (const h of document.querySelectorAll('.group\\/turn-diff-header')) {
         const card = h.parentElement;
@@ -1720,14 +1778,14 @@
       }
     };
 
-    const syncSvgLenses = () => {
+    const syncSvgLenses = (measure = true) => {
       if (disposed) return;
 
       for (const sf of SHARED_FILTERS) {
         const entry = sharedFilterNodes.get(sf.name);
         const zp = resolveLgZone(sf.zone);
         const mult = Math.max(0, zp.refractScale / 100);
-        const enabled = !reducedMotion && mult > 0.02;
+        const enabled = mult > 0.02;
         if (enabled) {
           const scaleStr = (sf.baseScale * mult).toFixed(2);
           if (entry.lastScale !== scaleStr) {
@@ -1746,8 +1804,8 @@
         const entry = slotNodes.get(slot.name);
         const zp = resolveLgZone(slot.zone);
         const mult = Math.max(0, zp.refractScale / 100);
-        const enabled = !reducedMotion && mult > 0.02;
-        const targets = pickOutermostVisibleList(slot);
+        const enabled = mult > 0.02;
+        const targets = measure ? (entry.targets = pickOutermostVisibleList(slot)) : entry.targets;
         const nextSet = new Set(targets.map((t) => t.el));
         for (const prevEl of entry.activeEls) {
           if (!nextSet.has(prevEl)) {
@@ -1793,14 +1851,105 @@
       }
     };
 
+    const visibleBubbles = new Set();
+    const watchedBubbles = new Set();
+    const bubbleLenses = new Map();
+    let bubbleLensSequence = 0;
+    let bubbleRaf = 0;
+    let lensRimState = "";
+    const releaseBubbleLens = (el) => {
+      el.style.removeProperty("--ds-lg-lens-bubble");
+      el.removeAttribute("data-dream-lg-bubble-lens");
+    };
+    const syncBubbleLenses = () => {
+      bubbleRaf = 0;
+      const mult = Math.max(0, resolveLgZone("writing").refractScale / 100);
+      const activeKeys = new Set();
+      const pending = [];
+      for (const el of visibleBubbles) {
+        if (!el.isConnected || el.closest(ACTIVE_PAGE_OFF) || mult <= .02) {
+          releaseBubbleLens(el);
+          continue;
+        }
+        const rect = el.getBoundingClientRect();
+        if (rect.width < 24 || rect.height < 18) continue;
+        const w = Math.max(32, Math.round(rect.width / 8) * 8);
+        const h = Math.max(24, Math.round(rect.height / 8) * 8);
+        const radius = Math.round(getRadiusPx(el, 20));
+        const bezel = Math.max(7, Math.min(17, Math.round(Math.min(w, h) * .22)));
+        const key = `${w}/${h > 1100 ? "tall" : h}/${radius}/${bezel}`;
+        activeKeys.add(key);
+        pending.push({ el, w, h, radius, bezel, key });
+      }
+      for (const { el, w, h, radius, bezel, key } of pending) {
+        let lens = bubbleLenses.get(key);
+        if (!lens) {
+          const map = buildSnellMapDataUrl(w, h, radius, bezel);
+          if (!map) continue;
+          const id = `ds-lg-bubble-${++bubbleLensSequence}`;
+          lens = { id, ...createDisplacementFilter(id, 34 * mult) };
+          lens.feImg.setAttribute("href", map);
+          bubbleLenses.set(key, lens);
+        }
+        const scale = (34 * mult).toFixed(2);
+        if (lens.feDisp.getAttribute("scale") !== scale) lens.feDisp.setAttribute("scale", scale);
+        const value = `url("#${lens.id}")`;
+        if (el.style.getPropertyValue("--ds-lg-lens-bubble") !== value) {
+          el.style.setProperty("--ds-lg-lens-bubble", value);
+          el.setAttribute("data-dream-lg-bubble-lens", "");
+        }
+      }
+      for (const [key, lens] of bubbleLenses) {
+        if (activeKeys.has(key)) continue;
+        lens.filter.remove();
+        bubbleLenses.delete(key);
+      }
+      lensRimState = String(mult);
+    };
+    const queueBubbleLenses = () => {
+      if (!disposed && !bubbleRaf) bubbleRaf = requestAnimationFrame(syncBubbleLenses);
+    };
+    const bubbleIntersection = typeof IntersectionObserver === "function" ? new IntersectionObserver((entries) => {
+      for (const { target, isIntersecting } of entries) {
+        if (isIntersecting) {
+          visibleBubbles.add(target);
+          resizeObs?.observe(target);
+        } else {
+          visibleBubbles.delete(target);
+          resizeObs?.unobserve(target);
+          releaseBubbleLens(target);
+        }
+      }
+      queueBubbleLenses();
+    }, { rootMargin: "256px" }) : null;
+    const syncBubbleNodes = (scope = document) => {
+      const nodes = scope.matches?.(BUBBLE_SEL) ? [scope] : scope.querySelectorAll?.(BUBBLE_SEL) || [];
+      for (const node of nodes) {
+        if (watchedBubbles.has(node) || node.parentElement?.closest(BUBBLE_SEL)) continue;
+        watchedBubbles.add(node);
+        if (bubbleIntersection) bubbleIntersection.observe(node);
+        else visibleBubbles.add(node);
+      }
+      for (const node of watchedBubbles) {
+        if (node.isConnected) continue;
+        bubbleIntersection?.unobserve(node);
+        resizeObs?.unobserve(node);
+        watchedBubbles.delete(node);
+        visibleBubbles.delete(node);
+      }
+      if (!bubbleIntersection) queueBubbleLenses();
+    };
+
     // === Tier 2: WebGL2 Static Optical Glass Engine v2 (White-Neutrality + Async toBlob) ===
     const GPU_TARGETS = [
-      { kind: "sidebar", selector: 'aside.app-shell-left-panel, [data-ds-part="sidebar"]', bezel: 22, scale: 32, blurLod: 0.24, defaultR: 24, tintAlpha: 0.055 },
+      { kind: "header", selector: '[data-ds-part="header"][data-app-shell-header-edge-scroll]', bezel: 9, scale: 12, blurLod: 0.55, defaultR: 0, tintAlpha: 0.09 },
+      { kind: "sidebar", selector: 'aside.app-shell-left-panel, [data-ds-part="sidebar"]', bezel: 27, scale: 46, blurLod: 0.18, defaultR: 24, tintAlpha: 0.055 },
       { kind: "homeCard", selector: '[role="main"]:has([data-testid="home-icon"]) .group\\/home-suggestions button, .group\\/project-selector > button, [data-ds-part="home-hero"] button', bezel: 16, scale: 26, blurLod: 0.12, defaultR: 20, tintAlpha: 0.048 },
     ];
     const allBlobUrls = new Set();
     const activeTileUrls = new Map();
-    const tileQueue = [];
+    const tileQueue = new Map();
+    const desiredTileKeys = new Map();
     let tileRaf = 0;
 
     const artFocusX = Math.max(0, Math.min(1, Number(THEME.art?.focusX ?? 0.5)));
@@ -1997,7 +2146,7 @@ void main() {
       gl.bindTexture(gl.TEXTURE_2D, artTex);
       gl.uniform1i(gpuLocs.uArt, 0);
 
-      const zName = spec.kind === "sidebar" ? "sidebar" : "cards";
+      const zName = spec.kind === "homeCard" ? "cards" : "sidebar";
       const lp = resolveLgZone(zName);
       const isDark = resolvedShell() === "dark" ? 1 : 0;
       const refractMult = Math.max(0, Number(lp.refractScale ?? 100) / 100);
@@ -2023,7 +2172,7 @@ void main() {
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
       glCanvas.toBlob((blob) => {
-        if (!blob || disposed || !el.isConnected) return;
+        if (!blob || disposed || !el.isConnected || desiredTileKeys.get(el) !== key) return;
         const url = URL.createObjectURL(blob);
         allBlobUrls.add(url);
         const prev = activeTileUrls.get(el);
@@ -2046,13 +2195,13 @@ void main() {
       tileRaf = 0;
       if (disposed || !artReady) return;
       let count = 0;
-      while (tileQueue.length > 0 && count < 2) {
-        const job = tileQueue.shift();
-        if (!job || !job.el.isConnected) continue;
-        drawTileToBlob(job.el, job.spec, job.rect, job.key);
-        count++;
+      for (const [el, job] of tileQueue) {
+        tileQueue.delete(el);
+        if (!el.isConnected || desiredTileKeys.get(el) !== job.key) continue;
+        drawTileToBlob(el, job.spec, job.rect, job.key);
+        if (++count === 2) break;
       }
-      if (tileQueue.length > 0) tileRaf = requestAnimationFrame(flushTileQueue);
+      if (tileQueue.size) tileRaf = requestAnimationFrame(flushTileQueue);
     };
 
     const refreshGpuTiles = () => {
@@ -2060,25 +2209,36 @@ void main() {
       const shell = resolvedShell();
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      const queuedSet = new Set(tileQueue.map((j) => j.el));
+      const current = new Set();
       for (const spec of GPU_TARGETS) {
-        const zName = spec.kind === "sidebar" ? "sidebar" : "cards";
+        const zName = spec.kind === "homeCard" ? "cards" : "sidebar";
         const lp = resolveLgZone(zName);
         const paramSig = `${shell}:${lp.transparency}:${lp.refractScale}:${lp.blurScale}:${lp.rimIntensity}:${vw}x${vh}`;
         for (const el of document.querySelectorAll(spec.selector)) {
-          if (el.closest("#codex-dream-skin-plugin-host")) continue;
+          if (el.closest(ACTIVE_PAGE_OFF)) continue;
           const rect = el.getBoundingClientRect();
           if (rect.width < 20 || rect.height < 16) continue;
+          current.add(el);
           const key = `${Math.round(rect.left)}:${Math.round(rect.top)}:${Math.round(rect.width)}x${Math.round(rect.height)}:${paramSig}`;
-          const prev = activeTileUrls.get(el);
-          if (prev?.key === key) continue;
-          if (!queuedSet.has(el)) {
-            tileQueue.push({ el, spec, rect, key });
-            queuedSet.add(el);
-          }
+          if (desiredTileKeys.get(el) === key) continue;
+          desiredTileKeys.set(el, key);
+          if (activeTileUrls.get(el)?.key !== key) tileQueue.set(el, { spec, rect, key });
         }
       }
-      if (tileQueue.length > 0 && !tileRaf) tileRaf = requestAnimationFrame(flushTileQueue);
+      for (const [el, { url }] of activeTileUrls) {
+        if (current.has(el)) continue;
+        el.removeAttribute("data-dream-lg-gpu");
+        el.style.removeProperty("--ds-lg-gpu-bg");
+        activeTileUrls.delete(el);
+        allBlobUrls.delete(url);
+        URL.revokeObjectURL(url);
+      }
+      for (const el of desiredTileKeys.keys()) {
+        if (current.has(el)) continue;
+        desiredTileKeys.delete(el);
+        tileQueue.delete(el);
+      }
+      if (tileQueue.size && !tileRaf) tileRaf = requestAnimationFrame(flushTileQueue);
     };
 
     let opticsRaf = 0;
@@ -2088,10 +2248,21 @@ void main() {
         opticsRaf = 0;
         if (disposed) return;
         syncSurfaceMarkers();
+        syncComposerMenuMarkers();
         syncSvgLenses();
         refreshGpuTiles();
+        observeLensNodes();
       });
     };
+    window.__dsLgQueueOptics = refreshAllOptics;
+    const onMenuInput = (event) => {
+      const editor = event.target?.closest?.(MENU_EDITOR_SEL);
+      if (!editor || (slashOwner !== editor && !isSlashQuery(editor))) return;
+      slashOwner = isSlashQuery(editor) ? editor : null;
+      syncComposerMenuMarkers();
+      refreshAllOptics();
+    };
+    document.addEventListener("input", onMenuInput, { passive: true });
 
     initWebGL();
 
@@ -2449,125 +2620,142 @@ void main() {
     window.addEventListener("pointercancel", onPointerUpOrCancel, { passive: true });
     window.addEventListener("resize", sizeFxCanvas, { passive: true });
 
-    // Focused Resize & Lifecycle Observers (no document-wide * scans!)
-    let resizeObs = null;
-    const observedResizeNodes = new WeakSet();
+    // Keep the stable surfaces observed; bubble resize observation is viewport-scoped.
+    const observedResizeNodes = new Set();
     const observeLensNodes = () => {
       if (!resizeObs) return;
-      for (const sel of [COMPOSER_SEL, WORK_BODY_SEL, RAIL_SEL, SLASH_SEL, WRITING_SEL, BANNER_SEL, 'aside.app-shell-left-panel']) {
-        for (const node of document.querySelectorAll(sel)) {
-          if (!observedResizeNodes.has(node) && !node.closest("#codex-dream-skin-plugin-host")) {
-            observedResizeNodes.add(node);
-            resizeObs.observe(node);
-          }
-        }
+      const next = new Set(document.querySelectorAll(`${COMPOSER_SEL}, ${WORK_BODY_SEL}, ${RAIL_SEL}, ${SLASH_SEL}, ${ATTACH_SEL}, ${WRITING_SEL}, ${BANNER_SEL}, aside.app-shell-left-panel`));
+      for (const node of observedResizeNodes) {
+        if (next.has(node)) continue;
+        resizeObs.unobserve(node);
+        observedResizeNodes.delete(node);
+      }
+      for (const node of next) {
+        if (observedResizeNodes.has(node)) continue;
+        resizeObs.observe(node);
+        observedResizeNodes.add(node);
       }
     };
-    if (typeof ResizeObserver === "function") {
-      resizeObs = new ResizeObserver(() => refreshAllOptics());
-      observeLensNodes();
-    }
+    const resizeObs = typeof ResizeObserver === "function" ? new ResizeObserver((entries) => {
+      if (entries.some(({ target }) => visibleBubbles.has(target))) queueBubbleLenses();
+      if (entries.some(({ target }) => observedResizeNodes.has(target))) refreshAllOptics();
+    }) : null;
 
-    let wasBusy = false;
+    let busyStopTimer = 0;
     let settledTimer = 0;
+    let runningSurface = null;
+    let runningRim = null;
     const syncBusyState = () => {
-      if (disposed) return;
+      if (disposed || document.hidden) return;
       const stopButtons = document.querySelectorAll(
         `:is([data-codex-composer-root], ${COMPOSER_SEL}) :is(button[aria-label="停止"], button[aria-label="停止生成"], button[aria-label="引导"], button[aria-label="Steer" i], button[aria-label="Stop" i], button[aria-label="Stop generating" i], button[data-testid="stop-button"])`
       );
-      const busy = [...stopButtons].some((button) =>
+      const control = Array.from(stopButtons).find(button =>
         !button.matches(':disabled, [aria-disabled="true"]') &&
-        !button.closest('[data-app-shell-active-page="false"], [data-composer-rail], [inert]') &&
-        button.getClientRects().length > 0 &&
-        getComputedStyle(button).visibility === "visible"
+        !button.closest(`${ACTIVE_PAGE_OFF}, [data-composer-rail]`) &&
+        button.getClientRects().length && getComputedStyle(button).visibility === "visible"
       );
-      if (busy) {
-        wasBusy = true;
+      const shell = control?.closest(COMPOSER_SEL);
+      if (shell) {
+        clearTimeout(busyStopTimer);
         clearTimeout(settledTimer);
-        root.removeAttribute("data-dream-lg-settled");
-        if (root.getAttribute("data-dream-lg-busy") !== "true") {
-          root.setAttribute("data-dream-lg-busy", "true");
+        busyStopTimer = 0;
+        const surface = isWorkComposerNode(shell) ? shell.querySelector('[data-composer-body]') || shell : shell;
+        if (runningSurface !== surface) {
+          runningSurface?.removeAttribute("data-dream-lg-running");
+          runningRim?.remove();
+          runningSurface = surface;
+          runningRim = document.createElement("span");
+          runningRim.className = "ds-lg-aurora-rim";
+          runningRim.setAttribute("aria-hidden", "true");
+          surface.appendChild(runningRim);
         }
-      } else {
-        if (root.hasAttribute("data-dream-lg-busy")) {
+        if (surface.getAttribute("data-dream-lg-running") !== "active") surface.setAttribute("data-dream-lg-running", "active");
+        if (root.getAttribute("data-dream-lg-busy") !== "true") root.setAttribute("data-dream-lg-busy", "true");
+      } else if (runningSurface?.getAttribute("data-dream-lg-running") === "active" && !busyStopTimer) {
+        busyStopTimer = setTimeout(() => {
+          busyStopTimer = 0;
+          const surface = runningSurface;
+          surface?.setAttribute("data-dream-lg-running", "fade");
           root.removeAttribute("data-dream-lg-busy");
-        }
-        if (wasBusy) {
-          wasBusy = false;
-          root.setAttribute("data-dream-lg-settled", "1");
-          clearTimeout(settledTimer);
-          settledTimer = setTimeout(() => root.removeAttribute("data-dream-lg-settled"), 740);
-        }
+          settledTimer = setTimeout(() => {
+            surface?.removeAttribute("data-dream-lg-running");
+            runningRim?.remove();
+            runningRim = null;
+            runningSurface = null;
+          }, 320);
+        }, 170);
       }
     };
-    const busyPollTimer = setInterval(syncBusyState, 480);
+    const stopFallback = setInterval(() => {
+      if (runningSurface || root.hasAttribute("data-dream-lg-busy")) syncBusyState();
+    }, 1200);
+    document.addEventListener("visibilitychange", syncBusyState);
 
-    let domObsTimer = 0;
     const domObs = new MutationObserver((records) => {
-      let hasNewSurface = false;
-      let enterCount = 0;
+      let layoutChanged = false;
+      let controlsChanged = false;
+      let menuChanged = false;
       for (const rec of records) {
-        if (rec.type === "childList" && (rec.addedNodes.length > 0 || rec.removedNodes.length > 0)) {
-          const tEl = rec.target?.nodeType === 1 ? rec.target : null;
-          if (tEl?.closest?.("#codex-dream-skin-plugin-host, .ProseMirror, [contenteditable='true']")) continue;
-          for (const n of rec.addedNodes) {
-            if (n.nodeType !== 1 || n.id === LG_SVG_ID || n.id === LG_CANVAS_ID || n.id === "codex-dream-skin-plugin-host") continue;
-            hasNewSurface = true;
-            if (!reducedMotion && enterCount < 2 && n.matches?.('[data-local-conversation-item-target-ids], [role="dialog"], [role="menu"], [role="tooltip"], [data-radix-popper-content-wrapper]') && !n.hasAttribute("data-dream-lg-seen")) {
-              n.setAttribute("data-dream-lg-seen", "enter");
-              enterCount++;
-            }
-            if (hasNewSurface && (reducedMotion || enterCount >= 2)) break;
-          }
-          if (!hasNewSurface) {
-            for (const n of rec.removedNodes) {
-              if (n.nodeType === 1 && n.id !== LG_SVG_ID && n.id !== LG_CANVAS_ID && n.id !== "codex-dream-skin-plugin-host") {
-                hasNewSurface = true;
-                break;
-              }
-            }
-          }
-        } else if (rec.type === "attributes") {
-          const track = rec.target?.closest?.('[role="group"], [role="tablist"], [role="radiogroup"]');
+        const target = rec.target;
+        if (target.closest?.("#codex-dream-skin-plugin-host, #ds-lg-svg-defs, #ds-lg-fx-canvas, [contenteditable='true']")) continue;
+        if (target.closest?.(MENU_OVERLAY_SEL) || target.matches?.('[data-composer-navigation-target="add-context"]')) menuChanged = true;
+        if (rec.type === "attributes") {
+          const track = target.closest?.('[role="group"], [role="tablist"], [role="radiogroup"]');
           if (track && activeSegTracks.has(track)) syncSegmentedTrack(track, true);
-          if (rec.attributeName === "aria-label") hasNewSurface = true;
+          if (target.closest?.('[data-codex-composer-root]')) controlsChanged = true;
+          if (rec.attributeName === "aria-expanded") layoutChanged = true;
+          continue;
+        }
+        if (target.closest?.('[data-codex-composer-root]')) controlsChanged = true;
+        for (const n of [...rec.addedNodes, ...rec.removedNodes]) {
+          if (n.nodeType !== 1 || n.matches("#ds-lg-svg-defs, #ds-lg-fx-canvas, #codex-dream-skin-plugin-host")) continue;
+          if (!n.matches(OPTICS_STRUCTURAL_SEL) && !n.querySelector(OPTICS_STRUCTURAL_SEL)) continue;
+          layoutChanged = true;
+          if (n.isConnected) syncBubbleNodes(n);
+          if (n.matches(MENU_OVERLAY_SEL) || n.querySelector(MENU_OVERLAY_SEL)) menuChanged = true;
+          if (n.querySelector('[data-codex-composer-root]')) controlsChanged = true;
         }
       }
-      if (hasNewSurface) {
-        syncSurfaceMarkers();
-        clearTimeout(domObsTimer);
-        domObsTimer = setTimeout(() => {
-          domObsTimer = 0;
-          if (disposed) return;
-          refreshAllOptics();
-          rescanSegTracks();
-          syncBusyState();
-          observeLensNodes();
-        }, 150);
+      if (controlsChanged) {
+        syncBusyState();
+        layoutChanged = true;
+      }
+      if (menuChanged) syncComposerMenuMarkers();
+      if (layoutChanged || menuChanged) {
+        refreshAllOptics();
+        rescanSegTracks();
       }
     });
     domObs.observe(document.body || root, {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["aria-selected", "aria-checked", "aria-pressed", "aria-label", "data-state"],
+      attributeFilter: ["aria-selected", "aria-checked", "aria-pressed", "aria-label", "aria-expanded", "data-state"],
     });
 
+    syncBubbleNodes();
     rescanSegTracks();
     syncBusyState();
     refreshAllOptics();
 
     let liveParamDebounce = 0;
-    window.__dsLgApplyLiveParams = (p) => {
+    let tileTuneSignature = "";
+    window.__dsLgApplyLiveParams = () => {
       const flags = resolveMotionFlags();
       reducedMotion = flags.reduced;
       liteMotion = flags.lite;
       root.setAttribute("data-dream-lg-motion", reducedMotion ? "reduced" : (liteMotion ? "lite" : "full"));
-      syncSvgLenses(); // Instant <0.05ms scale update
-      clearTimeout(liveParamDebounce);
-      liveParamDebounce = setTimeout(() => {
-        if (!disposed) refreshGpuTiles();
-      }, 48);
+      syncSvgLenses(false);
+      if (lensRimState !== String(Math.max(0, resolveLgZone("writing").refractScale / 100))) queueBubbleLenses();
+      const nextTileTuneSignature = JSON.stringify([resolveLgZone("sidebar"), resolveLgZone("cards")]);
+      if (nextTileTuneSignature !== tileTuneSignature) {
+        tileTuneSignature = nextTileTuneSignature;
+        clearTimeout(liveParamDebounce);
+        liveParamDebounce = setTimeout(() => {
+          if (!disposed) refreshGpuTiles();
+        }, 48);
+      }
     };
 
     const cleanupFn = () => {
@@ -2578,10 +2766,23 @@ void main() {
       cancelAnimationFrame(segRaf);
       cancelAnimationFrame(tileRaf);
       cancelAnimationFrame(opticsRaf);
-      clearTimeout(domObsTimer);
+      cancelAnimationFrame(bubbleRaf);
+      clearTimeout(busyStopTimer);
       clearTimeout(settledTimer);
+      runningSurface?.removeAttribute("data-dream-lg-running");
+      runningRim?.remove();
+      document.removeEventListener("visibilitychange", syncBusyState);
+      document.removeEventListener("input", onMenuInput);
+      bubbleIntersection?.disconnect();
+      for (const node of watchedBubbles) releaseBubbleLens(node);
+      for (const node of document.querySelectorAll("[data-dream-lg-menu], [data-dream-lg-goal-rail], [data-dream-lg-goal-item]")) {
+        node.removeAttribute("data-dream-lg-menu");
+        node.removeAttribute("data-dream-lg-goal-rail");
+        node.removeAttribute("data-dream-lg-goal-item");
+        node.style.removeProperty("--ds-lg-lens-attach");
+      }
       clearTimeout(liveParamDebounce);
-      clearInterval(busyPollTimer);
+      clearInterval(stopFallback);
       resizeObs?.disconnect();
       domObs.disconnect();
       document.removeEventListener("pointerover", onPointerOver);
@@ -2597,6 +2798,7 @@ void main() {
       try { gl?.getExtension("WEBGL_lose_context")?.loseContext(); } catch {}
       clearHoverCard();
       delete window.__dsLgApplyLiveParams;
+      delete window.__dsLgQueueOptics;
     };
     window.__dsLgEditionCleanup = cleanupFn;
     harmonyCleanup = () => teardownLiquidGlassEdition();
@@ -2616,24 +2818,15 @@ void main() {
   } catch (e) {}
 
   // === Live Optical Parameters Engine (0ms rAF + Multi-Zone updates across all themes) ===
-  const LIQUID_ZONES = ["composer", "slash", "writing", "sidebar", "cards", "popover"];
+  const LIQUID_ZONES = ["composer", "slash", "attach", "writing", "sidebar", "cards", "popover"];
   const ZONE_OPTICS = {
     composer: { hi: 0.10, mid: 0.025, lo: 0.065, blur: 1.1, rim: 0.15, darkHi: 0.11, darkMid: 0.18, darkLo: 0.24, darkRim: 0.22 },
-    slash:    { hi: 0.34, mid: 0.140, lo: 0.240, blur: 7.5, rim: 0.18, darkHi: 0.32, darkMid: 0.44, darkLo: 0.50, darkRim: 0.26, darkTintPopover: true },
+    slash:    { hi: 0.63, mid: 0.440, lo: 0.540, blur: 13, rim: 0.18, darkHi: 0.32, darkMid: 0.44, darkLo: 0.50, darkRim: 0.26, darkTintPopover: true },
+    attach:   { hi: 0.72, mid: 0.560, lo: 0.630, blur: 14, rim: 0.18, darkHi: 0.32, darkMid: 0.44, darkLo: 0.50, darkRim: 0.26, darkTintPopover: true },
     writing:  { hi: 0.24, mid: 0.070, lo: 0.150, blur: 5.0, rim: 0.16, darkHi: 0.11, darkMid: 0.24, darkLo: 0.30, darkRim: 0.24 },
     sidebar:  { hi: 0.22, mid: 0.080, lo: 0.140, blur: 4.0, rim: 0.15, darkHi: 0.11, darkMid: 0.20, darkLo: 0.24, darkRim: 0.22 },
     cards:    { hi: 0.22, mid: 0.070, lo: 0.140, blur: 5.0, rim: 0.15, darkHi: 0.11, darkMid: 0.20, darkLo: 0.24, darkRim: 0.22 },
     popover:  { hi: 0.48, mid: 0.280, lo: 0.380, blur: 10.0, rim: 0.16, darkHi: 0.64, darkMid: 0.58, darkLo: 0.54, darkRim: 0.24, darkTintPopover: true },
-  };
-  const DEFAULT_LIVE_PARAMS = {
-    transparency: 80,
-    refractScale: 100,
-    blurScale: 100,
-    rimIntensity: 100,
-    motionMode: "spring",
-    particlesEnabled: true,
-    fontWeightBoost: 0,
-    zones: {},
   };
   const normalizeClientLiveParams = (raw = {}) => {
     const num = (v, min, max, d) => {
@@ -2665,17 +2858,6 @@ void main() {
       zones,
     };
   };
-  const resolveZoneEffective = (p, zone) => {
-    const ov = zone && zone !== "global" ? p.zones?.[zone] : null;
-    const defaultBlur = zone === "slash" ? Math.max(40, Number(p.blurScale ?? 100)) : p.blurScale;
-    return {
-      transparency: ov?.transparency ?? p.transparency,
-      refractScale: ov?.refractScale ?? p.refractScale,
-      blurScale: ov?.blurScale ?? defaultBlur,
-      rimIntensity: ov?.rimIntensity ?? p.rimIntensity,
-    };
-  };
-
   const applyLiveTuneRuntime = (nextParams) => {
     const p = normalizeClientLiveParams(nextParams);
     window.__dsCurrentLiveParams = p;
@@ -2782,7 +2964,7 @@ void main() {
         html[data-dream-skin="active"][data-dream-shell="dark"]:not([data-theme="dark"]) :is(.thread-scroll-container, main) :is(h1, h2, h3, h4, p, li, strong, blockquote, td, th, code:not(pre code)) {
           color: var(--ds-text) !important;
         }
-        html[data-dream-skin="active"][data-dream-shell="dark"]:not([data-theme="dark"]) .thread-scroll-container :is([data-user-message-bubble="true"], [class~="bg-user-message"]) {
+        html[data-dream-skin="active"][data-dream-shell="dark"]:not([data-theme="dark"], [data-dream-lg="on"]) .thread-scroll-container :is([data-user-message-bubble="true"], [class~="bg-user-message"]) {
           background-color: rgb(var(--ds-panel-2-rgb) / var(--ds-upload-panel-alt-alpha, 0.82)) !important;
           color: var(--ds-text) !important;
           border: 1px solid rgb(var(--ds-text-rgb) / 0.16) !important;
@@ -2812,7 +2994,7 @@ void main() {
         html[data-dream-skin="active"][data-dream-shell="light"][data-theme="dark"] :is(.thread-scroll-container, main) :is(h1, h2, h3, h4, p, li, strong, blockquote, td, th, code:not(pre code)) {
           color: var(--ds-text) !important;
         }
-        html[data-dream-skin="active"][data-dream-shell="light"][data-theme="dark"] .thread-scroll-container :is([data-user-message-bubble="true"], [class~="bg-user-message"]) {
+        html[data-dream-skin="active"][data-dream-shell="light"][data-theme="dark"]:not([data-dream-lg="on"]) .thread-scroll-container :is([data-user-message-bubble="true"], [class~="bg-user-message"]) {
           background-color: rgb(var(--ds-panel-2-rgb) / var(--ds-upload-panel-alt-alpha, 0.82)) !important;
           color: var(--ds-text) !important;
           border: 1px solid rgb(var(--ds-text-rgb) / 0.16) !important;
@@ -2862,6 +3044,17 @@ void main() {
   };
 
   applyLiveTuneRuntime(THEME.liveParams || DEFAULT_LIVE_PARAMS);
+  window[STATE_KEY].applyOptics = (styleRevision, artKey, themeId, revision, params) => {
+    const state = window[STATE_KEY];
+    if (window[DISABLED_KEY] || state?.installToken !== installToken ||
+      styleRevision !== STYLE_REVISION || artKey !== THEME.artKey || themeId !== THEME.id) return false;
+    state.revision = revision;
+    if (JSON.stringify(params) !== JSON.stringify(window.__dsCurrentLiveParams)) {
+      applyLiveTuneRuntime(params);
+    }
+    return true;
+  };
+
 
   // === Persistent Shadow DOM Floating Crystal Studio Plugin v2 (#codex-dream-skin-plugin-host) ===
   const mountDreamSkinPluginStudio = () => {
@@ -3174,6 +3367,7 @@ void main() {
                   <button type="button" class="chip" data-zone="global">全部</button>
                   <button type="button" class="chip" data-zone="composer">输入栏</button>
                   <button type="button" class="chip" data-zone="slash">斜杠菜单</button>
+                  <button type="button" class="chip" data-zone="attach">加号菜单</button>
                   <button type="button" class="chip" data-zone="writing">输出框</button>
                   <button type="button" class="chip" data-zone="sidebar">侧边栏</button>
                   <button type="button" class="chip" data-zone="cards">设置·卡片</button>
@@ -3181,6 +3375,9 @@ void main() {
                 </div>
               </div>
               <div class="tune-group">
+                <div id="ds-menu-preview-area" class="menu-preview-area" hidden>
+                  <slot name="menu-preview"></slot>
+                </div>
                 <div class="slider-row">
                   <div class="slider-head"><span>玻璃通透度</span><span class="val" id="ds-val-transparency">80%</span></div>
                   <input type="range" min="15" max="100" step="1" data-tune="transparency" />
@@ -3477,6 +3674,10 @@ void main() {
         .card-sub { font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         .tune-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+        .menu-preview-area {
+          padding: 8px; border-radius: 16px;
+          background: var(--dream-skin-art) center / cover no-repeat, var(--card);
+        }
         .zone-card {
           padding: 9px 10px; border-radius: 14px; background: var(--card); border: 1px solid var(--rim);
           box-shadow: inset 0 1px 0 var(--spec); margin-bottom: 10px;
@@ -3528,6 +3729,15 @@ void main() {
 
     ensureScaffold();
     syncStyles();
+
+    // The slotted light-DOM preview uses the same styles and SVG lens as the actual menu.
+    let menuPreview = host.querySelector('[data-dream-lg-menu-preview]');
+    if (!menuPreview) {
+      menuPreview = document.createElement('div');
+      menuPreview.slot = 'menu-preview';
+      menuPreview.setAttribute('data-dream-lg-menu-preview', '');
+      host.appendChild(menuPreview);
+    }
 
     const fab = shadow.getElementById("ds-fab");
     const drawer = shadow.getElementById("ds-drawer");
@@ -3928,6 +4138,7 @@ void main() {
         global: "全部全局",
         composer: "对话输入栏",
         slash: "斜杠菜单",
+        attach: "加号菜单",
         writing: "气泡·产物",
         sidebar: "左侧边栏",
         cards: "设置·卡片",
@@ -3936,6 +4147,15 @@ void main() {
       const cur = window.__dsCurrentLiveParams || DEFAULT_LIVE_PARAMS;
       const zName = VALID_ZONES.includes(runtime.selectedZone) ? runtime.selectedZone : "global";
       runtime.selectedZone = zName;
+      const previewArea = shadow.getElementById("ds-menu-preview-area");
+      const previewZone = runtime.open && runtime.activeTab === "tune" && (zName === "slash" || zName === "attach") ? zName : null;
+      if (menuPreview.getAttribute("data-dream-lg-menu") !== previewZone) {
+        if (previewZone) menuPreview.setAttribute("data-dream-lg-menu", previewZone);
+        else menuPreview.removeAttribute("data-dream-lg-menu");
+        menuPreview.textContent = previewZone === "attach" ? "实时预览 · 添加文件" : "实时预览 · 斜杠命令";
+        previewArea.hidden = !previewZone;
+        window.__dsLgQueueOptics?.();
+      }
       const zEff = resolveZoneEffective(cur, zName);
       const hasCustomZone = zName !== "global" && Boolean(cur.zones?.[zName] && Object.keys(cur.zones[zName]).length > 0);
       const zStatus = shadow.getElementById("ds-zone-status");
@@ -3952,7 +4172,7 @@ void main() {
         const inp = shadow.querySelector(`[data-tune="${k}"]`);
         const valEl = shadow.getElementById(`ds-val-${k}`);
         const val = k === "fontWeightBoost" ? (cur.fontWeightBoost ?? 0) : (zEff[k] ?? DEFAULT_LIVE_PARAMS[k]);
-        if (inp && document.activeElement !== inp) inp.value = String(val);
+        if (inp && shadow.activeElement !== inp) inp.value = String(val);
         if (valEl) valEl.textContent = k === "fontWeightBoost" ? String(val) : `${val}%`;
       }
       const opState = s?.opticalPresets || { defaultPresetId: null, presets: [] };

@@ -130,6 +130,14 @@ namespace JBYLiquidGlassApp
         private TextBlock currentThemeText;
         private Slider transparencySlider;
         private TextBlock transparencyValueText;
+        private WrapPanel opticalControls;
+        private ComboBox opticalZone;
+        private readonly Dictionary<string, Slider> opticalSliders = new Dictionary<string, Slider>();
+        private readonly Dictionary<string, int> opticalPending = new Dictionary<string, int>();
+        private string opticalPendingTheme;
+        private string opticalPendingZone;
+        private bool editingOpticalValues;
+        private DispatcherTimer opticalSaveTimer;
         private Button applyBtn;
         private Button pauseBtn;
         private Button restoreBtn;
@@ -190,11 +198,15 @@ namespace JBYLiquidGlassApp
                 CommitTransparencyValue((int)Math.Round(transparencySlider.Value));
             };
 
+            opticalSaveTimer = new DispatcherTimer();
+            opticalSaveTimer.Interval = TimeSpan.FromMilliseconds(100);
+            opticalSaveTimer.Tick += delegate { FlushOpticalChanges(); };
+
             refreshTimer = new DispatcherTimer();
             refreshTimer.Interval = TimeSpan.FromMilliseconds(2000);
             refreshTimer.Tick += delegate
             {
-                if (!draggingSlider) RefreshStateAndGrid(false);
+                if (!draggingSlider && !editingOpticalValues) RefreshStateAndGrid(false);
             };
 
             Loaded += delegate
@@ -217,6 +229,7 @@ namespace JBYLiquidGlassApp
                     saveSliderTimer.Stop();
                     CommitTransparencyValue((int)Math.Round(transparencySlider.Value));
                 }
+                FlushOpticalChanges();
                 if (refreshTimer != null) refreshTimer.Stop();
                 if (smokeTimer != null) smokeTimer.Stop();
             };
@@ -531,6 +544,7 @@ namespace JBYLiquidGlassApp
             quickRow.Children.Add(shortcutOptBtn);
 
             ctrlStack.Children.Add(quickRow);
+            ctrlStack.Children.Add(BuildOpticalControls());
 
             WrapPanel presetRow = new WrapPanel();
             presetRow.Margin = new Thickness(0, 10, 0, 0);
@@ -687,6 +701,7 @@ namespace JBYLiquidGlassApp
 
         private void SelectTarget(string target)
         {
+            FlushOpticalChanges();
             selectedTarget = target;
             UpdateTargetTabsVisual();
             RefreshStateAndGrid(true);
@@ -924,6 +939,9 @@ namespace JBYLiquidGlassApp
                     }
                 }
                 currentThemeText.Text = "当前皮肤：" + curName;
+                opticalControls.Visibility = isAgy ? Visibility.Collapsed : Visibility.Visible;
+                opticalControls.IsEnabled = !string.IsNullOrEmpty(activeCodexId);
+                if (!isAgy && !editingOpticalValues && opticalPending.Count == 0) RefreshOpticalControls();
 
                 if (!draggingSlider)
                 {
@@ -1208,6 +1226,129 @@ namespace JBYLiquidGlassApp
                     Path.Combine(engineRoot, "scripts", "restore-dream-skin.ps1"),
                     "-Port 9335 -RestoreBaseTheme -PromptRestart",
                     "正在恢复 Codex 原生外观...");
+            }
+        }
+
+        private WrapPanel BuildOpticalControls()
+        {
+            opticalControls = new WrapPanel { Margin = new Thickness(0, 12, 0, 0) };
+            opticalZone = new ComboBox { Width = 110, Margin = new Thickness(0, 6, 10, 0), VerticalAlignment = VerticalAlignment.Center };
+            opticalZone.Items.Add(new ComboBoxItem { Tag = "composer", Content = "输入框" });
+            opticalZone.Items.Add(new ComboBoxItem { Tag = "slash", Content = "斜杠菜单 /" });
+            opticalZone.Items.Add(new ComboBoxItem { Tag = "attach", Content = "加号菜单 +" });
+            opticalZone.SelectedIndex = 0;
+            opticalZone.SelectionChanged += delegate
+            {
+                FlushOpticalChanges();
+                RefreshOpticalControls();
+            };
+            opticalControls.Children.Add(opticalZone);
+            AddOpticalSlider("transparency", "通透度", 100);
+            AddOpticalSlider("refractScale", "折射", 200);
+            AddOpticalSlider("blurScale", "模糊", 200);
+            AddOpticalSlider("rimIntensity", "边缘高光", 200);
+            return opticalControls;
+        }
+
+        private void AddOpticalSlider(string key, string title, double maximum)
+        {
+            StackPanel column = new StackPanel { Width = 122, Margin = new Thickness(0, 0, 8, 0) };
+            TextBlock value = new TextBlock { FontSize = 11, Text = title };
+            Slider slider = new Slider { Minimum = 0, Maximum = maximum, TickFrequency = 5 };
+            System.Windows.Automation.AutomationProperties.SetName(slider, title);
+            slider.PreviewMouseLeftButtonDown += delegate { editingOpticalValues = true; };
+            slider.AddHandler(UIElement.MouseLeftButtonUpEvent, new MouseButtonEventHandler(delegate
+            {
+                editingOpticalValues = false;
+                FlushOpticalChanges();
+            }), true);
+            slider.LostMouseCapture += delegate
+            {
+                editingOpticalValues = false;
+                FlushOpticalChanges();
+            };
+            slider.ValueChanged += delegate
+            {
+                int current = (int)Math.Round(slider.Value);
+                value.Text = title + "  " + current + "%";
+                if (suppressUiEvents || selectedTarget != "codex" || string.IsNullOrEmpty(activeCodexId)) return;
+                string zone = SelectedOpticalZone();
+                if (opticalPendingTheme != activeCodexId || opticalPendingZone != zone)
+                {
+                    FlushOpticalChanges();
+                    if (opticalPending.Count != 0) return;
+                    opticalPendingTheme = activeCodexId;
+                    opticalPendingZone = zone;
+                }
+                opticalPending[key] = current;
+                if (opticalSaveTimer != null && !opticalSaveTimer.IsEnabled) opticalSaveTimer.Start();
+            };
+            opticalSliders.Add(key, slider);
+            column.Children.Add(value);
+            column.Children.Add(slider);
+            opticalControls.Children.Add(column);
+        }
+
+        private string SelectedOpticalZone()
+        {
+            ComboBoxItem item = opticalZone == null ? null : opticalZone.SelectedItem as ComboBoxItem;
+            return item == null ? "composer" : (string)item.Tag;
+        }
+
+        private Dictionary<string, object> ReadCodexOptics(Dictionary<string, object> themes, string themeId)
+        {
+            object entry;
+            if (themes != null && themes.TryGetValue(themeId, out entry) && entry is Dictionary<string, object>)
+                return (Dictionary<string, object>)entry;
+            Dictionary<string, object> presets = JsonHelper.ReadDict(Path.Combine(stateRoot, "optical-presets.json"));
+            string presetId = presets == null ? "" : JsonHelper.GetString(presets, "defaultPresetId", "");
+            Dictionary<string, object> inherited = FindPresetParamsById(presetId) ?? new Dictionary<string, object>();
+            inherited["transparency"] = ResolveTransparencyFor(themeId, JsonHelper.GetInt(inherited, "transparency", 80));
+            return inherited;
+        }
+
+        private void RefreshOpticalControls()
+        {
+            if (opticalZone == null || selectedTarget != "codex" || string.IsNullOrEmpty(activeCodexId)) return;
+            Dictionary<string, object> cfg = JsonHelper.ReadDict(Path.Combine(stateRoot, "dream-skin-plugin.json")) ?? new Dictionary<string, object>();
+            Dictionary<string, object> parameters = ReadCodexOptics(JsonHelper.EnsureChildDict(cfg, "themes"), activeCodexId);
+            string zoneName = SelectedOpticalZone();
+            Dictionary<string, object> zone = JsonHelper.EnsureChildDict(JsonHelper.EnsureChildDict(parameters, "zones"), zoneName);
+            bool previous = suppressUiEvents;
+            suppressUiEvents = true;
+            try
+            {
+                foreach (KeyValuePair<string, Slider> pair in opticalSliders)
+                {
+                    int fallback = pair.Key == "transparency" ? 80 : 100;
+                    int inherited = JsonHelper.GetInt(parameters, pair.Key, fallback);
+                    if (pair.Key == "blurScale" && (zoneName == "slash" || zoneName == "attach")) inherited = Math.Max(40, inherited);
+                    pair.Value.Value = JsonHelper.GetInt(zone, pair.Key, inherited);
+                }
+            }
+            finally { suppressUiEvents = previous; }
+        }
+
+        private void FlushOpticalChanges()
+        {
+            if (opticalSaveTimer != null) opticalSaveTimer.Stop();
+            if (opticalPending.Count == 0) return;
+            string path = Path.Combine(stateRoot, "dream-skin-plugin.json");
+            try
+            {
+                Dictionary<string, object> cfg = JsonHelper.ReadDict(path) ?? new Dictionary<string, object>();
+                cfg["schemaVersion"] = 1;
+                Dictionary<string, object> themes = JsonHelper.EnsureChildDict(cfg, "themes");
+                Dictionary<string, object> parameters = ReadCodexOptics(themes, opticalPendingTheme);
+                Dictionary<string, object> zone = JsonHelper.EnsureChildDict(JsonHelper.EnsureChildDict(parameters, "zones"), opticalPendingZone);
+                foreach (KeyValuePair<string, int> item in opticalPending) zone[item.Key] = item.Value;
+                themes[opticalPendingTheme] = parameters;
+                JsonHelper.WriteDictAtomic(path, cfg);
+                opticalPending.Clear();
+            }
+            catch (Exception e)
+            {
+                if (footerHintText != null) footerHintText.Text = "光学参数保存失败：" + e.Message;
             }
         }
 
